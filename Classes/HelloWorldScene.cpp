@@ -3,6 +3,7 @@
 #include "ScrollingBackground.h"
 #include "FlyingObject.h"
 #include "UserControlledFlyingObject.h"
+#include "Weapon.h"
 
 USING_NS_CC;
 
@@ -10,7 +11,7 @@ Scene* HelloWorld::createScene()
 {
     auto scene = HelloWorld::create();
     scene->initWithPhysics();
-    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    //scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
     
     return scene;
 }
@@ -129,6 +130,9 @@ bool HelloWorld::init()
     if (fo5) {
         fo5->setPosition(Vec2(0, 0));
         fo5->setForceType(FRIEND);
+        auto weapon = new Weapon(FRIEND, 0.5f);
+        weapon->FireOn();
+        fo5->addChild(weapon);
         addChild(fo5);
         fo5->setSpeed(100);
         fo5->setDestination(Vec2(320, 480));

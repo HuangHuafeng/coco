@@ -27,8 +27,10 @@ bool CollideObject::initialize()
 
 void CollideObject::setForceType(ForceType type)
 {
+    mForceType = type;
+
     auto physicsBody = getPhysicsBody();
-    if (type == FRIEND) {
+    if (mForceType == FRIEND) {
         physicsBody->setCategoryBitmask(CategoryMaskFriend);
         //physicsBody->setCollisionBitmask(CollisionMaskFriend);
         physicsBody->setContactTestBitmask(ContactTestBitmaskFriend);

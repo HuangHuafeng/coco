@@ -18,6 +18,8 @@ typedef enum {
 class CollideObject : public GameObject {
     
 protected:
+    ForceType mForceType;
+
     virtual bool initialize();
     
     typedef enum {
