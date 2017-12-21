@@ -29,7 +29,6 @@ public:
     void setDestination(const cocos2d::Vec2 &destination);
     void stop();
     
-    static FlyingObject* create(const std::string &filename);
 };
 
 #endif /* FlyingObject_h */

@@ -28,10 +28,29 @@ void UserControlledFlyingObject::onTouchMoved(cocos2d::Touch *touch, cocos2d::Ev
     
     auto currentPosition = getPosition();
     auto delta = touch->getDelta();
-    auto newPosition = currentPosition + delta;
+    auto newPosition = keepInsideScreen(currentPosition + delta);
     setPosition(newPosition);
 }
 
+const cocos2d::Vec2 UserControlledFlyingObject::keepInsideScreen(const cocos2d::Vec2& position)
+{
+    auto modifiedPosition = position;
+    auto windowSize = Director::getInstance()->getWinSize();
+    if (modifiedPosition.x < 0) {
+        modifiedPosition.x = 0;
+    }
+    if (modifiedPosition.x > windowSize.width) {
+        modifiedPosition.x = windowSize.width;
+    }
+    if (modifiedPosition.y < 0) {
+        modifiedPosition.y = 0;
+    }
+    if (modifiedPosition.y > windowSize.height) {
+        modifiedPosition.y = windowSize.height;
+    }
+    
+    return modifiedPosition;
+}
 
 void UserControlledFlyingObject::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *unused_event)
 {
@@ -59,12 +78,3 @@ void UserControlledFlyingObject::onExit()
     CollideObject::onExit();
 }
 
-UserControlledFlyingObject* UserControlledFlyingObject::create(const std::string &filename)
-{
-    UserControlledFlyingObject* ucfo = new (std::nothrow) UserControlledFlyingObject();
-    ucfo->initWithFile(filename);
-    ucfo->initialize();
-    ucfo->autorelease();
-    
-    return ucfo;
-}

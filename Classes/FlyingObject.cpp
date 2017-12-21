@@ -47,13 +47,3 @@ void FlyingObject::stop()
 {
     stopAllActionsByTag(ACTION_TAG);
 }
-
-FlyingObject* FlyingObject::create(const std::string &filename)
-{
-    FlyingObject* fo = new (std::nothrow) FlyingObject();
-    fo->initWithFile(filename);
-    fo->initialize();
-    fo->autorelease();
-    
-    return fo;
-}

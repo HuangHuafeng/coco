@@ -2,8 +2,8 @@
 #include "SimpleAudioEngine.h"
 #include "ScrollingBackground.h"
 #include "FlyingObject.h"
-#include "UserControlledFlyingObject.h"
-#include "Weapon.h"
+#include "FriendPlane.h"
+#include "EnemyPlane.h"
 
 USING_NS_CC;
 
@@ -35,6 +35,12 @@ bool HelloWorld::init()
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    auto windowSize = Director::getInstance()->getWinSize();
+    auto windowSizeInPixels = Director::getInstance()->getWinSizeInPixels();
+    log("windowSize: %f, %f", windowSize.width, windowSize.height);
+    log("visibleSize: %f, %f", visibleSize.width, visibleSize.height);
+    log("windowSizeInPixels: %f, %f", windowSizeInPixels.width, windowSizeInPixels.height);
+    log("origin: %f, %f", origin.x, origin.y);
 
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
@@ -86,56 +92,40 @@ bool HelloWorld::init()
     }
     
     // background
-    auto windowSize = Director::getInstance()->getWinSize();
-    auto windowSizeInPixels = Director::getInstance()->getWinSizeInPixels();
     auto bkg = ScrollingBackground::create("background.png", "background.png", windowSize);
     if (bkg) {
         bkg->startScroll(20.0f);
         addChild(bkg, -100);
     }
     
-    log("windowSize: %f, %f", windowSize.width, windowSize.height);
-    log("visibleSize: %f, %f", visibleSize.width, visibleSize.height);
-    log("windowSizeInPixels: %f, %f", windowSizeInPixels.width, windowSizeInPixels.height);
-    log("origin: %f, %f", origin.x, origin.y);
     
-    //auto fo = UserControlledFlyingObject::create("myPlane.png");
-    auto fo = FlyingObject::create("myPlane.png");
-    if (fo) {
-        fo->setSpeed(200);
-        fo->setPosition(Vec2(80, 350));
-        addChild(fo);
+    auto ep = EnemyPlane::create("myPlane.png");
+    if (ep) {
+        ep->setSpeed(10);
+        ep->setPosition(Vec2(160, 480));
+        ep->setDestination(Vec2(240, 0));
+        ep->openFire();
+        addChild(ep);
     }
     
+    // how can I prevent creating instance from "abstract" FlyingObject
+    /*
     auto fo2 = FlyingObject::create("myPlane.png");
     if (fo2) {
         fo2->setPosition(Vec2(240, 200));
         addChild(fo2);
     }
+    */
+
     
-    auto fo4 = FlyingObject::create("myPlane.png");
-    if (fo4) {
-        fo4->setPosition(Vec2(200, 100));
-        fo4->setForceType(ENEMY);
-        addChild(fo4);
-        
-        //auto physicsBody = fo4->getPhysicsBody();
-        //physicsBody->setVelocity(Vec2(-10, 50));
-        fo4->setDestination(Vec2(160, 480));
-        fo4->setSpeed(100);
-    }
-    
-    
-    auto fo5 = UserControlledFlyingObject::create("myPlane.png");
+    auto fo5 = FriendPlane::create("myPlane.png");
     if (fo5) {
         fo5->setPosition(Vec2(0, 0));
         fo5->setForceType(FRIEND);
-        auto weapon = new Weapon(FRIEND, 0.5f);
-        weapon->FireOn();
-        fo5->addChild(weapon);
         addChild(fo5);
         fo5->setSpeed(100);
         fo5->setDestination(Vec2(320, 480));
+        fo5->openFire();
     }
     
     return true;

@@ -73,8 +73,8 @@ bool CollideObject::onContactBegan(PhysicsContact &contact)
     return true;
 }
 
-bool CollideObject::collideWith(CollideObject* otherCollideObject)
+void CollideObject::collideWith(CollideObject* otherCollideObject)
 {
-    return true;
+    // doing nothing
 }
 

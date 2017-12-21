@@ -16,15 +16,18 @@ protected:
     int mDamage;
     
     virtual void updateRoute() override;
-    virtual bool collideWith(CollideObject* otherCollideObject) override;
+    virtual void collideWith(CollideObject* otherCollideObject) override;
 
 public:
     Bullet();
     
     void setDamage(int damage);
     int getDamage();
+    void setForceType(ForceType type);  // override to set bullet contact test bit mask
     
-    static Bullet* create(const std::string &filename);
+    virtual float getFireRange();
+    
+    static Bullet* create(const std::string &filename, const cocos2d::Vec2& position, float speed, int damage, ForceType type = ENEMY);
 };
 
 #endif /* Bullet_h */

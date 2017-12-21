@@ -1,0 +1,28 @@
+//
+//  WarObject.h
+//  MyGame
+//
+//  Created by 黄华锋 on 21/12/2017.
+//
+
+#ifndef WarObject_h
+#define WarObject_h
+
+#include "FlyingObject.h"
+#include "Weapon.h"
+
+class WarObject : public FlyingObject {
+    
+protected:
+    Weapon *mWeapon;
+    
+public:
+    WarObject();
+    ~WarObject();
+
+    void openFire();
+    void ceaseFire();
+    void setWeapon(Weapon *weapon);
+};
+
+#endif /* WarObject_h */

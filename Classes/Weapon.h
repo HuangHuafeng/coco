@@ -20,13 +20,13 @@ protected:
     ForceType mForceType;
     float mBulletInterval;
     
-    virtual void fireBullet();
+    virtual void pullTrigger();
     
 public:
     Weapon(ForceType forceType = ENEMY, float bulletInterval = 1.0f);
     
-    void FireOn();
-    void FireOff();
+    virtual void openFire();
+    virtual void ceaseFire();
     void setBulletInterval(float bulletInterval);
 };
 

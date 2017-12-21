@@ -8,14 +8,15 @@
 #ifndef UserControlledFlyingObject_h
 #define UserControlledFlyingObject_h
 
-#include "FlyingObject.h"
+#include "WarObject.h"
 
-class UserControlledFlyingObject : public FlyingObject {
+class UserControlledFlyingObject : public WarObject {
 
 protected:
     bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *unused_event);
     void onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *unused_event);
     void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *unused_event);
+    const cocos2d::Vec2 keepInsideScreen(const cocos2d::Vec2& position);
     
 public:
     UserControlledFlyingObject();
@@ -23,7 +24,6 @@ public:
     virtual void onEnter() override;
     virtual void onExit() override;
     
-    static UserControlledFlyingObject* create(const std::string &filename);
 };
 
 #endif /* UserControlledFlyingObject_h */

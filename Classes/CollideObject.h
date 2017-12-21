@@ -25,6 +25,8 @@ protected:
     typedef enum {
         CategoryMaskFriend = 0x01,  // 0001
         CategoryMaskEnemy = 0x02,   // 0010
+        CategoryMaskFriendBullet = 0x04,  // 0100
+        CategoryMaskEnemyBullet = 0x08,   // 1000
     } CategoryMask;
     
     typedef enum {
@@ -33,13 +35,16 @@ protected:
     } CollisionMask;
     
     typedef enum {
-        ContactTestBitmaskFriend = 0x02,    // 0010
-        ContactTestBitmaskEnemy = 0x01,     // 0001
+        ContactTestBitmaskFriend = 0x0A,    // 1010
+        ContactTestBitmaskEnemy = 0x05,     // 0101
+        ContactTestBitmaskFriendBullet = 0x02,    // 0010
+        ContactTestBitmaskEnemyBullet = 0x01,     // 0001
+        // supper bullet?
     } ContactTestBitmask;
     
     
     bool onContactBegan(cocos2d::PhysicsContact &contact);
-    virtual bool collideWith(CollideObject* otherCollideObject);
+    virtual void collideWith(CollideObject* otherCollideObject);
     
 public:
     CollideObject();

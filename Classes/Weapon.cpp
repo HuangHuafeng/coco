@@ -15,30 +15,29 @@ Weapon::Weapon(ForceType forceType, float bulletInterval)
     mBulletInterval = bulletInterval;
 }
 
-void Weapon::FireOn()
+// openFire fire a bullet very mBulletInterval seconds
+// subclass should ONLY override this function if it does
+// not like this "fire a bullet every mBulletInterval seconds"
+// otherwise, override pullTrigger() should work
+void Weapon::openFire()
 {
-    auto fireOnce = CallFunc::create(CC_CALLBACK_0(Weapon::fireBullet, this));
+    auto fireOnce = CallFunc::create(CC_CALLBACK_0(Weapon::pullTrigger, this));
     auto delay = DelayTime::create(mBulletInterval);
     auto seq = Sequence::create(fireOnce, delay, nullptr);
     runAction(RepeatForever::create(seq));
 }
 
-void Weapon::FireOff()
+void Weapon::ceaseFire()
 {
     stopAllActions();
 }
 
-void Weapon::fireBullet()
+// subclass can override this function to get different effect
+// for example, fire 4 bullets a time
+void Weapon::pullTrigger()
 {
     auto currentPosition = getParent()->getPosition();
-    auto bulletDestination = currentPosition + Vec2(0, 480);
-    log("Weapon::fireBullet()");
-    auto bullet = Bullet::create("bullet1.png");
-    bullet->setForceType(mForceType);
-    bullet->setPosition(currentPosition);
-    bullet->setDestination(bulletDestination);
-    bullet->setDamage(100);
-    bullet->setSpeed(200);
+    auto bullet = Bullet::create("bullet1.png", currentPosition, 250, 100, mForceType);
     Director::getInstance()->getRunningScene()->addChild(bullet);
 }
 

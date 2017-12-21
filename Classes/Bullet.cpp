@@ -14,14 +14,44 @@ Bullet::Bullet()
     
 }
 
-Bullet* Bullet::create(const std::string &filename)
+
+float Bullet::getFireRange()
+{
+    auto windowSize = Director::getInstance()->getWinSize();
+    return windowSize.height;
+}
+
+
+Bullet* Bullet::create(const std::string &filename, const cocos2d::Vec2& position, float speed, int damage, ForceType type)
 {
     Bullet* b = new (std::nothrow) Bullet();
     b->initWithFile(filename);
     b->initialize();
+    b->setPosition(position);
+    b->setDamage(damage);
+    b->setForceType(type);
+    b->setSpeed(speed);
     b->autorelease();
-    
+
     return b;
+}
+
+
+void Bullet::setForceType(ForceType type)
+{
+    FlyingObject::setForceType(type);
+    
+    auto physicsBody = getPhysicsBody();
+    auto categoryBitmask = type == FRIEND ? CategoryMaskFriendBullet : CategoryMaskEnemyBullet;
+    physicsBody->setCategoryBitmask(categoryBitmask);
+    auto contactTestBitmask = type == FRIEND ? ContactTestBitmaskFriendBullet : ContactTestBitmaskEnemyBullet;
+    physicsBody->setContactTestBitmask(contactTestBitmask);
+    
+    // set the destination accordingly
+    auto fireRange = getFireRange();
+    auto position = getPosition();
+    auto destination = type == FRIEND ? position + Vec2(0, fireRange) : position - Vec2(0, fireRange);
+    setDestination(destination);
 }
 
 int Bullet::getDamage()
@@ -34,6 +64,7 @@ void Bullet::setDamage(int damage)
     mDamage = damage;
 }
 
+// override updateRoute() to remove myself after reaching the destination
 void Bullet::updateRoute()
 {
     stop();
@@ -53,7 +84,7 @@ void Bullet::updateRoute()
     }
 }
 
-bool Bullet::collideWith(CollideObject* otherCollideObject)
+void Bullet::collideWith(CollideObject* otherCollideObject)
 {
     removeFromParent();
 }
