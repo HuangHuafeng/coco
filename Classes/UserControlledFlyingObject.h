@@ -11,6 +11,10 @@
 #include "WarObject.h"
 
 class UserControlledFlyingObject : public WarObject {
+    
+private:
+    double mPreviousTime;
+    double mTimeLastFrame;
 
 protected:
     bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *unused_event);
@@ -23,6 +27,8 @@ public:
 
     virtual void onEnter() override;
     virtual void onExit() override;
+
+    virtual void update (float delta);
     
 };
 

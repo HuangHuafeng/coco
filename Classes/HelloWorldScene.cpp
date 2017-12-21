@@ -123,7 +123,7 @@ bool HelloWorld::init()
         fo5->setPosition(Vec2(0, 0));
         fo5->setForceType(FRIEND);
         addChild(fo5);
-        fo5->setSpeed(100);
+        fo5->setSpeed(200);
         fo5->setDestination(Vec2(320, 480));
         fo5->openFire();
     }

@@ -5,6 +5,7 @@
 //  Created by 黄华锋 on 19/12/2017.
 //
 
+//#include "base/ccUtils.h"
 #include "UserControlledFlyingObject.h"
 
 USING_NS_CC;
@@ -18,18 +19,29 @@ bool UserControlledFlyingObject::onTouchBegan(cocos2d::Touch *touch, cocos2d::Ev
     stop();
     auto touchLocation = touch->getLocation();
     cocos2d::log("onTouchBegan(): %f,%f", touchLocation.x, touchLocation.y);
+    mPreviousTime = utils::gettime();
     
     return true;
 }
 
 void UserControlledFlyingObject::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *unused_event)
 {
+    auto currentTime = utils::gettime();
+    if (mPreviousTime < mTimeLastFrame) {
+        // the user does not move the touch for a while, this is not accurate, but good enough
+        mPreviousTime = mTimeLastFrame;
+    }
     auto touchLocation = touch->getLocation();
     
     auto currentPosition = getPosition();
     auto delta = touch->getDelta();
-    auto newPosition = keepInsideScreen(currentPosition + delta);
+    delta.normalize();
+    auto timeDelta = currentTime - mPreviousTime;
+    auto newPosition = keepInsideScreen(currentPosition + mSpeed * delta * timeDelta);
     setPosition(newPosition);
+    
+    mPreviousTime = currentTime;
+    log("mPreviousTime: %f", mPreviousTime);
 }
 
 const cocos2d::Vec2 UserControlledFlyingObject::keepInsideScreen(const cocos2d::Vec2& position)
@@ -71,6 +83,9 @@ void UserControlledFlyingObject::onEnter()
     eventListener->onTouchEnded = CC_CALLBACK_2(UserControlledFlyingObject::onTouchEnded, this);
     
     _eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, this);
+    
+    //
+    scheduleUpdate();
 }
 
 void UserControlledFlyingObject::onExit()
@@ -78,3 +93,7 @@ void UserControlledFlyingObject::onExit()
     CollideObject::onExit();
 }
 
+void UserControlledFlyingObject::update (float delta)
+{
+    mTimeLastFrame = utils::gettime();
+}
