@@ -11,6 +11,7 @@ USING_NS_CC;
 
 FlyingObject::FlyingObject()
 {
+    mRouteNeedUpdate = false;
     mSpeed = 0.0f;
     mDestination = Vec2(0, 0);
 }
@@ -18,13 +19,13 @@ FlyingObject::FlyingObject()
 void FlyingObject::setDestination(const cocos2d::Vec2 &destination)
 {
     mDestination = destination;
-    updateRoute();
+    mRouteNeedUpdate = true;
 }
 
 void FlyingObject::setSpeed(float speed)
 {
     mSpeed = speed;
-    updateRoute();
+    mRouteNeedUpdate = true;
 }
 
 void FlyingObject::updateRoute()
@@ -46,4 +47,21 @@ void FlyingObject::updateRoute()
 void FlyingObject::stop()
 {
     stopAllActionsByTag(ACTION_TAG);
+}
+
+void FlyingObject::modifyPosition(const Vec2& pos)
+{
+    setPosition(pos);
+    mRouteNeedUpdate = true;
+}
+
+
+void FlyingObject::update(float delta)
+{
+    if (mRouteNeedUpdate) {
+        updateRoute();
+        mRouteNeedUpdate = false;
+    }
+    
+    CollideObject::update(delta);
 }

@@ -4,6 +4,7 @@
 #include "FlyingObject.h"
 #include "FriendPlane.h"
 #include "EnemyPlane.h"
+#include "WeaponTripleBullet.h"
 
 USING_NS_CC;
 
@@ -99,11 +100,21 @@ bool HelloWorld::init()
     }
     
     
+    // create the bullet, weapon
+    auto friendBullet = Bullet::create("bullet1.png", 300, 100);
+    auto friendWeapon = WeaponTripleBullet::create(FRIEND, 0.4f);
+    friendWeapon->setBullet(friendBullet);
+    
+    //auto enemyBullet = Bullet::create("bullet1.png", 100, 200);
+    auto enemyWeapon = Weapon::create(ENEMY, 0.8f);
+    enemyWeapon->setBullet(friendBullet);
+    
     auto ep = EnemyPlane::create("myPlane.png");
     if (ep) {
         ep->setSpeed(10);
-        ep->setPosition(Vec2(160, 480));
+        ep->setPosition(Vec2(320, 480));
         ep->setDestination(Vec2(240, 0));
+        ep->setWeapon(enemyWeapon);
         ep->openFire();
         addChild(ep);
     }
@@ -117,7 +128,7 @@ bool HelloWorld::init()
     }
     */
 
-    
+
     auto fo5 = FriendPlane::create("myPlane.png");
     if (fo5) {
         fo5->setPosition(Vec2(0, 0));
@@ -125,8 +136,10 @@ bool HelloWorld::init()
         addChild(fo5);
         fo5->setSpeed(200);
         fo5->setDestination(Vec2(320, 480));
+        fo5->setWeapon(friendWeapon);
         fo5->openFire();
     }
+
     
     return true;
 }

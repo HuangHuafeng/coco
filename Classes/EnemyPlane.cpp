@@ -21,9 +21,5 @@ EnemyPlane* EnemyPlane::create(const std::string &filename)
     ep->initialize();
     ep->autorelease();
     
-    // equip the plane with the basic weapon
-    auto weapon = new Weapon(ENEMY, 0.8f);
-    ep->setWeapon(weapon);
-    
     return ep;
 }

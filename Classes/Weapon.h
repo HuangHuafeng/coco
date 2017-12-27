@@ -17,17 +17,23 @@ typedef enum {
 class Weapon : public cocos2d::Node {
 
 protected:
+    Weapon(ForceType forceType = ENEMY, float bulletInterval = 1.0f);
+    
+    Bullet *mBullet;
     ForceType mForceType;
     float mBulletInterval;
     
     virtual void pullTrigger();
     
 public:
-    Weapon(ForceType forceType = ENEMY, float bulletInterval = 1.0f);
+    ~Weapon();
     
     virtual void openFire();
     virtual void ceaseFire();
     void setBulletInterval(float bulletInterval);
+    void setBullet(Bullet *bullet);
+    
+    static Weapon * create(ForceType forceType = ENEMY, float bulletInterval = 1.0f);
 };
 
 #endif /* Weapon_h */

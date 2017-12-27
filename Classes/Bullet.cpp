@@ -9,7 +9,7 @@
 
 USING_NS_CC;
 
-Bullet::Bullet()
+Bullet::Bullet() : FlyingObject()
 {
     
 }
@@ -22,14 +22,12 @@ float Bullet::getFireRange()
 }
 
 
-Bullet* Bullet::create(const std::string &filename, const cocos2d::Vec2& position, float speed, int damage, ForceType type)
+Bullet* Bullet::create(const std::string &filename, float speed, int damage)
 {
     Bullet* b = new (std::nothrow) Bullet();
     b->initWithFile(filename);
     b->initialize();
-    b->setPosition(position);
     b->setDamage(damage);
-    b->setForceType(type);
     b->setSpeed(speed);
     b->autorelease();
 
@@ -47,11 +45,27 @@ void Bullet::setForceType(ForceType type)
     auto contactTestBitmask = type == FRIEND ? ContactTestBitmaskFriendBullet : ContactTestBitmaskEnemyBullet;
     physicsBody->setContactTestBitmask(contactTestBitmask);
     
+    /*
     // set the destination accordingly
     auto fireRange = getFireRange();
     auto position = getPosition();
     auto destination = type == FRIEND ? position + Vec2(0, fireRange) : position - Vec2(0, fireRange);
     setDestination(destination);
+    */
+}
+
+Bullet* Bullet::clone() const
+{
+    Bullet* b = new (std::nothrow) Bullet();
+    b->initWithTexture(_texture);
+    b->initialize();
+    b->setDamage(mDamage);
+    b->setForceType(mForceType);
+    b->modifyPosition(getPosition());
+    b->setSpeed(mSpeed);
+    b->autorelease();
+    
+    return b;
 }
 
 int Bullet::getDamage()

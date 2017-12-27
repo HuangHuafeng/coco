@@ -7,6 +7,7 @@
 
 #include "FriendPlane.h"
 #include "Weapon.h"
+#include "WeaponTripleBullet.h"
 
 USING_NS_CC;
 
@@ -22,10 +23,6 @@ FriendPlane* FriendPlane::create(const std::string &filename)
     fp->initWithFile(filename);
     fp->initialize();
     fp->autorelease();
-    
-    // equip the plane with the basic weapon
-    auto weapon = new Weapon(FRIEND, 0.4f);
-    fp->setWeapon(weapon);
-    
+
     return fp;
 }

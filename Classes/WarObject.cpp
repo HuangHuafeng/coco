@@ -27,8 +27,10 @@ void WarObject::setWeapon(Weapon *weapon)
         mWeapon = nullptr;
     }
 
-    mWeapon = weapon;
-    addChild(mWeapon);
+    if (weapon) {
+        mWeapon = weapon;
+        addChild(mWeapon);
+    }
 }
 
 void WarObject::openFire()

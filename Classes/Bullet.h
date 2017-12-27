@@ -10,7 +10,7 @@
 
 #include "FlyingObject.h"
 
-class Bullet : public FlyingObject {
+class Bullet : public FlyingObject, public cocos2d::Clonable {
 
 protected:
     int mDamage;
@@ -26,8 +26,9 @@ public:
     void setForceType(ForceType type);  // override to set bullet contact test bit mask
     
     virtual float getFireRange();
+    virtual Bullet * clone() const override;
     
-    static Bullet* create(const std::string &filename, const cocos2d::Vec2& position, float speed, int damage, ForceType type = ENEMY);
+    static Bullet* create(const std::string &filename, float speed, int damage);
 };
 
 #endif /* Bullet_h */

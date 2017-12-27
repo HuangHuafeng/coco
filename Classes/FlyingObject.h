@@ -12,6 +12,7 @@
 
 class FlyingObject : public CollideObject {
 protected:
+    bool mRouteNeedUpdate;
     float mSpeed;
     cocos2d::Vec2 mDestination;
     
@@ -24,9 +25,12 @@ protected:
     
 public:
     FlyingObject();
+
+    virtual void update (float delta) override;
     
     void setSpeed(float speed);
     void setDestination(const cocos2d::Vec2 &destination);
+    void modifyPosition(const cocos2d::Vec2& pos);
     void stop();
     
 };

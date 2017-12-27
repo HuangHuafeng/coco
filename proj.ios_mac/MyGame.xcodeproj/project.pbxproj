@@ -383,6 +383,10 @@
 				DC7BE6961FEA8A2F00C7E219 /* Bullet.h */,
 				DC7BE6901FEA088400C7E219 /* CollideObject.cpp */,
 				DC7BE68F1FEA087600C7E219 /* CollideObject.h */,
+				DC7BE6AC1FEB8BA300C7E219 /* EnemyObject.cpp */,
+				DC7BE6AD1FEB8BA300C7E219 /* EnemyObject.h */,
+				DC7BE6B01FEB8EAD00C7E219 /* EnemyPlane.cpp */,
+				DC7BE6B11FEB8EAD00C7E219 /* EnemyPlane.h */,
 				DC8B183B1FE8B150001E8C17 /* FlyingObject.cpp */,
 				DC8B18391FE8ACE8001E8C17 /* FlyingObject.h */,
 				DC7BE6A81FEB846700C7E219 /* FriendPlane.cpp */,
@@ -401,10 +405,6 @@
 				DC7BE69A1FEA921F00C7E219 /* Weapon.h */,
 				DC7BE6A01FEB4D0F00C7E219 /* WeaponTripleBullet.cpp */,
 				DC7BE6A11FEB4D0F00C7E219 /* WeaponTripleBullet.h */,
-				DC7BE6AC1FEB8BA300C7E219 /* EnemyObject.cpp */,
-				DC7BE6B01FEB8EAD00C7E219 /* EnemyPlane.cpp */,
-				DC7BE6B11FEB8EAD00C7E219 /* EnemyPlane.h */,
-				DC7BE6AD1FEB8BA300C7E219 /* EnemyObject.h */,
 			);
 			name = Classes;
 			path = ../Classes;

@@ -13,6 +13,15 @@ Weapon::Weapon(ForceType forceType, float bulletInterval)
 {
     mForceType = forceType;
     mBulletInterval = bulletInterval;
+    mBullet = nullptr;
+}
+
+Weapon::~Weapon()
+{
+    if (mBullet) {
+        mBullet->autorelease();
+        mBullet = nullptr;
+    }
 }
 
 // openFire fire a bullet very mBulletInterval seconds
@@ -36,12 +45,42 @@ void Weapon::ceaseFire()
 // for example, fire 4 bullets a time
 void Weapon::pullTrigger()
 {
-    auto currentPosition = getParent()->getPosition();
-    auto bullet = Bullet::create("bullet1.png", currentPosition, 250, 100, mForceType);
-    Director::getInstance()->getRunningScene()->addChild(bullet);
+    if (mBullet) {
+        auto currentPosition = getParent()->getPosition();
+        auto bullet = mBullet->clone();
+        auto offset = Vec2(0, bullet->getFireRange());
+        auto destination = mForceType == FRIEND ? currentPosition + offset : currentPosition - offset;
+        bullet->modifyPosition(currentPosition);
+        bullet->setDestination(destination);
+        
+        Director::getInstance()->getRunningScene()->addChild(bullet);
+    }
 }
 
 void Weapon::setBulletInterval(float bulletInterval)
 {
     mBulletInterval = bulletInterval;
+}
+
+void Weapon::setBullet(Bullet *bullet)
+{
+    if (mBullet) {
+        mBullet->autorelease();
+        mBullet = nullptr;
+    }
+    
+    if (bullet) {
+        mBullet = bullet->clone();
+        mBullet->setForceType(mForceType);
+        // mBullet will never be added to the scene, so we need to retain it
+        mBullet->retain();
+    }
+}
+
+Weapon * Weapon::create(ForceType forceType, float bulletInterval)
+{
+    auto weapon = new (std::nothrow) Weapon(forceType, bulletInterval);
+    weapon->autorelease();
+
+    return weapon;
 }

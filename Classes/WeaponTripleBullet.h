@@ -13,10 +13,12 @@
 class WeaponTripleBullet : public Weapon {
     
 protected:
+    WeaponTripleBullet(ForceType forceType = ENEMY, float bulletInterval = 1.0f);
+
     virtual void pullTrigger();
     
 public:
-    WeaponTripleBullet(ForceType forceType = ENEMY, float bulletInterval = 1.0f);
+    static WeaponTripleBullet * create(ForceType forceType, float bulletInterval);
 };
 
 #endif /* WeaponTripleBullet_h */
