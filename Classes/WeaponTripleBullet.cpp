@@ -19,17 +19,17 @@ void WeaponTripleBullet::pullTrigger()
 {
     if (mBullet) {
         auto currentPosition = getParent()->getPosition();
-        const auto interval = Vec2(50, 0);
+        const auto interval = Vec2(100, 0);
         auto fireRange = mBullet->getFireRange();
         auto offset = mForceType == FRIEND ? Vec2(0, fireRange) : Vec2(0, - fireRange);
         auto bullet1 = mBullet->clone();
         auto bullet2 = mBullet->clone();
         auto bullet3 = mBullet->clone();
-        bullet1->modifyPosition(currentPosition - interval);
+        bullet1->modifyPosition(currentPosition);
         bullet1->setDestination(currentPosition - interval + offset);
         bullet2->modifyPosition(currentPosition);
         bullet2->setDestination(currentPosition + offset);
-        bullet3->modifyPosition(currentPosition + interval);
+        bullet3->modifyPosition(currentPosition);
         bullet3->setDestination(currentPosition + interval + offset);
         Director::getInstance()->getRunningScene()->addChild(bullet1);
         Director::getInstance()->getRunningScene()->addChild(bullet2);

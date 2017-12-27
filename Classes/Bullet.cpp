@@ -86,6 +86,11 @@ void Bullet::updateRoute()
     if (mSpeed > 0) {
         auto currentPosition = getPosition();
         if (currentPosition != mDestination) {
+            // set rotation
+            auto offset = mDestination - currentPosition;
+            auto rot = offset.getAngle(Vec2(0, 1));
+            setRotation(rot * 180 / 3.1415926);
+
             // calculate the time needed
             auto distance = currentPosition.getDistance(mDestination);
             auto moveTo = MoveTo::create(distance/mSpeed, mDestination);
