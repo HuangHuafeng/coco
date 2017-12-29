@@ -22,6 +22,7 @@ FriendPlane* FriendPlane::create(const std::string &filename)
     FriendPlane* fp = new (std::nothrow) FriendPlane();
     fp->initWithFile(filename);
     fp->initialize();
+    fp->setForceType(FRIEND);
     fp->autorelease();
 
     return fp;

@@ -102,6 +102,10 @@
 		DC7BE6B31FEB8EAD00C7E219 /* EnemyPlane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7BE6B01FEB8EAD00C7E219 /* EnemyPlane.cpp */; };
 		DC8B183C1FE8B150001E8C17 /* FlyingObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC8B183B1FE8B150001E8C17 /* FlyingObject.cpp */; };
 		DC8B183D1FE8B150001E8C17 /* FlyingObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC8B183B1FE8B150001E8C17 /* FlyingObject.cpp */; };
+		DCEB25FC1FF4D6EB00EF09CC /* ObjectManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCEB25FA1FF4D6EB00EF09CC /* ObjectManager.cpp */; };
+		DCEB25FD1FF4D6EB00EF09CC /* ObjectManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCEB25FA1FF4D6EB00EF09CC /* ObjectManager.cpp */; };
+		DCEB25FF1FF4DC6700EF09CC /* testgame.json in Resources */ = {isa = PBXBuildFile; fileRef = DCEB25FE1FF4DC6700EF09CC /* testgame.json */; };
+		DCEB26001FF4DC6700EF09CC /* testgame.json in Resources */ = {isa = PBXBuildFile; fileRef = DCEB25FE1FF4DC6700EF09CC /* testgame.json */; };
 		ED545A7C1B68A1F400C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7B1B68A1F400C3958E /* libiconv.dylib */; };
 		ED545A7E1B68A1FA00C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7D1B68A1FA00C3958E /* libiconv.dylib */; };
 /* End PBXBuildFile section */
@@ -233,6 +237,9 @@
 		DC8B183B1FE8B150001E8C17 /* FlyingObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FlyingObject.cpp; sourceTree = "<group>"; };
 		DC8B183E1FE8BE6D001E8C17 /* UserControlledFlyingObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UserControlledFlyingObject.cpp; sourceTree = "<group>"; };
 		DC8B183F1FE8BE6D001E8C17 /* UserControlledFlyingObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserControlledFlyingObject.h; sourceTree = "<group>"; };
+		DCEB25FA1FF4D6EB00EF09CC /* ObjectManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ObjectManager.cpp; sourceTree = "<group>"; };
+		DCEB25FB1FF4D6EB00EF09CC /* ObjectManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjectManager.h; sourceTree = "<group>"; };
+		DCEB25FE1FF4DC6700EF09CC /* testgame.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testgame.json; sourceTree = "<group>"; };
 		ED545A7B1B68A1F400C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libiconv.dylib; sourceTree = DEVELOPER_DIR; };
 		ED545A7D1B68A1FA00C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -359,6 +366,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DCEB25FE1FF4DC6700EF09CC /* testgame.json */,
 				DC7BE69D1FEA9BB300C7E219 /* bullet1.png */,
 				DC2B4B9E1FE3CDE8000E9E53 /* myPlane.png */,
 				DC2B4B981FE3CB96000E9E53 /* texture.plist */,
@@ -395,6 +403,8 @@
 				DC7BE68E1FEA040200C7E219 /* GameObject.h */,
 				46880B8619C43A87006E1F66 /* HelloWorldScene.cpp */,
 				46880B8719C43A87006E1F66 /* HelloWorldScene.h */,
+				DCEB25FA1FF4D6EB00EF09CC /* ObjectManager.cpp */,
+				DCEB25FB1FF4D6EB00EF09CC /* ObjectManager.h */,
 				DC2B4B941FE386F5000E9E53 /* ScrollingBackground.cpp */,
 				DC2B4B951FE386F5000E9E53 /* ScrollingBackground.h */,
 				DC8B183E1FE8BE6D001E8C17 /* UserControlledFlyingObject.cpp */,
@@ -565,6 +575,7 @@
 				5087E78617EB970100C73F5D /* Icon-76.png in Resources */,
 				5087E77F17EB970100C73F5D /* Default@2x.png in Resources */,
 				DC2B4B9C1FE3CB96000E9E53 /* texture.png in Resources */,
+				DCEB25FF1FF4DC6700EF09CC /* testgame.json in Resources */,
 				50EF629917ECD46A001EB2F8 /* Icon-100.png in Resources */,
 				5087E78317EB970100C73F5D /* Icon-152.png in Resources */,
 				46880B8119C43A67006E1F66 /* HelloWorld.png in Resources */,
@@ -597,6 +608,7 @@
 				DC2B4B9B1FE3CB96000E9E53 /* texture.plist in Resources */,
 				46880B8219C43A67006E1F66 /* HelloWorld.png in Resources */,
 				DC2B4BA01FE3CDE8000E9E53 /* myPlane.png in Resources */,
+				DCEB26001FF4DC6700EF09CC /* testgame.json in Resources */,
 				503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */,
 				DC2B4B9D1FE3CB96000E9E53 /* texture.png in Resources */,
 				DC2B4B891FE2B658000E9E53 /* background.png in Resources */,
@@ -623,6 +635,7 @@
 				DC7BE6AE1FEB8BA300C7E219 /* EnemyObject.cpp in Sources */,
 				DC7BE6B21FEB8EAD00C7E219 /* EnemyPlane.cpp in Sources */,
 				46880B8A19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
+				DCEB25FC1FF4D6EB00EF09CC /* ObjectManager.cpp in Sources */,
 				DC8B183C1FE8B150001E8C17 /* FlyingObject.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				DC2B4B961FE386F5000E9E53 /* ScrollingBackground.cpp in Sources */,
@@ -651,6 +664,7 @@
 				DC7BE6A71FEB75BD00C7E219 /* WarObject.cpp in Sources */,
 				DC7BE69C1FEA921F00C7E219 /* Weapon.cpp in Sources */,
 				DC7BE6A31FEB4D0F00C7E219 /* WeaponTripleBullet.cpp in Sources */,
+				DCEB25FD1FF4D6EB00EF09CC /* ObjectManager.cpp in Sources */,
 				DC7BE6AF1FEB8BA300C7E219 /* EnemyObject.cpp in Sources */,
 				46880B8B19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
 				DC7BE68C1FEA03EE00C7E219 /* GameObject.cpp in Sources */,
@@ -841,6 +855,7 @@
 					"$(SRCROOT)/../cocos2d/external",
 					"$(SRCROOT)/../cocos2d/external/chipmunk/include/chipmunk",
 					"$(SRCROOT)/../cocos2d/cocos/editor-support",
+					/usr/local/Cellar/nlohmann_json/3.0.0/include,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
@@ -887,6 +902,7 @@
 					"$(SRCROOT)/../cocos2d/external",
 					"$(SRCROOT)/../cocos2d/external/chipmunk/include/chipmunk",
 					"$(SRCROOT)/../cocos2d/cocos/editor-support",
+					/usr/local/Cellar/nlohmann_json/3.0.0/include,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;

@@ -6,14 +6,16 @@
 //
 
 #include "Weapon.h"
+#include "WarObject.h"
 
 USING_NS_CC;
 
-Weapon::Weapon(ForceType forceType, float bulletInterval)
+Weapon::Weapon(float triggerInterval)
 {
-    mForceType = forceType;
-    mBulletInterval = bulletInterval;
+    mTriggerInterval = triggerInterval;
+    mBulletOffset = Vec2(0, 0);
     mBullet = nullptr;
+    mWarObject = nullptr;
 }
 
 Weapon::~Weapon()
@@ -21,6 +23,11 @@ Weapon::~Weapon()
     if (mBullet) {
         mBullet->autorelease();
         mBullet = nullptr;
+    }
+
+    if (mWarObject) {
+        mWarObject->autorelease();
+        mWarObject = nullptr;
     }
 }
 
@@ -31,7 +38,7 @@ Weapon::~Weapon()
 void Weapon::openFire()
 {
     auto fireOnce = CallFunc::create(CC_CALLBACK_0(Weapon::pullTrigger, this));
-    auto delay = DelayTime::create(mBulletInterval);
+    auto delay = DelayTime::create(mTriggerInterval);
     auto seq = Sequence::create(fireOnce, delay, nullptr);
     runAction(RepeatForever::create(seq));
 }
@@ -41,6 +48,31 @@ void Weapon::ceaseFire()
     stopAllActions();
 }
 
+void Weapon::attachToWarObject(WarObject *warObject)
+{
+    if (mWarObject) {
+        mWarObject->autorelease();
+        mWarObject = nullptr;
+    }
+    
+    if (warObject) {
+        mWarObject = warObject;
+        mWarObject->retain();
+        updateBullet();
+    }
+}
+
+void Weapon::updateBullet()
+{
+    if (mBullet && mWarObject) {
+        auto forceType = mWarObject->getForceType();
+        mBullet->setForceType(forceType);
+        
+        auto firRange = mBullet->getFireRange();
+        mBulletOffset = forceType == FRIEND ? Vec2(0, firRange) : Vec2(0, - firRange);
+    }
+}
+
 // subclass can override this function to get different effect
 // for example, fire 4 bullets a time
 void Weapon::pullTrigger()
@@ -48,8 +80,7 @@ void Weapon::pullTrigger()
     if (mBullet) {
         auto currentPosition = getParent()->getPosition();
         auto bullet = mBullet->clone();
-        auto offset = Vec2(0, bullet->getFireRange());
-        auto destination = mForceType == FRIEND ? currentPosition + offset : currentPosition - offset;
+        auto destination = currentPosition + mBulletOffset;
         bullet->modifyPosition(currentPosition);
         bullet->setDestination(destination);
         
@@ -57,9 +88,9 @@ void Weapon::pullTrigger()
     }
 }
 
-void Weapon::setBulletInterval(float bulletInterval)
+void Weapon::setBulletInterval(float triggerInterval)
 {
-    mBulletInterval = bulletInterval;
+    mTriggerInterval = triggerInterval;
 }
 
 void Weapon::setBullet(Bullet *bullet)
@@ -71,15 +102,15 @@ void Weapon::setBullet(Bullet *bullet)
     
     if (bullet) {
         mBullet = bullet->clone();
-        mBullet->setForceType(mForceType);
         // mBullet will never be added to the scene, so we need to retain it
         mBullet->retain();
+        updateBullet();
     }
 }
 
-Weapon * Weapon::create(ForceType forceType, float bulletInterval)
+Weapon * Weapon::create(float triggerInterval)
 {
-    auto weapon = new (std::nothrow) Weapon(forceType, bulletInterval);
+    auto weapon = new (std::nothrow) Weapon(triggerInterval);
     weapon->autorelease();
 
     return weapon;

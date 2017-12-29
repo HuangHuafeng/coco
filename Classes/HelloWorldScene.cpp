@@ -1,10 +1,7 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 #include "ScrollingBackground.h"
-#include "FlyingObject.h"
-#include "FriendPlane.h"
-#include "EnemyPlane.h"
-#include "WeaponTripleBullet.h"
+#include "ObjectManager.h"
 
 USING_NS_CC;
 
@@ -99,47 +96,9 @@ bool HelloWorld::init()
         addChild(bkg, -100);
     }
     
-    
-    // create the bullet, weapon
-    auto friendBullet = Bullet::create("bullet1.png", 300, 100);
-    auto friendWeapon = WeaponTripleBullet::create(FRIEND, 0.4f);
-    friendWeapon->setBullet(friendBullet);
-    
-    //auto enemyBullet = Bullet::create("bullet1.png", 100, 200);
-    auto enemyWeapon = Weapon::create(ENEMY, 0.8f);
-    enemyWeapon->setBullet(friendBullet);
-    
-    auto ep = EnemyPlane::create("myPlane.png");
-    if (ep) {
-        ep->setSpeed(10);
-        ep->setPosition(Vec2(320, 480));
-        ep->setDestination(Vec2(240, 0));
-        ep->setWeapon(enemyWeapon);
-        ep->openFire();
-        addChild(ep);
-    }
-    
-    // how can I prevent creating instance from "abstract" FlyingObject
-    /*
-    auto fo2 = FlyingObject::create("myPlane.png");
-    if (fo2) {
-        fo2->setPosition(Vec2(240, 200));
-        addChild(fo2);
-    }
-    */
-
-
-    auto fo5 = FriendPlane::create("myPlane.png");
-    if (fo5) {
-        fo5->setPosition(Vec2(0, 0));
-        fo5->setForceType(FRIEND);
-        addChild(fo5);
-        fo5->setSpeed(200);
-        fo5->setDestination(Vec2(320, 480));
-        fo5->setWeapon(friendWeapon);
-        fo5->openFire();
-    }
-
+    auto om = ObjectManager::getInstance();
+    om->setScene(this);
+    om->loadFromFile("testgame.json");
     
     return true;
 }

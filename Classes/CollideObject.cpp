@@ -43,6 +43,11 @@ void CollideObject::setForceType(ForceType type)
     physicsBody->setCollisionBitmask(0);
 }
 
+ForceType CollideObject::getForceType() const
+{
+    return mForceType;
+}
+
 void CollideObject::onExit()
 {
     GameObject::onExit();

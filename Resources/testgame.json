@@ -1,0 +1,19 @@
+{
+  "objects": [
+    { "type": 1, "id": 1, "name": "b1", "file": "bullet1.png", "speed": 333, "damage": 111 },
+    { "type": 2, "id": 2, "name": "w1", "bullet": 1, "triggerInterval": 300 },
+    {
+      "type": 4,
+      "id": 3,
+      "name": "f1",
+      "file": "myPlane.png",
+      "speed": 250,
+      "weapon": 2,
+      "bornTime": 0,
+      "bornX": 0,
+      "bornY": 0,
+      "destinationX": 160,
+      "destinationY": 240
+    }
+  ]
+}

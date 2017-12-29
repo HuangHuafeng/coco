@@ -10,19 +10,23 @@
 
 #include "Bullet.h"
 
+class WarObject;    // need forward declaration here
+
 typedef enum {
     WEAPON_FIRE_ACTION = 9999,
 } WeaponAction;
 
-class Weapon : public cocos2d::Node {
+class Weapon : public GameObject {
 
 protected:
-    Weapon(ForceType forceType = ENEMY, float bulletInterval = 1.0f);
+    Weapon(float triggerInterval = 1.0f);
     
     Bullet *mBullet;
-    ForceType mForceType;
-    float mBulletInterval;
+    WarObject *mWarObject;
+    float mTriggerInterval;
+    cocos2d::Vec2 mBulletOffset;
     
+    void updateBullet();
     virtual void pullTrigger();
     
 public:
@@ -30,10 +34,11 @@ public:
     
     virtual void openFire();
     virtual void ceaseFire();
+    virtual void attachToWarObject(WarObject *warObject);
     void setBulletInterval(float bulletInterval);
     void setBullet(Bullet *bullet);
     
-    static Weapon * create(ForceType forceType = ENEMY, float bulletInterval = 1.0f);
+    static Weapon * create(float triggerInterval = 1.0f);
 };
 
 #endif /* Weapon_h */

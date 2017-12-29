@@ -29,6 +29,7 @@ void WarObject::setWeapon(Weapon *weapon)
 
     if (weapon) {
         mWeapon = weapon;
+        mWeapon->attachToWarObject(this);
         addChild(mWeapon);
     }
 }

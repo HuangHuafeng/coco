@@ -12,8 +12,17 @@
 
 class GameObject : public cocos2d::Sprite {
     
+protected:
+    int mId;
+    std::string mName;
+    
 public:
     GameObject();
+    
+    const std::string & getName();
+    void setName(const std::string & name);
+    int getId() const;
+    void setId(int id);
 };
 
 #endif /* GameObject_h */

@@ -8,7 +8,9 @@
 #ifndef ScrollingBackground_h
 #define ScrollingBackground_h
 
-class ScrollingBackground : public cocos2d::Node {
+#include "GameObject.h"
+
+class ScrollingBackground : public GameObject {
 public:
     ScrollingBackground(const cocos2d::Size bkgSize);
     //virtual ~Background();

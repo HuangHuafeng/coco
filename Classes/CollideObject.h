@@ -50,6 +50,7 @@ public:
     CollideObject();
     
     void setForceType(ForceType type = ENEMY);
+    ForceType getForceType() const;
     virtual void onEnter() override;
     virtual void onExit() override;
 };
