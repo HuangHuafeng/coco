@@ -43,6 +43,21 @@ void Weapon::openFire()
     runAction(RepeatForever::create(seq));
 }
 
+// subclass can override this function to get different effect
+// for example, fire 4 bullets a time
+void Weapon::pullTrigger()
+{
+    if (mBullet) {
+        auto currentPosition = getParent()->getPosition();
+        auto bullet = mBullet->clone();
+        auto destination = currentPosition + mBulletOffset;
+        bullet->modifyPosition(currentPosition);
+        bullet->setDestination(destination);
+        
+        Director::getInstance()->getRunningScene()->addChild(bullet);
+    }
+}
+
 void Weapon::ceaseFire()
 {
     stopAllActions();
@@ -70,21 +85,6 @@ void Weapon::updateBullet()
         
         auto firRange = mBullet->getFireRange();
         mBulletOffset = forceType == FRIEND ? Vec2(0, firRange) : Vec2(0, - firRange);
-    }
-}
-
-// subclass can override this function to get different effect
-// for example, fire 4 bullets a time
-void Weapon::pullTrigger()
-{
-    if (mBullet) {
-        auto currentPosition = getParent()->getPosition();
-        auto bullet = mBullet->clone();
-        auto destination = currentPosition + mBulletOffset;
-        bullet->modifyPosition(currentPosition);
-        bullet->setDestination(destination);
-        
-        Director::getInstance()->getRunningScene()->addChild(bullet);
     }
 }
 

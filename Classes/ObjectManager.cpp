@@ -125,9 +125,38 @@ bool ObjectManager::createObject(const json &object)
     }
     
     const json j_null;
-    const int type = object.value("type", j_null);
-    bool ret = false;
-    switch (type) {
+    auto bornTime = object.value("bornTime", j_null);
+    if (bornTime.is_null()) {
+        // no bornTime, create the object now
+        return createObjectImmediately(object);
+    } else {
+        // the object will be created after "bornTime" **milliseconds**
+        auto delay = DelayTime::create(static_cast<float>(bornTime) * 0.001);
+        auto createObject = CallFunc::create(CC_CALLBACK_0(ObjectManager::createObjectImmediately, this, object));
+        auto seq = Sequence::create(delay, createObject, nullptr);
+        if (mScene) {
+            mScene->runAction(seq);
+        }
+    }
+    
+    return true;
+}
+
+bool ObjectManager::createObjectImmediately(const json &object)
+{
+    if (object.type() != json::value_t::object) {
+        log("\"object\" has type %hhu, it's not an object!", object.type());
+        return false;
+    }
+    
+    const json j_null;
+    auto type = object.value("type", j_null);
+    if (type.is_number_integer() == false) {
+        return false;
+    }
+    
+    GameObject * ret = nullptr;
+    switch (static_cast<int>(type)) {
         case BULLET: // Bullet
             ret = createBullet(object);
             break;
@@ -144,104 +173,110 @@ bool ObjectManager::createObject(const json &object)
             break;
     }
     
+    if (ret) {
+        // successfully created an object, check if it should be added to scene
+        auto addToScene = object.value("addToScene", j_null);
+        if (addToScene.is_boolean() && mScene) {
+            if (static_cast<bool>(addToScene) == true) {
+                mScene->addChild(ret);
+            }
+        }
+    }
+    
     return ret;
 }
 
-bool ObjectManager::createBullet(const json &object)
+Bullet * ObjectManager::createBullet(const json &object)
 {
     const json j_null;
-    const int type = object.value("type", j_null);
-    if (type != BULLET) {
-        assert(false);
-        return false;
+    auto id = object.value("id", j_null);
+    auto name = object.value("name", j_null);
+    auto file = object.value("file", j_null);
+    auto speed = object.value("speed", j_null);
+    auto damage = object.value("damage", j_null);
+    if (id.is_number_integer() == false || name.is_string() == false || file.is_string() == false || speed.is_number_integer() == false || damage.is_number_integer() == false) {
+        return nullptr;
     }
-
-    const int id = object.value("id", j_null);
-    if (getObject(id) != nullptr) {
-        return false;
+    
+    if ( getObject(id) != nullptr) {
+        // there's already an object with this id, don't create another one
+        return nullptr;
     }
-
-    const std::string name = object.value("name", j_null);
-    const std::string file = object.value("file", j_null);
-    const float speed = object.value("speed", j_null);
-    const int damage = object.value("damage", j_null);
     
     auto bullet = Bullet::create(file, speed, damage);
     bullet->setId(id);
     bullet->setName(name);
     bullet->retain();
     mBullets.push_back(bullet);
-    return true;
+    return bullet;
 }
 
-bool ObjectManager::createWeapon(const json &object)
+Weapon * ObjectManager::createWeapon(const json &object)
 {
     const json j_null;
-    const int type = object.value("type", j_null);
-    if (type != WEAPON) {
-        assert(false);
-        return false;
+    auto id = object.value("id", j_null);
+    auto name = object.value("name", j_null);
+    auto triggerInterval = object.value("triggerInterval", j_null);
+    if (id.is_number_integer() == false || name.is_string() == false || triggerInterval.is_number_integer() == false) {
+        return nullptr;
     }
     
-    const int id = object.value("id", j_null);
-    if (getObject(id) != nullptr) {
-        return false;
+    if ( getObject(id) != nullptr) {
+        // there's already an object with this id, don't create another one
+        return nullptr;
     }
-    
-    const std::string name = object.value("name", j_null);
-    const float triggerInterval = object.value("triggerInterval", j_null);
-    auto weapon = Weapon::create(triggerInterval * 0.001);  // triggerInterval is milliseconds in json file
+
+    // triggerInterval is **milliseconds** in json file
+    auto weapon = Weapon::create(static_cast<float>(triggerInterval) * 0.001);
     weapon->setId(id);
     weapon->setName(name);
     weapon->retain();
     mWeapons.push_back(weapon);
     
-    const int bulletId = object.value("bullet", j_null);
-    if (bulletId != 0) {
-        auto bullet = getObject(bulletId);
+    auto bulletId = object.value("bullet", j_null);
+    if (bulletId.is_number_integer()) {
+        auto bullet = getObject(static_cast<int>(bulletId));
         if (bullet) {
             weapon->setBullet(dynamic_cast<Bullet *>(bullet));
         }
     }
     
-    return true;
+    return weapon;
 }
 
-bool ObjectManager::createFriendPlane(const json &object)
+FriendPlane * ObjectManager::createFriendPlane(const json &object)
 {
-    const json j_null;
-    const int type = object.value("type", j_null);
-    if (type != FRIENDPLANE) {
-        assert(false);
-        return false;
-    }
-    
     if (mFriendPlane) {
         // sorry only one friend plane is supported
-        return false;
+        return nullptr;
     }
     
-    const int id = object.value("id", j_null);
-    if (getObject(id) != nullptr) {
-        return false;
+    const json j_null;
+    auto id = object.value("id", j_null);
+    auto name = object.value("name", j_null);
+    auto file = object.value("file", j_null);
+    auto speed = object.value("speed", j_null);
+    if (id.is_number_integer() == false || name.is_string() == false || file.is_string() == false || speed.is_number_integer() == false) {
+        return nullptr;
     }
     
-    const std::string name = object.value("name", j_null);
-    const std::string file = object.value("file", j_null);
-    const float speed = object.value("speed", j_null);
-    const float bornTime = object.value("bornTime", j_null);
-    const float bornX = object.value("bornX", j_null);
-    const float bornY = object.value("bornY", j_null);
-    const float destinationX = object.value("destinationX", j_null);
-    const float destinationY = object.value("destinationY", j_null);
+    if ( getObject(id) != nullptr) {
+        // there's already an object with this id, don't create another one
+        return nullptr;
+    }
     
     mFriendPlane = FriendPlane::create(file);
-    mFriendPlane->setPosition(Vec2(bornX, bornY));
+    mFriendPlane->retain();
     mFriendPlane->setSpeed(speed);
-    mFriendPlane->setDestination(Vec2(destinationX, destinationY));
     
-    if (mScene) {
-        mScene->addChild(mFriendPlane);
+    auto bornX = object.value("bornX", j_null);
+    auto bornY = object.value("bornY", j_null);
+    auto destinationX = object.value("destinationX", j_null);
+    auto destinationY = object.value("destinationY", j_null);
+    
+    if (bornX.is_number_integer() && bornY.is_number_integer() && destinationX.is_number_integer() && destinationY.is_number_integer()) {
+        mFriendPlane->setPosition(Vec2(static_cast<float>(bornX), static_cast<float>(bornY)));
+        mFriendPlane->setDestination(Vec2(static_cast<float>(destinationX), static_cast<float>(destinationY)));
     }
     
     const int weaponId = object.value("weapon", j_null);
@@ -253,9 +288,7 @@ bool ObjectManager::createFriendPlane(const json &object)
         }
     }
     
-    mFriendPlane->retain();
-    
-    return true;
+    return mFriendPlane;
 }
 
 GameObject * ObjectManager::getObject(int id)

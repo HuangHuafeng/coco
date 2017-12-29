@@ -35,9 +35,11 @@ private:
     
     bool loadObjects(const json &objects);
     bool createObject(const json &object);
-    bool createBullet(const json &object);
-    bool createWeapon(const json &object);
-    bool createFriendPlane(const json &object);
+    bool createObjectImmediately(const json &object);
+    
+    Bullet * createBullet(const json &object);
+    Weapon * createWeapon(const json &object);
+    FriendPlane * createFriendPlane(const json &object);
     
 public:
     ~ObjectManager();
