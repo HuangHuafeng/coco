@@ -7,6 +7,7 @@
 
 #include "Weapon.h"
 #include "WarObject.h"
+#include "ObjectManager.h"
 
 USING_NS_CC;
 
@@ -36,8 +37,9 @@ void Weapon::generateOnce()
         auto destination = currentPosition + mBulletOffset;
         bullet->modifyPosition(currentPosition);
         bullet->setDestination(destination);
-        
-        Director::getInstance()->getRunningScene()->addChild(bullet);
+        auto localZorder = getParent()->getLocalZOrder();
+        localZorder--;  // the Bullet is under the WarObject
+        ObjectManager::getInstance()->AddObjectToScene(bullet, localZorder);
     }
 }
 
@@ -75,9 +77,9 @@ void Weapon::setBullet(Bullet *bullet)
     }
 }
 
-Weapon * Weapon::create(float triggerInterval)
+Weapon * Weapon::create(float interval)
 {
-    auto weapon = new (std::nothrow) Weapon(triggerInterval);
+    auto weapon = new (std::nothrow) Weapon(interval);
     weapon->autorelease();
 
     return weapon;

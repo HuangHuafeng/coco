@@ -15,10 +15,10 @@ class WeaponTripleBullet : public Weapon {
 protected:
     WeaponTripleBullet(float interval = 1.0f);
 
-    virtual void generateOnce();
+    virtual void generateOnce() override;
     
 public:
-    static WeaponTripleBullet * create(float bulletInterval);
+    static WeaponTripleBullet * create(float interval = 1.0f);
 };
 
 #endif /* WeaponTripleBullet_h */

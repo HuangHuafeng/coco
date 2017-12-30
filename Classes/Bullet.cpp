@@ -18,7 +18,7 @@ Bullet::Bullet() : FlyingObject()
 float Bullet::getFireRange()
 {
     auto windowSize = Director::getInstance()->getWinSize();
-    return windowSize.height;
+    return windowSize.height * 1.5f;
 }
 
 

@@ -13,10 +13,6 @@
 
 class WarObject;    // need forward declaration here
 
-typedef enum {
-    WEAPON_FIRE_ACTION = 9999,
-} WeaponAction;
-
 class Weapon : public ObjectGenerator {
 
 protected:
@@ -36,7 +32,7 @@ public:
     virtual void attachToWarObject(WarObject *warObject);
     void setBullet(Bullet *bullet);
     
-    static Weapon * create(float triggerInterval = 1.0f);
+    static Weapon * create(float interval = 1.0f);
 };
 
 #endif /* Weapon_h */

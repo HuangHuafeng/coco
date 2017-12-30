@@ -49,3 +49,9 @@ void EnemyObject::updateRoute()
         }
     }
 }
+
+EnemyObject * EnemyObject::clone() const
+{
+    // I am not able to clone myself
+    return nullptr;
+}

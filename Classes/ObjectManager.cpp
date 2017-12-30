@@ -20,8 +20,9 @@ ObjectManager::ObjectManager()
     mScene = nullptr;
     mBullets = {};
     mWeapons = {};
-    mEnemies = {};
+    mRetainedObjects = {};
     mObjectsInScene = {};
+    mObjectsWithId0 = {};
     mFriendPlane = nullptr;
 }
 
@@ -32,25 +33,11 @@ ObjectManager::~ObjectManager()
         mScene = nullptr;
     }
     
-    std::vector<Bullet *>::const_iterator itBullet = mBullets.cbegin();
-    std::vector<Bullet *>::const_iterator endBullet = mBullets.cend();
-    while (itBullet != endBullet) {
-        (*itBullet)->autorelease();
-        itBullet++;
-    }
-    
-    std::vector<Weapon *>::const_iterator itWeapon = mWeapons.cbegin();
-    std::vector<Weapon *>::const_iterator endWeapon = mWeapons.cend();
-    while (itWeapon != endWeapon) {
-        (*itWeapon)->autorelease();
-        itWeapon++;
-    }
-    
-    std::vector<EnemyObject *>::const_iterator itEnemies = mEnemies.cbegin();
-    std::vector<EnemyObject *>::const_iterator endEnemies = mEnemies.cend();
-    while (itEnemies != endEnemies) {
-        (*itEnemies)->autorelease();
-        itEnemies++;
+    std::vector<GameObject *>::const_iterator itObject = mRetainedObjects.cbegin();
+    std::vector<GameObject *>::const_iterator endObject = mRetainedObjects.cend();
+    while (itObject != endObject) {
+        (*itObject)->autorelease();
+        itObject++;
     }
     
     if (mFriendPlane) {
@@ -173,6 +160,8 @@ bool ObjectManager::createObjectImmediately(const json &object)
         ret = createFriendPlane(object);
     } else if ("EnemyPlane" == type) {
         ret = createEnemyPlane(object);
+    } else if ("EnemyGenerator" == type) {
+        ret = createEnemyGenerator(object);
     } else {
         log("Don't know how to create object from json: %s", object.dump(4).c_str());
     }
@@ -190,11 +179,44 @@ bool ObjectManager::createObjectImmediately(const json &object)
                 // a bullet which will be used later when creating a Weapon
                 // a template WarObject which will be used later to create many copies
                 ret->retain();
+                mRetainedObjects.push_back(ret);
             }
         }
     }
     
     return ret;
+}
+
+EnemyGenerator * ObjectManager::createEnemyGenerator(const json &object)
+{
+    const json j_null;
+    auto id = object.value("id", j_null);
+    auto name = object.value("name", j_null);
+    auto triggerInterval = object.value("triggerInterval", j_null);
+    if (id.is_number_integer() == false || name.is_string() == false || triggerInterval.is_number_integer() == false) {
+        return nullptr;
+    }
+    
+    if ( findRetainedObject(id) != nullptr) {
+        // there's already an object with this id, don't create another one
+        return nullptr;
+    }
+    
+    // triggerInterval is **milliseconds** in json file
+    auto enemyGenerator = EnemyGenerator::create(static_cast<float>(triggerInterval) * 0.001);
+    enemyGenerator->setObjectId(id);
+    enemyGenerator->setObjectName(name);
+    enemyGenerator->start();
+    
+    auto enemyObjectId = object.value("enemyObject", j_null);
+    if (enemyObjectId.is_number_integer()) {
+        auto enemyObject = dynamic_cast<EnemyObject *>(findRetainedObject(enemyObjectId));
+        if (enemyObject) {
+            enemyGenerator->setObject(enemyObject);
+        }
+    }
+    
+    return enemyGenerator;
 }
 
 EnemyPlane * ObjectManager::createEnemyPlane(const json &object)
@@ -208,13 +230,12 @@ EnemyPlane * ObjectManager::createEnemyPlane(const json &object)
         return nullptr;
     }
     
-    if ( findObject(id) != nullptr) {
+    if ( findRetainedObject(id) != nullptr) {
         // there's already an object with this id, don't create another one
         return nullptr;
     }
     
     auto enemyPlane = EnemyPlane::create(file);
-    mEnemies.push_back(enemyPlane);
     enemyPlane->setSpeed(speed);
     enemyPlane->setObjectName(name);
     enemyPlane->setObjectId(id);
@@ -231,10 +252,10 @@ EnemyPlane * ObjectManager::createEnemyPlane(const json &object)
     
     const int weaponId = object.value("weapon", j_null);
     if (weaponId != 0) {
-        auto weapon = findWeapon(weaponId);
+        auto weapon = dynamic_cast<Weapon *>(findRetainedObject(weaponId));
         if (weapon) {
             enemyPlane->setWeapon(weapon);
-            enemyPlane->openFire();
+            //enemyPlane->openFire();
         }
     }
     
@@ -253,7 +274,7 @@ Bullet * ObjectManager::createBullet(const json &object)
         return nullptr;
     }
     
-    if ( findObject(id) != nullptr) {
+    if ( findRetainedObject(id) != nullptr) {
         // there's already an object with this id, don't create another one
         return nullptr;
     }
@@ -275,7 +296,7 @@ Weapon * ObjectManager::createWeapon(const json &object)
         return nullptr;
     }
     
-    if ( findObject(id) != nullptr) {
+    if ( findRetainedObject(id) != nullptr) {
         // there's already an object with this id, don't create another one
         return nullptr;
     }
@@ -288,7 +309,7 @@ Weapon * ObjectManager::createWeapon(const json &object)
     
     auto bulletId = object.value("bullet", j_null);
     if (bulletId.is_number_integer()) {
-        auto bullet = findBullet(bulletId);
+        auto bullet = dynamic_cast<Bullet *>(findRetainedObject(bulletId));
         if (bullet) {
             weapon->setBullet(bullet);
         }
@@ -313,7 +334,7 @@ FriendPlane * ObjectManager::createFriendPlane(const json &object)
         return nullptr;
     }
     
-    if ( findObject(id) != nullptr) {
+    if ( findRetainedObject(id) != nullptr) {
         // there's already an object with this id, don't create another one
         return nullptr;
     }
@@ -335,16 +356,17 @@ FriendPlane * ObjectManager::createFriendPlane(const json &object)
     
     const int weaponId = object.value("weapon", j_null);
     if (weaponId != 0) {
-        auto weapon = findWeapon(weaponId);
+        auto weapon = dynamic_cast<Weapon *>(findRetainedObject(weaponId));
         if (weapon) {
             mFriendPlane->setWeapon(weapon);
-            mFriendPlane->openFire();
+            //mFriendPlane->openFire();
         }
     }
     
     return mFriendPlane;
 }
 
+/*
 GameObject * ObjectManager::findObject(int id) const
 {
     GameObject *ret = findBullet(id);
@@ -396,20 +418,7 @@ Bullet * ObjectManager::findBullet(int id) const
     
     return nullptr;
 }
-
-EnemyObject * ObjectManager::findEnemy(int id) const
-{
-    std::vector<EnemyObject *>::const_iterator itEnemies = mEnemies.cbegin();
-    std::vector<EnemyObject *>::const_iterator endEnemies = mEnemies.cend();
-    while (itEnemies != endEnemies) {
-        if ((*itEnemies)->getObjectId() == id) {
-            return *itEnemies;
-        }
-        itEnemies++;
-    }
-    
-    return nullptr;
-}
+*/
 
 void ObjectManager::ObjectEnterScene(GameObject *object)
 {
@@ -426,6 +435,12 @@ void ObjectManager::ObjectEnterScene(GameObject *object)
         } else {
             log("try to add object with id %d, but there's already an object with id %d in list. We should NOT reach here!", id, id);
         }
+    } else {
+        // we still should trace the objects with id 0
+        // of course, we cannot trace them by id, we trace them by the pointers
+        object->retain();
+        mObjectsWithId0.push_back(object);
+        log("add one object with id 0, there're %lu objects with id 0.", mObjectsWithId0.size());
     }
 }
 
@@ -445,8 +460,37 @@ void ObjectManager::ObjectExitScene(GameObject *object)
             }
             itObject++;
         }
+    } else {
+        std::list<GameObject *>::const_iterator itObject = mObjectsWithId0.cbegin();
+        std::list<GameObject *>::const_iterator endObject = mObjectsWithId0.cend();
+        
+        while (itObject != endObject) {
+            if (*itObject == object) {
+                mObjectsWithId0.remove(*itObject);
+                (*itObject)->autorelease();
+                log("remove one object with id 0, there're %lu objects with id 0 left.", mObjectsWithId0.size());
+                break;
+            }
+            itObject++;
+        }
     }
 }
+
+GameObject * ObjectManager::findRetainedObject(int id) const
+{
+    std::vector<GameObject *>::const_iterator itObject = mRetainedObjects.cbegin();
+    std::vector<GameObject *>::const_iterator endObject = mRetainedObjects.cend();
+    
+    while (itObject != endObject) {
+        if ((*itObject)->getObjectId() == id) {
+            return *itObject;
+        }
+        itObject++;
+    }
+    
+    return nullptr;
+}
+
 
 GameObject * ObjectManager::findSceneObject(int id) const
 {
@@ -461,4 +505,26 @@ GameObject * ObjectManager::findSceneObject(int id) const
     }
     
     return nullptr;
+}
+
+int ObjectManager::giveMeId()
+{
+    static int id = static_cast<int>(500000 + 1000000.0f * rand_0_1());
+    return id++;
+}
+
+int ObjectManager::getNumberOfSceneObjects() const
+{
+    return static_cast<int>(mObjectsInScene.size());
+}
+
+void ObjectManager::AddObjectToScene(GameObject *object, int localZOrder)
+{
+    if (object && mScene) {
+        auto lzo = localZOrder;
+        if (!lzo) {
+            lzo = getNumberOfSceneObjects() + 1;
+        }
+        mScene->addChild(object, lzo);
+    }
 }

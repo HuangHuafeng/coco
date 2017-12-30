@@ -47,3 +47,15 @@ void WarObject::ceaseFire()
         mWeapon->stop();
     }
 }
+
+void WarObject::onEnter()
+{
+    FlyingObject::onEnter();
+    openFire();
+}
+
+void WarObject::onExit()
+{
+    FlyingObject::onExit();
+    ceaseFire();
+}

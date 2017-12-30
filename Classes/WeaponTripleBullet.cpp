@@ -37,9 +37,9 @@ void WeaponTripleBullet::generateOnce()
 }
 
 
-WeaponTripleBullet * WeaponTripleBullet::create(float bulletInterval)
+WeaponTripleBullet * WeaponTripleBullet::create(float interval)
 {
-    auto weapon = new (std::nothrow) WeaponTripleBullet(bulletInterval);
+    auto weapon = new (std::nothrow) WeaponTripleBullet(interval);
     weapon->autorelease();
     
     return weapon;

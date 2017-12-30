@@ -23,6 +23,9 @@ public:
     void openFire();
     void ceaseFire();
     void setWeapon(Weapon *weapon);
+    
+    virtual void onEnter() override;
+    virtual void onExit() override;
 };
 
 #endif /* WarObject_h */

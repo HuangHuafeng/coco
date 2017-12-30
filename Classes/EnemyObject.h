@@ -22,6 +22,8 @@ protected:
     
 public:
     EnemyObject();
+    
+    virtual EnemyObject * clone() const override;
 };
 
 #endif /* EnemyObject_h */

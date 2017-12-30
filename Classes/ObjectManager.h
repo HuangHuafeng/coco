@@ -12,6 +12,8 @@
 #include "Weapon.h"
 #include "FriendPlane.h"
 #include "EnemyPlane.h"
+#include "EnemyGenerator.h"
+
 #include "json.hpp" // installed by homebrew in /usr/local/Cellar/nlohmann_json/3.0.0/include/
 using json = nlohmann::json;
 
@@ -31,7 +33,9 @@ private:
     std::vector<Bullet *> mBullets;
     std::vector<Weapon *> mWeapons;
     std::vector<EnemyObject *> mEnemies;
+    std::vector<GameObject *> mRetainedObjects;
     std::list<GameObject *> mObjectsInScene;
+    std::list<GameObject *> mObjectsWithId0;
     FriendPlane *mFriendPlane;      // only on friend plane is supported
     
     ObjectManager();
@@ -44,6 +48,7 @@ private:
     Weapon * createWeapon(const json &object);
     FriendPlane * createFriendPlane(const json &object);
     EnemyPlane * createEnemyPlane(const json &object);
+    EnemyGenerator * createEnemyGenerator(const json &object);
     
 public:
     ~ObjectManager();
@@ -53,14 +58,17 @@ public:
     bool loadFromFile(const std::string &filename);
     void setScene(cocos2d::Scene *scene);
     cocos2d::Scene * getScene() const;
-    
-    GameObject * findObject(int id) const;
+
+    int giveMeId();
+    int getNumberOfSceneObjects() const;
+    GameObject * findRetainedObject(int id) const;
     GameObject * findSceneObject(int id) const;
-    Weapon * findWeapon(int id) const;
-    Bullet * findBullet(int id) const;
-    EnemyObject * findEnemy(int id) const;
+    //Weapon * findWeapon(int id) const;
+    //Bullet * findBullet(int id) const;
+    //EnemyObject * findEnemy(int id) const;
     void ObjectEnterScene(GameObject *object);
     void ObjectExitScene(GameObject *object);
+    void AddObjectToScene(GameObject *object, int localZOrder = 0);
 };
 
 #endif /* ObjectManager_h */
