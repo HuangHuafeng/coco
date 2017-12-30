@@ -11,6 +11,7 @@
 #include "Bullet.h"
 #include "Weapon.h"
 #include "FriendPlane.h"
+#include "EnemyPlane.h"
 #include "json.hpp" // installed by homebrew in /usr/local/Cellar/nlohmann_json/3.0.0/include/
 using json = nlohmann::json;
 
@@ -29,6 +30,8 @@ private:
     cocos2d::Scene *mScene;
     std::vector<Bullet *> mBullets;
     std::vector<Weapon *> mWeapons;
+    std::vector<EnemyObject *> mEnemies;
+    std::list<GameObject *> mObjectsInScene;
     FriendPlane *mFriendPlane;      // only on friend plane is supported
     
     ObjectManager();
@@ -40,6 +43,7 @@ private:
     Bullet * createBullet(const json &object);
     Weapon * createWeapon(const json &object);
     FriendPlane * createFriendPlane(const json &object);
+    EnemyPlane * createEnemyPlane(const json &object);
     
 public:
     ~ObjectManager();
@@ -50,7 +54,13 @@ public:
     void setScene(cocos2d::Scene *scene);
     cocos2d::Scene * getScene() const;
     
-    GameObject * getObject(int id);
+    GameObject * findObject(int id) const;
+    GameObject * findSceneObject(int id) const;
+    Weapon * findWeapon(int id) const;
+    Bullet * findBullet(int id) const;
+    EnemyObject * findEnemy(int id) const;
+    void ObjectEnterScene(GameObject *object);
+    void ObjectExitScene(GameObject *object);
 };
 
 #endif /* ObjectManager_h */

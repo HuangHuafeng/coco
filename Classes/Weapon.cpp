@@ -115,3 +115,14 @@ Weapon * Weapon::create(float triggerInterval)
 
     return weapon;
 }
+
+Weapon * Weapon::clone() const
+{
+    auto weapon = new (std::nothrow) Weapon(mTriggerInterval);
+    if (mBullet) {
+        weapon->setBullet(mBullet);
+    }
+    weapon->autorelease();
+    
+    return weapon;
+}

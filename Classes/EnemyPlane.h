@@ -15,6 +15,8 @@ class EnemyPlane : public EnemyObject {
 public:
     EnemyPlane();
     
+    virtual EnemyPlane * clone() const override;
+    
     static EnemyPlane * create(const std::string &filename);
 };
 

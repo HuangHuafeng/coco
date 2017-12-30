@@ -28,7 +28,7 @@ void WarObject::setWeapon(Weapon *weapon)
     }
 
     if (weapon) {
-        mWeapon = weapon;
+        mWeapon = weapon->clone();
         mWeapon->attachToWarObject(this);
         addChild(mWeapon);
     }

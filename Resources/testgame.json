@@ -1,1 +1,96 @@
-{"objects":[{"type":1,"id":1,"name":"b1","bornTime":0,"addToScene":false,"file":"bullet1.png","speed":500,"damage":100},{"type":2,"id":2,"name":"w1","bornTime":0,"addToScene":false,"bullet":1,"triggerInterval":400},{"type":4,"id":3,"name":"f1","bornTime":1000,"addToScene":true,"file":"myPlane.png","speed":300,"weapon":2,"bornX":0,"bornY":0,"destinationX":160,"destinationY":100}]}
+{
+  "objects": [
+    {
+      "type": 1,
+      "id": 1,
+      "name": "b1",
+      "bornTime": 0,
+      "addToScene": false,
+      "file": "bullet1.png",
+      "speed": 500,
+      "damage": 100
+    },
+    {
+      "type": 1,
+      "id": 8,
+      "name": "b2",
+      "bornTime": 0,
+      "addToScene": false,
+      "file": "bullet3.png",
+      "speed": 150,
+      "damage": 100
+    },
+    { "type": 2, "id": 2, "name": "w1", "bornTime": 0, "addToScene": false, "bullet": 1, "triggerInterval": 400 },
+    { "type": 2, "id": 12, "name": "w2", "bornTime": 0, "addToScene": false, "bullet": 8, "triggerInterval": 1200 },
+    {
+      "type": 4,
+      "id": 3,
+      "name": "f1",
+      "bornTime": 1000,
+      "addToScene": true,
+      "file": "myPlane.png",
+      "speed": 300,
+      "weapon": 2,
+      "bornX": 0,
+      "bornY": 0,
+      "destinationX": 50,
+      "destinationY": 100
+    },
+    {
+      "type": 5,
+      "id": 5,
+      "name": "e1",
+      "bornTime": 2000,
+      "addToScene": true,
+      "file": "enemy2.png",
+      "speed": 50,
+      "weapon": 12,
+      "bornX": 160,
+      "bornY": 480,
+      "destinationX": 250,
+      "destinationY": 100
+    },
+    {
+      "type": 5,
+      "id": 51,
+      "name": "e1",
+      "bornTime": 2200,
+      "addToScene": true,
+      "file": "enemy2.png",
+      "speed": 30,
+      "weapon": 12,
+      "bornX": 240,
+      "bornY": 480,
+      "destinationX": 50,
+      "destinationY": 100
+    },
+    {
+      "type": 5,
+      "id": 52,
+      "name": "e1",
+      "bornTime": 1500,
+      "addToScene": true,
+      "file": "enemy2.png",
+      "speed": 20,
+      "weapon": 12,
+      "bornX": 260,
+      "bornY": 480,
+      "destinationX": 150,
+      "destinationY": 100
+    },
+    {
+      "type": 5,
+      "id": 53,
+      "name": "e1",
+      "bornTime": 2500,
+      "addToScene": true,
+      "file": "enemy2.png",
+      "speed": 50,
+      "weapon": 2,
+      "bornX": 280,
+      "bornY": 480,
+      "destinationX": 0,
+      "destinationY": 100
+    }
+  ]
+}

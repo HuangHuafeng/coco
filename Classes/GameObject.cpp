@@ -6,6 +6,9 @@
 //
 
 #include "GameObject.h"
+#include "ObjectManager.h"
+
+USING_NS_CC;
 
 GameObject::GameObject()
 {
@@ -19,17 +22,30 @@ const std::string & GameObject::getName()
     return mName;
 }
 
-void GameObject::setName(const std::string & name)
+void GameObject::setObjectName(const std::string & name)
 {
     mName = name;
 }
 
-int GameObject::getId() const
+int GameObject::getObjectId() const
 {
     return mId;
 }
 
-void GameObject::setId(int id)
+void GameObject::setObjectId(int id)
 {
     mId = id;
+}
+
+void GameObject::onExit()
+{
+    Sprite::onExit();
+    ObjectManager::getInstance()->ObjectExitScene(this);
+}
+
+void GameObject::onEnter()
+{
+    Sprite::onEnter();
+
+    ObjectManager::getInstance()->ObjectEnterScene(this);
 }

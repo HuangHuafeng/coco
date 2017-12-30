@@ -10,7 +10,7 @@
 #ifndef GameObject_h
 #define GameObject_h
 
-class GameObject : public cocos2d::Sprite {
+class GameObject : public cocos2d::Sprite, public cocos2d::Clonable {
     
 protected:
     int mId;
@@ -20,9 +20,12 @@ public:
     GameObject();
     
     const std::string & getName();
-    void setName(const std::string & name);
-    int getId() const;
-    void setId(int id);
+    void setObjectName(const std::string & name);
+    int getObjectId() const;
+    void setObjectId(int id);
+    
+    virtual void onEnter() override;
+    virtual void onExit() override;
 };
 
 #endif /* GameObject_h */

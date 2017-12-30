@@ -27,3 +27,17 @@ FriendPlane* FriendPlane::create(const std::string &filename)
 
     return fp;
 }
+
+FriendPlane * FriendPlane::clone() const
+{
+    FriendPlane* fp = new (std::nothrow) FriendPlane();
+    fp->initWithTexture(_texture);
+    fp->initialize();
+    fp->setForceType(mForceType);
+    fp->modifyPosition(getPosition());
+    fp->setSpeed(mSpeed);
+    fp->setWeapon(mWeapon);
+    fp->autorelease();
+    
+    return fp;
+}

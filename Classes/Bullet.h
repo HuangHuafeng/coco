@@ -10,7 +10,7 @@
 
 #include "FlyingObject.h"
 
-class Bullet : public FlyingObject, public cocos2d::Clonable {
+class Bullet : public FlyingObject {
 
 protected:
     int mDamage;

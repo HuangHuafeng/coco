@@ -15,8 +15,13 @@ ScrollingBackground::ScrollingBackground(const Size bkgSize)
     mBackgroundSize = bkgSize;
 }
 
+ScrollingBackground * ScrollingBackground::clone() const
+{
+    // no clone yet
+    return nullptr;
+}
 
-ScrollingBackground* ScrollingBackground::create(const std::string& bkgImg1, const std::string& bkgImg2, const cocos2d::Size bkgSize)
+ScrollingBackground * ScrollingBackground::create(const std::string& bkgImg1, const std::string& bkgImg2, const cocos2d::Size bkgSize)
 {
     auto img1 = Sprite::create(bkgImg1);
     auto img2 = Sprite::create(bkgImg2);

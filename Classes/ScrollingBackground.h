@@ -15,6 +15,8 @@ public:
     ScrollingBackground(const cocos2d::Size bkgSize);
     //virtual ~Background();
     
+    virtual ScrollingBackground * clone() const override;
+    
     static ScrollingBackground* create(const std::string& bkgImg1, const std::string& bkgImg2, const cocos2d::Size bkgSize);
     void startScroll(float timeForOneScroll);
     

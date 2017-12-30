@@ -32,6 +32,8 @@ protected:
 public:
     ~Weapon();
     
+    virtual Weapon * clone() const override;
+    
     virtual void openFire();
     virtual void ceaseFire();
     virtual void attachToWarObject(WarObject *warObject);

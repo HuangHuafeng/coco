@@ -15,6 +15,8 @@ class FriendPlane : public UserControlledFlyingObject {
 public:
     FriendPlane();
     
+    virtual FriendPlane * clone() const override;
+    
     static FriendPlane * create(const std::string &filename);
 };
 #endif /* FriendPlane_h */
