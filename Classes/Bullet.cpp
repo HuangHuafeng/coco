@@ -68,16 +68,6 @@ Bullet* Bullet::clone() const
     return b;
 }
 
-int Bullet::getDamage()
-{
-    return mDamage;
-}
-
-void Bullet::setDamage(int damage)
-{
-    mDamage = damage;
-}
-
 // override updateRoute() to remove myself after reaching the destination
 void Bullet::updateRoute()
 {

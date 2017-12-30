@@ -41,3 +41,10 @@ FriendPlane * FriendPlane::clone() const
     
     return fp;
 }
+
+void FriendPlane::collideWith(CollideObject *otherCollideObject)
+{
+    setPosition(Vec2(0, 0));
+    
+    UserControlledFlyingObject::collideWith(otherCollideObject);
+}

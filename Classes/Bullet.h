@@ -13,16 +13,12 @@
 class Bullet : public FlyingObject {
 
 protected:
-    int mDamage;
-    
     virtual void updateRoute() override;
     virtual void collideWith(CollideObject* otherCollideObject) override;
 
 public:
     Bullet();
     
-    void setDamage(int damage);
-    int getDamage();
     void setForceType(ForceType type);  // override to set bullet contact test bit mask
     
     virtual float getFireRange();

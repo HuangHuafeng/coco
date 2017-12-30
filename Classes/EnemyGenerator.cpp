@@ -14,7 +14,9 @@ USING_NS_CC;
 EnemyGenerator::EnemyGenerator(float interval)
 : ObjectGenerator(interval)
 {
-    
+    auto seed = utils::gettime() * 1000000;
+    //log("seed: %f", seed);
+    std::srand(seed);
 }
 
 void EnemyGenerator::generateOnce()

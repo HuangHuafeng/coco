@@ -18,6 +18,7 @@ typedef enum {
 class CollideObject : public GameObject {
     
 protected:
+    int mDamage;
     ForceType mForceType;
 
     virtual bool initialize();
@@ -44,11 +45,13 @@ protected:
     
     
     bool onContactBegan(cocos2d::PhysicsContact &contact);
-    virtual void collideWith(CollideObject* otherCollideObject);
+    virtual void collideWith(CollideObject* otherCollideObject) = 0;
     
 public:
     CollideObject();
     
+    void setDamage(int damage);
+    int getDamage();
     void setForceType(ForceType type = ENEMY);
     ForceType getForceType() const;
     virtual void onEnter() override;

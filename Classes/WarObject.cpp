@@ -10,6 +10,7 @@
 WarObject::WarObject()
 {
     mWeapon = nullptr;
+    mHealth = 10;   // default to a small value, so it will be killed easily
 }
 
 WarObject::~WarObject()
@@ -18,6 +19,16 @@ WarObject::~WarObject()
         removeChild(mWeapon, true);
         mWeapon = nullptr;
     }
+}
+
+void WarObject::setHealth(int health)
+{
+    mHealth = health;
+}
+
+int WarObject::getHealth() const
+{
+    return mHealth;
 }
 
 void WarObject::setWeapon(Weapon *weapon)
@@ -58,4 +69,19 @@ void WarObject::onExit()
 {
     FlyingObject::onExit();
     ceaseFire();
+}
+
+void WarObject::collideWith(CollideObject *otherCollideObject)
+{
+    mHealth -= otherCollideObject->getDamage();
+
+    if (mHealth <= 0) {
+        OnKilled();
+    }
+}
+
+void WarObject::OnKilled()
+{
+    stop();
+    removeFromParent();
 }

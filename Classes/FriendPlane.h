@@ -12,6 +12,9 @@
 
 class FriendPlane : public UserControlledFlyingObject {
     
+protected:
+    virtual void collideWith(CollideObject* otherCollideObject) override;
+    
 public:
     FriendPlane();
     

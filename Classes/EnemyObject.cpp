@@ -19,11 +19,6 @@ void EnemyObject::setSelfDestroy(bool selfDestroy)
     mSelfDestroy = selfDestroy;
 }
 
-void EnemyObject::collideWith(CollideObject *otherCollideObject)
-{
-    removeFromParent();
-}
-
 // override updateRoute() to remove myself after reaching the destination
 void EnemyObject::updateRoute()
 {

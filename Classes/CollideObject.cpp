@@ -11,7 +11,7 @@ USING_NS_CC;
 
 CollideObject::CollideObject()
 {
-    
+    mDamage = 0;
 }
 
 bool CollideObject::initialize()
@@ -78,8 +78,12 @@ bool CollideObject::onContactBegan(PhysicsContact &contact)
     return true;
 }
 
-void CollideObject::collideWith(CollideObject* otherCollideObject)
+int CollideObject::getDamage()
 {
-    // doing nothing
+    return mDamage;
 }
 
+void CollideObject::setDamage(int damage)
+{
+    mDamage = damage;
+}

@@ -15,6 +15,10 @@ class WarObject : public FlyingObject {
     
 protected:
     Weapon *mWeapon;
+    int mHealth;
+    
+    virtual void collideWith(CollideObject* otherCollideObject) override;
+    virtual void OnKilled();
     
 public:
     WarObject();
@@ -23,9 +27,12 @@ public:
     void openFire();
     void ceaseFire();
     void setWeapon(Weapon *weapon);
+    void setHealth(int health);
+    int getHealth() const;
     
     virtual void onEnter() override;
     virtual void onExit() override;
+    //virtual void update (float delta) override;
 };
 
 #endif /* WarObject_h */

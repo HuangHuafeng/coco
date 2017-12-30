@@ -85,12 +85,11 @@ bool ObjectManager::loadFromFile(const std::string &filename)
         return false;
     }
     
-    json objects = game.value("objects", j_null);
-    if (false == loadObjects(objects)) {
-        return false;
+    auto objects = game.value("objects", j_null);
+    if (objects.is_null() == false) {
+        return loadObjects(objects);
     }
     
-    log("looks good!");
     return true;
 }
 
@@ -343,6 +342,7 @@ FriendPlane * ObjectManager::createFriendPlane(const json &object)
     mFriendPlane->setSpeed(speed);
     mFriendPlane->setObjectName(name);
     mFriendPlane->setObjectId(id);
+    mFriendPlane->setHealth(1000);
     
     auto bornX = object.value("bornX", j_null);
     auto bornY = object.value("bornY", j_null);
@@ -431,7 +431,7 @@ void ObjectManager::ObjectEnterScene(GameObject *object)
             // only add the object if there's no object with "id"
             object->retain();
             mObjectsInScene.push_back(object);
-            log("object with id %d enters, %lu objects in scene", object->getObjectId(), mObjectsInScene.size());
+            //log("object with id %d enters, %lu objects in scene", object->getObjectId(), mObjectsInScene.size());
         } else {
             log("try to add object with id %d, but there's already an object with id %d in list. We should NOT reach here!", id, id);
         }
@@ -440,7 +440,7 @@ void ObjectManager::ObjectEnterScene(GameObject *object)
         // of course, we cannot trace them by id, we trace them by the pointers
         object->retain();
         mObjectsWithId0.push_back(object);
-        log("add one object with id 0, there're %lu objects with id 0.", mObjectsWithId0.size());
+        //log("add one object with id 0, there're %lu objects with id 0.", mObjectsWithId0.size());
     }
 }
 
@@ -455,7 +455,7 @@ void ObjectManager::ObjectExitScene(GameObject *object)
             if ((*itObject)->getObjectId() == object->getObjectId()) {
                 mObjectsInScene.remove(*itObject);
                 (*itObject)->autorelease();
-                log("object with id %d exits, %lu objects in scene", object->getObjectId(), mObjectsInScene.size());
+                //log("object with id %d exits, %lu objects in scene", object->getObjectId(), mObjectsInScene.size());
                 break;
             }
             itObject++;
@@ -468,7 +468,7 @@ void ObjectManager::ObjectExitScene(GameObject *object)
             if (*itObject == object) {
                 mObjectsWithId0.remove(*itObject);
                 (*itObject)->autorelease();
-                log("remove one object with id 0, there're %lu objects with id 0 left.", mObjectsWithId0.size());
+                //log("remove one object with id 0, there're %lu objects with id 0 left.", mObjectsWithId0.size());
                 break;
             }
             itObject++;

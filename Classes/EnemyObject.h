@@ -16,7 +16,6 @@ protected:
     bool mSelfDestroy;
     
     virtual void updateRoute() override;
-    virtual void collideWith(CollideObject* otherCollideObject) override;
     
     void setSelfDestroy(bool selfDestroy);
     
