@@ -10,57 +10,35 @@
 
 USING_NS_CC;
 
-Weapon::Weapon(float triggerInterval)
+Weapon::Weapon(float interval)
+: ObjectGenerator(interval)
 {
-    mTriggerInterval = triggerInterval;
     mBulletOffset = Vec2(0, 0);
-    mBullet = nullptr;
     mWarObject = nullptr;
 }
 
 Weapon::~Weapon()
 {
-    if (mBullet) {
-        mBullet->autorelease();
-        mBullet = nullptr;
-    }
-
     if (mWarObject) {
         mWarObject->autorelease();
         mWarObject = nullptr;
     }
 }
 
-// openFire fire a bullet very mBulletInterval seconds
-// subclass should ONLY override this function if it does
-// not like this "fire a bullet every mBulletInterval seconds"
-// otherwise, override pullTrigger() should work
-void Weapon::openFire()
-{
-    auto fireOnce = CallFunc::create(CC_CALLBACK_0(Weapon::pullTrigger, this));
-    auto delay = DelayTime::create(mTriggerInterval);
-    auto seq = Sequence::create(fireOnce, delay, nullptr);
-    runAction(RepeatForever::create(seq));
-}
-
 // subclass can override this function to get different effect
 // for example, fire 4 bullets a time
-void Weapon::pullTrigger()
+void Weapon::generateOnce()
 {
-    if (mBullet) {
+    Bullet * equippedBullet = dynamic_cast<Bullet *>(mObject);
+    if (equippedBullet) {
         auto currentPosition = getParent()->getPosition();
-        auto bullet = mBullet->clone();
+        auto bullet = equippedBullet->clone();
         auto destination = currentPosition + mBulletOffset;
         bullet->modifyPosition(currentPosition);
         bullet->setDestination(destination);
         
         Director::getInstance()->getRunningScene()->addChild(bullet);
     }
-}
-
-void Weapon::ceaseFire()
-{
-    stopAllActions();
 }
 
 void Weapon::attachToWarObject(WarObject *warObject)
@@ -79,31 +57,20 @@ void Weapon::attachToWarObject(WarObject *warObject)
 
 void Weapon::updateBullet()
 {
-    if (mBullet && mWarObject) {
+    Bullet * equippedBullet = dynamic_cast<Bullet *>(mObject);
+    if (equippedBullet && mWarObject) {
         auto forceType = mWarObject->getForceType();
-        mBullet->setForceType(forceType);
+        equippedBullet->setForceType(forceType);
         
-        auto firRange = mBullet->getFireRange();
+        auto firRange = equippedBullet->getFireRange();
         mBulletOffset = forceType == FRIEND ? Vec2(0, firRange) : Vec2(0, - firRange);
     }
 }
 
-void Weapon::setBulletInterval(float triggerInterval)
-{
-    mTriggerInterval = triggerInterval;
-}
-
 void Weapon::setBullet(Bullet *bullet)
 {
-    if (mBullet) {
-        mBullet->autorelease();
-        mBullet = nullptr;
-    }
-    
     if (bullet) {
-        mBullet = bullet->clone();
-        // mBullet will never be added to the scene, so we need to retain it
-        mBullet->retain();
+        setObject(bullet);
         updateBullet();
     }
 }
@@ -118,9 +85,10 @@ Weapon * Weapon::create(float triggerInterval)
 
 Weapon * Weapon::clone() const
 {
-    auto weapon = new (std::nothrow) Weapon(mTriggerInterval);
-    if (mBullet) {
-        weapon->setBullet(mBullet);
+    auto weapon = new (std::nothrow) Weapon(mInterval);
+    Bullet * equippedBullet = dynamic_cast<Bullet *>(mObject);
+    if (equippedBullet) {
+        weapon->setBullet(equippedBullet);
     }
     weapon->autorelease();
     

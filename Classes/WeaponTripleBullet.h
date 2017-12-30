@@ -13,9 +13,9 @@
 class WeaponTripleBullet : public Weapon {
     
 protected:
-    WeaponTripleBullet(float bulletInterval = 1.0f);
+    WeaponTripleBullet(float interval = 1.0f);
 
-    virtual void pullTrigger();
+    virtual void generateOnce();
     
 public:
     static WeaponTripleBullet * create(float bulletInterval);

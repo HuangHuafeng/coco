@@ -37,13 +37,13 @@ void WarObject::setWeapon(Weapon *weapon)
 void WarObject::openFire()
 {
     if (mWeapon) {
-        mWeapon->openFire();
+        mWeapon->start();
     }
 }
 
 void WarObject::ceaseFire()
 {
     if (mWeapon) {
-        mWeapon->ceaseFire();
+        mWeapon->stop();
     }
 }

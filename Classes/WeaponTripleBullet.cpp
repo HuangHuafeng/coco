@@ -10,19 +10,20 @@
 USING_NS_CC;
 
 
-WeaponTripleBullet::WeaponTripleBullet(float bulletInterval) : Weapon(bulletInterval)
+WeaponTripleBullet::WeaponTripleBullet(float interval) : Weapon(interval)
 {
     
 }
 
-void WeaponTripleBullet::pullTrigger()
+void WeaponTripleBullet::generateOnce()
 {
-    if (mBullet) {
+    Bullet * equippedBullet = dynamic_cast<Bullet *>(mObject);
+    if (equippedBullet) {
         auto currentPosition = getParent()->getPosition();
         const auto interval = Vec2(80, 0);
-        auto bullet1 = mBullet->clone();
-        auto bullet2 = mBullet->clone();
-        auto bullet3 = mBullet->clone();
+        auto bullet1 = equippedBullet->clone();
+        auto bullet2 = equippedBullet->clone();
+        auto bullet3 = equippedBullet->clone();
         bullet1->modifyPosition(currentPosition);
         bullet1->setDestination(currentPosition - interval + mBulletOffset);
         bullet2->modifyPosition(currentPosition);

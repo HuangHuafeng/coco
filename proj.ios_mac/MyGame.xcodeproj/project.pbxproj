@@ -82,6 +82,8 @@
 		DC67387B1FF64A140013C7F0 /* bullet3.png in Resources */ = {isa = PBXBuildFile; fileRef = DC67387A1FF64A140013C7F0 /* bullet3.png */; };
 		DC67387C1FF6629C0013C7F0 /* bullet3.png in Resources */ = {isa = PBXBuildFile; fileRef = DC67387A1FF64A140013C7F0 /* bullet3.png */; };
 		DC67387D1FF6629F0013C7F0 /* enemy2.png in Resources */ = {isa = PBXBuildFile; fileRef = DC6738771FF649820013C7F0 /* enemy2.png */; };
+		DC6738801FF724950013C7F0 /* ObjectGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC67387E1FF724950013C7F0 /* ObjectGenerator.cpp */; };
+		DC6738811FF724950013C7F0 /* ObjectGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC67387E1FF724950013C7F0 /* ObjectGenerator.cpp */; };
 		DC7BE68B1FEA03EE00C7E219 /* GameObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7BE68A1FEA03EE00C7E219 /* GameObject.cpp */; };
 		DC7BE68C1FEA03EE00C7E219 /* GameObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7BE68A1FEA03EE00C7E219 /* GameObject.cpp */; };
 		DC7BE6911FEA088400C7E219 /* CollideObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7BE6901FEA088400C7E219 /* CollideObject.cpp */; };
@@ -220,6 +222,8 @@
 		DC2B4B9E1FE3CDE8000E9E53 /* myPlane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myPlane.png; sourceTree = "<group>"; };
 		DC6738771FF649820013C7F0 /* enemy2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = enemy2.png; sourceTree = "<group>"; };
 		DC67387A1FF64A140013C7F0 /* bullet3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bullet3.png; sourceTree = "<group>"; };
+		DC67387E1FF724950013C7F0 /* ObjectGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ObjectGenerator.cpp; sourceTree = "<group>"; };
+		DC67387F1FF724950013C7F0 /* ObjectGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjectGenerator.h; sourceTree = "<group>"; };
 		DC7BE68A1FEA03EE00C7E219 /* GameObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameObject.cpp; sourceTree = "<group>"; };
 		DC7BE68E1FEA040200C7E219 /* GameObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameObject.h; sourceTree = "<group>"; };
 		DC7BE68F1FEA087600C7E219 /* CollideObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollideObject.h; sourceTree = "<group>"; };
@@ -403,6 +407,8 @@
 				DC7BE6AD1FEB8BA300C7E219 /* EnemyObject.h */,
 				DC7BE6B01FEB8EAD00C7E219 /* EnemyPlane.cpp */,
 				DC7BE6B11FEB8EAD00C7E219 /* EnemyPlane.h */,
+				DC67387E1FF724950013C7F0 /* ObjectGenerator.cpp */,
+				DC67387F1FF724950013C7F0 /* ObjectGenerator.h */,
 				DC8B183B1FE8B150001E8C17 /* FlyingObject.cpp */,
 				DC8B18391FE8ACE8001E8C17 /* FlyingObject.h */,
 				DC7BE6A81FEB846700C7E219 /* FriendPlane.cpp */,
@@ -641,6 +647,7 @@
 			files = (
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				DC7BE69B1FEA921F00C7E219 /* Weapon.cpp in Sources */,
+				DC6738801FF724950013C7F0 /* ObjectGenerator.cpp in Sources */,
 				DC7BE6911FEA088400C7E219 /* CollideObject.cpp in Sources */,
 				DC7BE6A61FEB75BD00C7E219 /* WarObject.cpp in Sources */,
 				DC7BE6931FEA3F5A00C7E219 /* UserControlledFlyingObject.cpp in Sources */,
@@ -668,6 +675,7 @@
 				DC7BE6981FEA8A2F00C7E219 /* Bullet.cpp in Sources */,
 				DC2B4B971FE386F5000E9E53 /* ScrollingBackground.cpp in Sources */,
 				DC7BE6B31FEB8EAD00C7E219 /* EnemyPlane.cpp in Sources */,
+				DC6738811FF724950013C7F0 /* ObjectGenerator.cpp in Sources */,
 				DC7BE6AB1FEB846700C7E219 /* FriendPlane.cpp in Sources */,
 				DC8B183D1FE8B150001E8C17 /* FlyingObject.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,

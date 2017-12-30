@@ -49,3 +49,9 @@ void GameObject::onEnter()
 
     ObjectManager::getInstance()->ObjectEnterScene(this);
 }
+
+GameObject * GameObject::clone() const
+{
+    // I am not able to clone myself
+    return nullptr;
+}

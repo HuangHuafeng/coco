@@ -26,6 +26,7 @@ public:
     
     virtual void onEnter() override;
     virtual void onExit() override;
+    virtual GameObject * clone() const override;
 };
 
 #endif /* GameObject_h */

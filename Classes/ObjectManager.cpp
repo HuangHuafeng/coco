@@ -160,32 +160,23 @@ bool ObjectManager::createObjectImmediately(const json &object)
     
     const json j_null;
     auto type = object.value("type", j_null);
-    if (type.is_number_integer() == false) {
+    if (type.is_string() == false) {
         return false;
     }
     
     GameObject * ret = nullptr;
-    switch (static_cast<int>(type)) {
-        case BULLET: // Bullet
-            ret = createBullet(object);
-            break;
-            
-        case WEAPON: // Weapon
-            ret = createWeapon(object);
-            break;
-            
-        case FRIENDPLANE: // FriendPlane
-            ret = createFriendPlane(object);
-            break;
-            
-        case ENEMYPLANE:
-            ret = createEnemyPlane(object);
-            break;
-            
-        default:
-            break;
+    if ("Bullet" == type) {
+        ret = createBullet(object);
+    } else if ("Weapon" == type) {
+        ret = createWeapon(object);
+    } else if ("FriendPlane" == type) {
+        ret = createFriendPlane(object);
+    } else if ("EnemyPlane" == type) {
+        ret = createEnemyPlane(object);
+    } else {
+        log("Don't know how to create object from json: %s", object.dump(4).c_str());
     }
-    
+
     if (ret) {
         // successfully created an object, check if it should be added to scene
         auto addToScene = object.value("addToScene", j_null);

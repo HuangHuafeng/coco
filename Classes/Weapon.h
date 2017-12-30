@@ -9,6 +9,7 @@
 #define Weapon_h
 
 #include "Bullet.h"
+#include "ObjectGenerator.h"
 
 class WarObject;    // need forward declaration here
 
@@ -16,28 +17,23 @@ typedef enum {
     WEAPON_FIRE_ACTION = 9999,
 } WeaponAction;
 
-class Weapon : public GameObject {
+class Weapon : public ObjectGenerator {
 
 protected:
-    Weapon(float triggerInterval = 1.0f);
+    Weapon(float interval = 1.0f);
     
-    Bullet *mBullet;
     WarObject *mWarObject;
-    float mTriggerInterval;
     cocos2d::Vec2 mBulletOffset;
     
     void updateBullet();
-    virtual void pullTrigger();
+    
+    virtual void generateOnce() override;
     
 public:
     ~Weapon();
     
     virtual Weapon * clone() const override;
-    
-    virtual void openFire();
-    virtual void ceaseFire();
     virtual void attachToWarObject(WarObject *warObject);
-    void setBulletInterval(float bulletInterval);
     void setBullet(Bullet *bullet);
     
     static Weapon * create(float triggerInterval = 1.0f);

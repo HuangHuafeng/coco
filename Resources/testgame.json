@@ -1,7 +1,7 @@
 {
   "objects": [
     {
-      "type": 1,
+      "type": "Bullet",
       "id": 1,
       "name": "b1",
       "bornTime": 0,
@@ -11,7 +11,7 @@
       "damage": 100
     },
     {
-      "type": 1,
+      "type": "Bullet",
       "id": 8,
       "name": "b2",
       "bornTime": 0,
@@ -20,10 +20,26 @@
       "speed": 150,
       "damage": 100
     },
-    { "type": 2, "id": 2, "name": "w1", "bornTime": 0, "addToScene": false, "bullet": 1, "triggerInterval": 400 },
-    { "type": 2, "id": 12, "name": "w2", "bornTime": 0, "addToScene": false, "bullet": 8, "triggerInterval": 1200 },
     {
-      "type": 4,
+      "type": "Weapon",
+      "id": 2,
+      "name": "w1",
+      "bornTime": 0,
+      "addToScene": false,
+      "bullet": 1,
+      "triggerInterval": 400
+    },
+    {
+      "type": "Weapon",
+      "id": 12,
+      "name": "w2",
+      "bornTime": 0,
+      "addToScene": false,
+      "bullet": 8,
+      "triggerInterval": 1200
+    },
+    {
+      "type": "FriendPlane",
       "id": 3,
       "name": "f1",
       "bornTime": 1000,
@@ -37,7 +53,7 @@
       "destinationY": 100
     },
     {
-      "type": 5,
+      "type": "EnemyPlane",
       "id": 5,
       "name": "e1",
       "bornTime": 2000,
@@ -51,7 +67,7 @@
       "destinationY": 100
     },
     {
-      "type": 5,
+      "type": "EnemyPlane",
       "id": 51,
       "name": "e1",
       "bornTime": 2200,
@@ -65,7 +81,7 @@
       "destinationY": 100
     },
     {
-      "type": 5,
+      "type": "EnemyPlane",
       "id": 52,
       "name": "e1",
       "bornTime": 1500,
@@ -79,7 +95,7 @@
       "destinationY": 100
     },
     {
-      "type": 5,
+      "type": "EnemyPlane",
       "id": 53,
       "name": "e1",
       "bornTime": 2500,
@@ -91,6 +107,34 @@
       "bornY": 480,
       "destinationX": 0,
       "destinationY": 100
+    },
+    {
+      "type": "EnemyPlane",
+      "id": 54,
+      "name": "e1",
+      "bornTime": 10000,
+      "addToScene": true,
+      "file": "enemy2.png",
+      "speed": 50,
+      "weapon": 2,
+      "bornX": 320,
+      "bornY": 480,
+      "destinationX": 0,
+      "destinationY": 0
+    },
+    {
+      "type": "EnemyPlane",
+      "id": 55,
+      "name": "e1",
+      "bornTime": 10000,
+      "addToScene": true,
+      "file": "myPlane.png",
+      "speed": 50,
+      "weapon": 12,
+      "bornX": 0,
+      "bornY": 480,
+      "destinationX": 320,
+      "destinationY": 0
     }
   ]
 }
