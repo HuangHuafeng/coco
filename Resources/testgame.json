@@ -7,8 +7,8 @@
       "bornTime": 0,
       "addToScene": false,
       "file": "bullet1.png",
-      "speed": 500,
-      "damage": 100
+      "speed": 400,
+      "damage": 200
     },
     {
       "type": "Bullet",
@@ -17,7 +17,7 @@
       "bornTime": 0,
       "addToScene": false,
       "file": "bullet3.png",
-      "speed": 350,
+      "speed": 200,
       "damage": 100
     },
     {
@@ -36,7 +36,7 @@
       "bornTime": 0,
       "addToScene": false,
       "bullet": 8,
-      "triggerInterval": 1500
+      "triggerInterval": 3000
     },
     {
       "type": "FriendPlane",
@@ -45,7 +45,9 @@
       "bornTime": 1000,
       "addToScene": true,
       "file": "myPlane.png",
+      "health": 500,
       "speed": 250,
+      "damage": 1000,
       "weapon": 2,
       "bornX": 0,
       "bornY": 0,
@@ -59,7 +61,9 @@
       "bornTime": 0,
       "addToScene": false,
       "file": "enemy2.png",
-      "speed": 150,
+      "health": 500,
+      "speed": 100,
+      "damage": 1000,
       "weapon": 12,
       "bornX": 160,
       "bornY": 480,
@@ -70,10 +74,10 @@
       "type": "EnemyGenerator",
       "id": 6,
       "name": "eg1",
-      "bornTime": 0,
+      "bornTime": 3000,
       "addToScene": true,
       "enemyObject": 5,
-      "triggerInterval": 1500
+      "triggerInterval": 2000
     }
   ]
 }

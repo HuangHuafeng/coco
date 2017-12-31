@@ -34,6 +34,8 @@ EnemyPlane * EnemyPlane::clone() const
     ep->modifyPosition(getPosition());
     ep->setSpeed(mSpeed);
     ep->setWeapon(mWeapon);
+    ep->setDamage(mDamage);
+    ep->setHealth(mHealth);
     ep->autorelease();
     
     return ep;

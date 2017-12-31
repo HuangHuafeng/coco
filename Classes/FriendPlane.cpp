@@ -47,4 +47,6 @@ void FriendPlane::collideWith(CollideObject *otherCollideObject)
     setPosition(Vec2(0, 0));
     
     UserControlledFlyingObject::collideWith(otherCollideObject);
+    
+    log("FriendPlane health: %d", mHealth);
 }

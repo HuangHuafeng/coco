@@ -29,7 +29,6 @@ void EnemyGenerator::generateOnce()
             auto windowSize = Director::getInstance()->getWinSize();
             newEnemyObject->modifyPosition(Vec2(windowSize.width * rand_0_1(), windowSize.height + height));
             newEnemyObject->setDestination(Vec2(windowSize.width * rand_0_1(), - height));
-            //newEnemyObject->openFire();
             newEnemyObject->setObjectId(ObjectManager::getInstance()->giveMeId());
             ObjectManager::getInstance()->AddObjectToScene(newEnemyObject);
         }

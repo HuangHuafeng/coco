@@ -8,8 +8,6 @@ USING_NS_CC;
 Scene* HelloWorld::createScene()
 {
     auto scene = HelloWorld::create();
-    scene->initWithPhysics();
-    //scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
     
     return scene;
 }
@@ -30,7 +28,9 @@ bool HelloWorld::init()
     {
         return false;
     }
-
+    
+    //getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     auto windowSize = Director::getInstance()->getWinSize();

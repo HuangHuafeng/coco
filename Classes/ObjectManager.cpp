@@ -192,7 +192,7 @@ EnemyGenerator * ObjectManager::createEnemyGenerator(const json &object)
     auto id = object.value("id", j_null);
     auto name = object.value("name", j_null);
     auto triggerInterval = object.value("triggerInterval", j_null);
-    if (id.is_number_integer() == false || name.is_string() == false || triggerInterval.is_number_integer() == false) {
+    if (id.is_number_unsigned() == false || name.is_string() == false || triggerInterval.is_number_unsigned() == false) {
         return nullptr;
     }
     
@@ -208,7 +208,7 @@ EnemyGenerator * ObjectManager::createEnemyGenerator(const json &object)
     enemyGenerator->start();
     
     auto enemyObjectId = object.value("enemyObject", j_null);
-    if (enemyObjectId.is_number_integer()) {
+    if (enemyObjectId.is_number_unsigned()) {
         auto enemyObject = dynamic_cast<EnemyObject *>(findRetainedObject(enemyObjectId));
         if (enemyObject) {
             enemyGenerator->setObject(enemyObject);
@@ -225,7 +225,9 @@ EnemyPlane * ObjectManager::createEnemyPlane(const json &object)
     auto name = object.value("name", j_null);
     auto file = object.value("file", j_null);
     auto speed = object.value("speed", j_null);
-    if (id.is_number_integer() == false || name.is_string() == false || file.is_string() == false || speed.is_number_integer() == false) {
+    auto health = object.value("health", j_null);
+    auto damage = object.value("damage", j_null);
+    if (id.is_number_unsigned() == false || name.is_string() == false || file.is_string() == false || speed.is_number_unsigned() == false || health.is_number_unsigned() == false || damage.is_number_unsigned() == false) {
         return nullptr;
     }
     
@@ -235,9 +237,11 @@ EnemyPlane * ObjectManager::createEnemyPlane(const json &object)
     }
     
     auto enemyPlane = EnemyPlane::create(file);
-    enemyPlane->setSpeed(speed);
-    enemyPlane->setObjectName(name);
     enemyPlane->setObjectId(id);
+    enemyPlane->setObjectName(name);
+    enemyPlane->setSpeed(speed);
+    enemyPlane->setHealth(health);
+    enemyPlane->setDamage(damage);
     
     auto bornX = object.value("bornX", j_null);
     auto bornY = object.value("bornY", j_null);
@@ -254,7 +258,6 @@ EnemyPlane * ObjectManager::createEnemyPlane(const json &object)
         auto weapon = dynamic_cast<Weapon *>(findRetainedObject(weaponId));
         if (weapon) {
             enemyPlane->setWeapon(weapon);
-            //enemyPlane->openFire();
         }
     }
     
@@ -269,7 +272,7 @@ Bullet * ObjectManager::createBullet(const json &object)
     auto file = object.value("file", j_null);
     auto speed = object.value("speed", j_null);
     auto damage = object.value("damage", j_null);
-    if (id.is_number_integer() == false || name.is_string() == false || file.is_string() == false || speed.is_number_integer() == false || damage.is_number_integer() == false) {
+    if (id.is_number_unsigned() == false || name.is_string() == false || file.is_string() == false || speed.is_number_unsigned() == false || damage.is_number_unsigned() == false) {
         return nullptr;
     }
     
@@ -291,7 +294,7 @@ Weapon * ObjectManager::createWeapon(const json &object)
     auto id = object.value("id", j_null);
     auto name = object.value("name", j_null);
     auto triggerInterval = object.value("triggerInterval", j_null);
-    if (id.is_number_integer() == false || name.is_string() == false || triggerInterval.is_number_integer() == false) {
+    if (id.is_number_unsigned() == false || name.is_string() == false || triggerInterval.is_number_unsigned() == false) {
         return nullptr;
     }
     
@@ -307,7 +310,7 @@ Weapon * ObjectManager::createWeapon(const json &object)
     mWeapons.push_back(weapon);
     
     auto bulletId = object.value("bullet", j_null);
-    if (bulletId.is_number_integer()) {
+    if (bulletId.is_number_unsigned()) {
         auto bullet = dynamic_cast<Bullet *>(findRetainedObject(bulletId));
         if (bullet) {
             weapon->setBullet(bullet);
@@ -329,7 +332,9 @@ FriendPlane * ObjectManager::createFriendPlane(const json &object)
     auto name = object.value("name", j_null);
     auto file = object.value("file", j_null);
     auto speed = object.value("speed", j_null);
-    if (id.is_number_integer() == false || name.is_string() == false || file.is_string() == false || speed.is_number_integer() == false) {
+    auto health = object.value("health", j_null);
+    auto damage = object.value("damage", j_null);
+    if (id.is_number_unsigned() == false || name.is_string() == false || file.is_string() == false || speed.is_number_unsigned() == false || health.is_number_unsigned() == false || damage.is_number_unsigned() == false) {
         return nullptr;
     }
     
@@ -339,10 +344,11 @@ FriendPlane * ObjectManager::createFriendPlane(const json &object)
     }
     
     mFriendPlane = FriendPlane::create(file);
-    mFriendPlane->setSpeed(speed);
-    mFriendPlane->setObjectName(name);
     mFriendPlane->setObjectId(id);
-    mFriendPlane->setHealth(1000);
+    mFriendPlane->setObjectName(name);
+    mFriendPlane->setSpeed(speed);
+    mFriendPlane->setHealth(health);
+    mFriendPlane->setDamage(damage);
     
     auto bornX = object.value("bornX", j_null);
     auto bornY = object.value("bornY", j_null);

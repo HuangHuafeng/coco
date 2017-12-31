@@ -20,7 +20,7 @@ bool CollideObject::initialize()
     //physicsBody->setDynamic(false);
     physicsBody->setGravityEnable(false);
     addComponent(physicsBody);
-    setForceType(ENEMY); // by default, this is an enemy
+    //setForceType(ENEMY); // by default, this is an enemy
     
     return true;
 }
