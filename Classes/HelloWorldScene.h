@@ -16,6 +16,7 @@ public:
     virtual bool init();
     bool onContactBegan(PhysicsContact &contact);
     
+    void menuStartGameCallback(Ref *sender);
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
     

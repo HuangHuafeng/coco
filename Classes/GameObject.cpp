@@ -6,7 +6,7 @@
 //
 
 #include "GameObject.h"
-#include "ObjectManager.h"
+#include "GameScene.h"
 
 USING_NS_CC;
 
@@ -40,14 +40,21 @@ void GameObject::setObjectId(int id)
 void GameObject::onExit()
 {
     Sprite::onExit();
-    ObjectManager::getInstance()->ObjectExitScene(this);
+    
+    auto gameScene = dynamic_cast<GameScene *>(Director::getInstance()->getRunningScene());
+    if (gameScene) {
+        gameScene->ObjectExitScene(this);
+    }
 }
 
 void GameObject::onEnter()
 {
     Sprite::onEnter();
-
-    ObjectManager::getInstance()->ObjectEnterScene(this);
+    
+    auto gameScene = dynamic_cast<GameScene *>(Director::getInstance()->getRunningScene());
+    if (gameScene) {
+        gameScene->ObjectEnterScene(this);
+    }
 }
 
 GameObject * GameObject::clone() const

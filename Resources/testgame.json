@@ -11,6 +11,16 @@
       "damage": 200
     },
     {
+      "type": "ScrollingBackground",
+      "id": 111,
+      "name": "b1",
+      "bornTime": 0,
+      "addToScene": true,
+      "file1": "background.png",
+      "file2": "background.png",
+      "speed": 50
+    },
+    {
       "type": "Bullet",
       "id": 8,
       "name": "b2",

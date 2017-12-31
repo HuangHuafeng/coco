@@ -13,9 +13,15 @@
 #include "FriendPlane.h"
 #include "EnemyPlane.h"
 #include "EnemyGenerator.h"
+#include "FriendPlane.h"
+#include "EnemyPlane.h"
+#include "WeaponTripleBullet.h"
+#include "ScrollingBackground.h"
 
 #include "json.hpp" // installed by homebrew in /usr/local/Cellar/nlohmann_json/3.0.0/include/
 using json = nlohmann::json;
+
+class GameScene;
 
 typedef enum {
     BULLET = 1,
@@ -26,10 +32,8 @@ typedef enum {
 } ObjectType;
 
 class ObjectManager {
-private:
-    static ObjectManager *mInstance;
-    
-    cocos2d::Scene *mScene;
+private:    
+    GameScene *mScene;
     std::vector<Bullet *> mBullets;
     std::vector<Weapon *> mWeapons;
     std::vector<EnemyObject *> mEnemies;
@@ -37,8 +41,7 @@ private:
     std::list<GameObject *> mObjectsInScene;
     std::list<GameObject *> mObjectsWithId0;
     FriendPlane *mFriendPlane;      // only on friend plane is supported
-    
-    ObjectManager();
+    ScrollingBackground *mBackground;
     
     bool loadObjects(const json &objects);
     bool createObject(const json &object);
@@ -49,15 +52,18 @@ private:
     FriendPlane * createFriendPlane(const json &object);
     EnemyPlane * createEnemyPlane(const json &object);
     EnemyGenerator * createEnemyGenerator(const json &object);
+    ScrollingBackground * createScrollingBackground(const json &object);
     
 public:
+    ObjectManager(GameScene *scene);
     ~ObjectManager();
     
-    static ObjectManager * getInstance();
+    // ObjectManager should not be a singleton object as every scene
+    // has its own object manager. And object manager is created/destroyed by scene
+    //static ObjectManager * getInstance();
     
     bool loadFromFile(const std::string &filename);
-    void setScene(cocos2d::Scene *scene);
-    cocos2d::Scene * getScene() const;
+    bool loadFromJsonString(const std::string &jsonString);
 
     int giveMeId();
     int getNumberOfSceneObjects() const;
@@ -68,7 +74,6 @@ public:
     //EnemyObject * findEnemy(int id) const;
     void ObjectEnterScene(GameObject *object);
     void ObjectExitScene(GameObject *object);
-    void AddObjectToScene(GameObject *object, int localZOrder = 0);
 };
 
 #endif /* ObjectManager_h */

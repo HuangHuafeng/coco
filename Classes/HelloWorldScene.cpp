@@ -1,7 +1,6 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
-#include "ScrollingBackground.h"
-#include "ObjectManager.h"
+#include "PlayScene.h"
 
 USING_NS_CC;
 
@@ -24,13 +23,11 @@ bool HelloWorld::init()
 {
     //////////////////////////////
     // 1. super init first
-    if ( !Scene::initWithPhysics() )
+    if ( !Scene::init() )
     {
         return false;
     }
-    
-    //getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-    
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     auto windowSize = Director::getInstance()->getWinSize();
@@ -62,9 +59,12 @@ bool HelloWorld::init()
         float y = origin.y + closeItem->getContentSize().height/2;
         closeItem->setPosition(Vec2(x/2,y));
     }
+    
+    auto miStartGame = MenuItemFont::create("Start", CC_CALLBACK_1(HelloWorld::menuStartGameCallback, this));
+    miStartGame->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
 
     // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
+    auto menu = Menu::create(miStartGame, closeItem, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
@@ -88,19 +88,25 @@ bool HelloWorld::init()
         // add the label as a child to this layer
         this->addChild(label, 1);
     }
-    
-    // background
-    auto bkg = ScrollingBackground::create("background.png", "background.png", windowSize);
-    if (bkg) {
-        bkg->startScroll(20.0f);
-        addChild(bkg, -100);
-    }
-    
-    auto om = ObjectManager::getInstance();
-    om->setScene(this);
-    om->loadFromFile("testgame.json");
+
     
     return true;
+}
+
+
+void HelloWorld::menuStartGameCallback(Ref *sender)
+{
+    std::string sbuf;
+    auto status = FileUtils::getInstance()->getContents("testgame.json", &sbuf);
+    
+    if (status == FileUtils::Status::OK) {
+        auto playScene = PlayScene::createScene(sbuf);
+        if (playScene) {
+            Director::getInstance()->pushScene(playScene);
+        }
+    } else {
+        log("failed to read file testgame.json, status: %d", status);
+    }
 }
 
 void HelloWorld::menuCloseCallback(Ref* pSender)

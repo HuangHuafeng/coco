@@ -6,24 +6,24 @@
 //
 
 #include "ObjectManager.h"
-#include "FlyingObject.h"
-#include "FriendPlane.h"
-#include "EnemyPlane.h"
-#include "WeaponTripleBullet.h"
-
-ObjectManager * ObjectManager::mInstance;
+#include "GameScene.h"
 
 USING_NS_CC;
 
-ObjectManager::ObjectManager()
+ObjectManager::ObjectManager(GameScene *scene)
 {
-    mScene = nullptr;
     mBullets = {};
     mWeapons = {};
     mRetainedObjects = {};
     mObjectsInScene = {};
     mObjectsWithId0 = {};
     mFriendPlane = nullptr;
+    mBackground = nullptr;
+    
+    mScene = scene;
+    if (mScene) {
+        mScene->retain();
+    }
 }
 
 ObjectManager::~ObjectManager()
@@ -44,21 +44,15 @@ ObjectManager::~ObjectManager()
         mFriendPlane->autorelease();
         mFriendPlane = nullptr;
     }
-}
-
-void ObjectManager::setScene(cocos2d::Scene *scene)
-{
-    if (mScene) {
-        mScene->autorelease();
-        mScene = nullptr;
-    }
     
-    if (scene) {
-        mScene = scene;
-        mScene->retain();
+    if (mBackground) {
+        mBackground->autorelease();
+        mBackground = nullptr;
     }
 }
 
+
+/*
 ObjectManager * ObjectManager::getInstance()
 {
     if (mInstance == nullptr) {
@@ -67,6 +61,7 @@ ObjectManager * ObjectManager::getInstance()
     
     return mInstance;
 }
+*/
 
 bool ObjectManager::loadFromFile(const std::string &filename)
 {
@@ -78,10 +73,15 @@ bool ObjectManager::loadFromFile(const std::string &filename)
         return false;
     }
     
+    return loadFromJsonString(sbuf);
+}
+
+bool ObjectManager::loadFromJsonString(const std::string &jsonString)
+{
     const json j_null;
-    json game = json::parse(sbuf);
+    json game = json::parse(jsonString);
     if (game.type() != json::value_t::object) {
-        log("%s is not a valid json file for this game, type %hhu", filename.c_str(), game.type());
+        log("%s is not a valid json string for this game, type %hhu", jsonString.c_str(), game.type());
         return false;
     }
     
@@ -161,6 +161,8 @@ bool ObjectManager::createObjectImmediately(const json &object)
         ret = createEnemyPlane(object);
     } else if ("EnemyGenerator" == type) {
         ret = createEnemyGenerator(object);
+    } else if ("ScrollingBackground" == type) {
+        ret = createScrollingBackground(object);
     } else {
         log("Don't know how to create object from json: %s", object.dump(4).c_str());
     }
@@ -184,6 +186,34 @@ bool ObjectManager::createObjectImmediately(const json &object)
     }
     
     return ret;
+}
+
+ScrollingBackground * ObjectManager::createScrollingBackground(const json &object)
+{
+    const json j_null;
+    auto id = object.value("id", j_null);
+    auto name = object.value("name", j_null);
+    auto file1 = object.value("file1", j_null);
+    auto file2 = object.value("file2", j_null);
+    auto speed = object.value("speed", j_null);
+    if (id.is_number_unsigned() == false || name.is_string() == false || file1.is_string() == false || file2.is_string() == false || speed.is_number_unsigned() == false) {
+        return nullptr;
+    }
+    
+    if ( findRetainedObject(id) != nullptr) {
+        // there's already an object with this id, don't create another one
+        return nullptr;
+    }
+    
+    auto windowSize = Director::getInstance()->getWinSize();
+    auto bkg = ScrollingBackground::create(file1, file2, windowSize);
+    if (bkg) {
+        bkg->startScroll(speed);
+        mBackground = bkg;
+        mBackground->retain();
+    }
+    
+    return mBackground;
 }
 
 EnemyGenerator * ObjectManager::createEnemyGenerator(const json &object)
@@ -448,10 +478,18 @@ void ObjectManager::ObjectEnterScene(GameObject *object)
         mObjectsWithId0.push_back(object);
         //log("add one object with id 0, there're %lu objects with id 0.", mObjectsWithId0.size());
     }
+    
+    if (object == mFriendPlane && mScene) {
+        mScene->onFriendPlaneEnter();
+    }
 }
 
 void ObjectManager::ObjectExitScene(GameObject *object)
 {
+    if (object == mFriendPlane && mScene) {
+        mScene->onFriendPlaneExit();
+    }
+    
     auto id = object->getObjectId();
     if (id != 0) {
         std::list<GameObject *>::const_iterator itObject = mObjectsInScene.cbegin();
@@ -524,13 +562,3 @@ int ObjectManager::getNumberOfSceneObjects() const
     return static_cast<int>(mObjectsInScene.size());
 }
 
-void ObjectManager::AddObjectToScene(GameObject *object, int localZOrder)
-{
-    if (object && mScene) {
-        auto lzo = localZOrder;
-        if (!lzo) {
-            lzo = getNumberOfSceneObjects() + 1;
-        }
-        mScene->addChild(object, lzo);
-    }
-}

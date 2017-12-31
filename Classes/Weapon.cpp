@@ -8,6 +8,7 @@
 #include "Weapon.h"
 #include "WarObject.h"
 #include "ObjectManager.h"
+#include "GameScene.h"
 
 USING_NS_CC;
 
@@ -37,9 +38,12 @@ void Weapon::generateOnce()
         auto destination = currentPosition + mBulletOffset;
         bullet->modifyPosition(currentPosition);
         bullet->setDestination(destination);
-        auto localZorder = getParent()->getLocalZOrder();
-        localZorder--;  // the Bullet is under the WarObject
-        ObjectManager::getInstance()->AddObjectToScene(bullet, localZorder);
+        auto gameScene = dynamic_cast<GameScene *>(Director::getInstance()->getRunningScene());
+        if (gameScene) {
+            auto localZorder = getParent()->getLocalZOrder();
+            localZorder--;  // the Bullet is under the WarObject
+            gameScene->AddObjectToScene(bullet, localZorder);
+        }
     }
 }
 
