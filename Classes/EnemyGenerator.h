@@ -19,6 +19,7 @@ protected:
     
 public:
     static EnemyGenerator * create(float interval = 1.0f);
+    virtual EnemyGenerator * clone() const override;
 };
 
 #endif /* EnemyGenerator_h */

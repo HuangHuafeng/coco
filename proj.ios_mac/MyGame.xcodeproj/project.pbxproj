@@ -112,6 +112,8 @@
 		DC7D65971FF8D47E00AFE949 /* PlayScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7D65941FF8D47E00AFE949 /* PlayScene.cpp */; };
 		DC7D659B1FF8DADC00AFE949 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7D65991FF8DADC00AFE949 /* GameScene.cpp */; };
 		DC7D659C1FF8DADC00AFE949 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7D65991FF8DADC00AFE949 /* GameScene.cpp */; };
+		DC7D65A21FFA1B1500AFE949 /* t2.json in Resources */ = {isa = PBXBuildFile; fileRef = DC7D65A11FFA1B1500AFE949 /* t2.json */; };
+		DC7D65A31FFA1B1500AFE949 /* t2.json in Resources */ = {isa = PBXBuildFile; fileRef = DC7D65A11FFA1B1500AFE949 /* t2.json */; };
 		DC8B183C1FE8B150001E8C17 /* FlyingObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC8B183B1FE8B150001E8C17 /* FlyingObject.cpp */; };
 		DC8B183D1FE8B150001E8C17 /* FlyingObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC8B183B1FE8B150001E8C17 /* FlyingObject.cpp */; };
 		DCEB25FC1FF4D6EB00EF09CC /* ObjectManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCEB25FA1FF4D6EB00EF09CC /* ObjectManager.cpp */; };
@@ -255,6 +257,7 @@
 		DC7D65951FF8D47E00AFE949 /* PlayScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayScene.h; sourceTree = "<group>"; };
 		DC7D65991FF8DADC00AFE949 /* GameScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene.cpp; sourceTree = "<group>"; };
 		DC7D659A1FF8DADC00AFE949 /* GameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
+		DC7D65A11FFA1B1500AFE949 /* t2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = t2.json; sourceTree = "<group>"; };
 		DC8B18391FE8ACE8001E8C17 /* FlyingObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlyingObject.h; sourceTree = "<group>"; };
 		DC8B183B1FE8B150001E8C17 /* FlyingObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FlyingObject.cpp; sourceTree = "<group>"; };
 		DC8B183E1FE8BE6D001E8C17 /* UserControlledFlyingObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UserControlledFlyingObject.cpp; sourceTree = "<group>"; };
@@ -388,6 +391,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DC7D65A11FFA1B1500AFE949 /* t2.json */,
 				DC67387A1FF64A140013C7F0 /* bullet3.png */,
 				DC6738771FF649820013C7F0 /* enemy2.png */,
 				DCEB25FE1FF4DC6700EF09CC /* testgame.json */,
@@ -622,6 +626,7 @@
 				50EF62A217ECD613001EB2F8 /* Icon-29.png in Resources */,
 				50EF629617ECD46A001EB2F8 /* Icon-40.png in Resources */,
 				5087E78217EB970100C73F5D /* Icon-144.png in Resources */,
+				DC7D65A21FFA1B1500AFE949 /* t2.json in Resources */,
 				DC7BE69E1FEA9BB300C7E219 /* bullet1.png in Resources */,
 				DC6738791FF649820013C7F0 /* enemy2.png in Resources */,
 				3EACC98F19EE6D4300EB3C5E /* res in Resources */,
@@ -639,6 +644,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC7D65A31FFA1B1500AFE949 /* t2.json in Resources */,
 				DC67387C1FF6629C0013C7F0 /* bullet3.png in Resources */,
 				DC2B4B9B1FE3CB96000E9E53 /* texture.plist in Resources */,
 				46880B8219C43A67006E1F66 /* HelloWorld.png in Resources */,

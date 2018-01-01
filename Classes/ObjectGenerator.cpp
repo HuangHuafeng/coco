@@ -50,3 +50,15 @@ void ObjectGenerator::stop()
 {
     stopAllActions();
 }
+
+void ObjectGenerator::onEnter()
+{
+    GameObject::onEnter();
+    start();
+}
+
+void ObjectGenerator::onExit()
+{
+    stop();
+    GameObject::onExit();
+}

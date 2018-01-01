@@ -97,7 +97,7 @@ bool HelloWorld::init()
 void HelloWorld::menuStartGameCallback(Ref *sender)
 {
     std::string sbuf;
-    auto status = FileUtils::getInstance()->getContents("testgame.json", &sbuf);
+    auto status = FileUtils::getInstance()->getContents("t2.json", &sbuf);
     
     if (status == FileUtils::Status::OK) {
         auto playScene = PlayScene::createScene(sbuf);

@@ -46,3 +46,14 @@ EnemyGenerator * EnemyGenerator::create(float interval)
     
     return eg;
 }
+
+EnemyGenerator * EnemyGenerator::clone() const
+{
+    auto generator = new (std::nothrow) EnemyGenerator(mInterval);
+    if (mObject) {
+        generator->setObject(mObject);
+    }
+    generator->autorelease();
+    
+    return generator;
+}

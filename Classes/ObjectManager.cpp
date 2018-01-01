@@ -14,10 +14,11 @@ ObjectManager::ObjectManager(GameScene *scene)
 {
     mBullets = {};
     mWeapons = {};
+    //mFriendPlanes = {};
     mRetainedObjects = {};
     mObjectsInScene = {};
     mObjectsWithId0 = {};
-    mFriendPlane = nullptr;
+    mPlayerPlane = nullptr;
     mBackground = nullptr;
     
     mScene = scene;
@@ -38,11 +39,6 @@ ObjectManager::~ObjectManager()
     while (itObject != endObject) {
         (*itObject)->autorelease();
         itObject++;
-    }
-    
-    if (mFriendPlane) {
-        mFriendPlane->autorelease();
-        mFriendPlane = nullptr;
     }
     
     if (mBackground) {
@@ -79,18 +75,18 @@ bool ObjectManager::loadFromFile(const std::string &filename)
 bool ObjectManager::loadFromJsonString(const std::string &jsonString)
 {
     const json j_null;
-    json game = json::parse(jsonString);
-    if (game.type() != json::value_t::object) {
-        log("%s is not a valid json string for this game, type %hhu", jsonString.c_str(), game.type());
+    json sceneData = json::parse(jsonString);
+    if (sceneData.type() != json::value_t::object) {
+        log("%s is not a valid json string for this game, type %hhu", jsonString.c_str(), sceneData.type());
         return false;
     }
     
-    auto objects = game.value("objects", j_null);
+    auto objects = sceneData.value("objects", j_null);
     if (objects.is_null() == false) {
         return loadObjects(objects);
     }
     
-    return true;
+    return false;
 }
 
 bool ObjectManager::loadObjects(const json &objects)
@@ -122,7 +118,7 @@ bool ObjectManager::createObject(const json &object)
     const json j_null;
     auto bornTime = object.value("bornTime", j_null);
     if (bornTime.is_null()) {
-        // no bornTime, create the object now
+        // no bornTime, this object is a class object that will be used by others, create it immediately
         return createObjectImmediately(object);
     } else {
         // the object will be created after "bornTime" **milliseconds**
@@ -163,25 +159,30 @@ bool ObjectManager::createObjectImmediately(const json &object)
         ret = createEnemyGenerator(object);
     } else if ("ScrollingBackground" == type) {
         ret = createScrollingBackground(object);
+    } else if ("PlayerPlane" == type) {
+        ret = createPlayerPlane(object);
+    } else if ("SceneObject" == type) {
+        ret = createSceneObject(object);
     } else {
         log("Don't know how to create object from json: %s", object.dump(4).c_str());
     }
 
     if (ret) {
         // successfully created an object, check if it should be added to scene
-        auto addToScene = object.value("addToScene", j_null);
-        if (addToScene.is_boolean()) {
-            if (static_cast<bool>(addToScene) == true && mScene) {
+        if (type == "SceneObject" || type == "PlayerPlane" ) {
+            // SceneObject is added to the scene, PlayerPlane is a special SceneObject
+            if (mScene) {
                 mScene->addChild(ret);
-            } else {
-                // the object is NOT going to be added to the scene, **AS A RULE**
-                // ObjectManager retains it as it probably will be used by other objects
-                // like a weapon which will be used later when creating WarObject
-                // a bullet which will be used later when creating a Weapon
-                // a template WarObject which will be used later to create many copies
-                ret->retain();
-                mRetainedObjects.push_back(ret);
             }
+        } else {
+            // the object is NOT going to be added to the scene, **AS A RULE**
+            // ObjectManager retains it as it probably will be used by other objects
+            // like a weapon which will be used later when creating WarObject
+            // a bullet which will be used later when creating a Weapon
+            // a template WarObject which will be used later to create many copies
+            //// not a SceneObject, meaning that this is a class object used by SceneObject.
+            ret->retain();
+            mRetainedObjects.push_back(ret);
         }
     }
     
@@ -221,8 +222,9 @@ EnemyGenerator * ObjectManager::createEnemyGenerator(const json &object)
     const json j_null;
     auto id = object.value("id", j_null);
     auto name = object.value("name", j_null);
+    auto classId = object.value("classId", j_null);
     auto triggerInterval = object.value("triggerInterval", j_null);
-    if (id.is_number_unsigned() == false || name.is_string() == false || triggerInterval.is_number_unsigned() == false) {
+    if (id.is_number_unsigned() == false || name.is_string() == false || classId.is_number_unsigned() == false || triggerInterval.is_number_unsigned() == false) {
         return nullptr;
     }
     
@@ -231,19 +233,18 @@ EnemyGenerator * ObjectManager::createEnemyGenerator(const json &object)
         return nullptr;
     }
     
+    auto classObject = findRetainedObject(classId);
+    if (classObject == nullptr) {
+        // can NOT find the object with this classId, the object from which this generator will clone
+        // don't know how to create this generator
+        return nullptr;
+    }
+    
     // triggerInterval is **milliseconds** in json file
     auto enemyGenerator = EnemyGenerator::create(static_cast<float>(triggerInterval) * 0.001);
     enemyGenerator->setObjectId(id);
     enemyGenerator->setObjectName(name);
-    enemyGenerator->start();
-    
-    auto enemyObjectId = object.value("enemyObject", j_null);
-    if (enemyObjectId.is_number_unsigned()) {
-        auto enemyObject = dynamic_cast<EnemyObject *>(findRetainedObject(enemyObjectId));
-        if (enemyObject) {
-            enemyGenerator->setObject(enemyObject);
-        }
-    }
+    enemyGenerator->setObject(classObject);
     
     return enemyGenerator;
 }
@@ -273,18 +274,8 @@ EnemyPlane * ObjectManager::createEnemyPlane(const json &object)
     enemyPlane->setHealth(health);
     enemyPlane->setDamage(damage);
     
-    auto bornX = object.value("bornX", j_null);
-    auto bornY = object.value("bornY", j_null);
-    auto destinationX = object.value("destinationX", j_null);
-    auto destinationY = object.value("destinationY", j_null);
-    
-    if (bornX.is_number_integer() && bornY.is_number_integer() && destinationX.is_number_integer() && destinationY.is_number_integer()) {
-        enemyPlane->setPosition(Vec2(static_cast<float>(bornX), static_cast<float>(bornY)));
-        enemyPlane->setDestination(Vec2(static_cast<float>(destinationX), static_cast<float>(destinationY)));
-    }
-    
-    const int weaponId = object.value("weapon", j_null);
-    if (weaponId != 0) {
+    auto weaponId = object.value("weapon", j_null);
+    if (weaponId.is_number_unsigned() && weaponId != 0) {
         auto weapon = dynamic_cast<Weapon *>(findRetainedObject(weaponId));
         if (weapon) {
             enemyPlane->setWeapon(weapon);
@@ -292,6 +283,43 @@ EnemyPlane * ObjectManager::createEnemyPlane(const json &object)
     }
     
     return enemyPlane;
+}
+
+FriendPlane * ObjectManager::createFriendPlane(const json &object)
+{
+    const json j_null;
+    auto id = object.value("id", j_null);
+    auto name = object.value("name", j_null);
+    auto file = object.value("file", j_null);
+    auto speed = object.value("speed", j_null);
+    auto health = object.value("health", j_null);
+    auto damage = object.value("damage", j_null);
+    if (id.is_number_unsigned() == false || name.is_string() == false || file.is_string() == false || speed.is_number_unsigned() == false || health.is_number_unsigned() == false || damage.is_number_unsigned() == false) {
+        return nullptr;
+    }
+    
+    if ( findRetainedObject(id) != nullptr) {
+        // there's already an object with this id, don't create another one
+        return nullptr;
+    }
+    
+    auto friendPlane = FriendPlane::create(file);
+    friendPlane->setObjectId(id);
+    friendPlane->setObjectName(name);
+    friendPlane->setSpeed(speed);
+    friendPlane->setHealth(health);
+    friendPlane->setDamage(damage);
+    //mFriendPlanes.push_back(friendPlane);
+    
+    auto weaponId = object.value("weapon", j_null);
+    if (weaponId.is_number_unsigned() && weaponId != 0) {
+        auto weapon = dynamic_cast<Weapon *>(findRetainedObject(weaponId));
+        if (weapon) {
+            friendPlane->setWeapon(weapon);
+        }
+    }
+    
+    return friendPlane;
 }
 
 Bullet * ObjectManager::createBullet(const json &object)
@@ -350,21 +378,18 @@ Weapon * ObjectManager::createWeapon(const json &object)
     return weapon;
 }
 
-FriendPlane * ObjectManager::createFriendPlane(const json &object)
+GameObject * ObjectManager::createSceneObject(const json &object)
 {
-    if (mFriendPlane) {
-        // sorry only one friend plane is supported
-        return nullptr;
-    }
-    
     const json j_null;
     auto id = object.value("id", j_null);
     auto name = object.value("name", j_null);
-    auto file = object.value("file", j_null);
-    auto speed = object.value("speed", j_null);
-    auto health = object.value("health", j_null);
-    auto damage = object.value("damage", j_null);
-    if (id.is_number_unsigned() == false || name.is_string() == false || file.is_string() == false || speed.is_number_unsigned() == false || health.is_number_unsigned() == false || damage.is_number_unsigned() == false) {
+    auto classId = object.value("classId", j_null);
+    auto bornX = object.value("bornX", j_null);
+    auto bornY = object.value("bornY", j_null);
+    auto destinationX = object.value("destinationX", j_null);
+    auto destinationY = object.value("destinationY", j_null);
+    
+    if (id.is_number_unsigned() == false || name.is_string() == false || classId.is_number_unsigned() == false || bornX.is_number_integer() == false || bornY.is_number_integer() == false || destinationX.is_number_integer() == false || destinationY.is_number_integer() == false) {
         return nullptr;
     }
     
@@ -373,33 +398,37 @@ FriendPlane * ObjectManager::createFriendPlane(const json &object)
         return nullptr;
     }
     
-    mFriendPlane = FriendPlane::create(file);
-    mFriendPlane->setObjectId(id);
-    mFriendPlane->setObjectName(name);
-    mFriendPlane->setSpeed(speed);
-    mFriendPlane->setHealth(health);
-    mFriendPlane->setDamage(damage);
-    
-    auto bornX = object.value("bornX", j_null);
-    auto bornY = object.value("bornY", j_null);
-    auto destinationX = object.value("destinationX", j_null);
-    auto destinationY = object.value("destinationY", j_null);
-    
-    if (bornX.is_number_integer() && bornY.is_number_integer() && destinationX.is_number_integer() && destinationY.is_number_integer()) {
-        mFriendPlane->setPosition(Vec2(static_cast<float>(bornX), static_cast<float>(bornY)));
-        mFriendPlane->setDestination(Vec2(static_cast<float>(destinationX), static_cast<float>(destinationY)));
+    auto classObject = findRetainedObject(classId);
+    if (classObject == nullptr) {
+        // can NOT find the object with this classId, the object from which this SceneObject will clone
+        // don't know how to create this SceneObject
+        return nullptr;
     }
     
-    const int weaponId = object.value("weapon", j_null);
-    if (weaponId != 0) {
-        auto weapon = dynamic_cast<Weapon *>(findRetainedObject(weaponId));
-        if (weapon) {
-            mFriendPlane->setWeapon(weapon);
-            //mFriendPlane->openFire();
-        }
+    auto sceneObject = classObject->clone();
+    sceneObject->setObjectId(id);
+    sceneObject->setObjectName(name);
+    sceneObject->setPosition(Vec2(static_cast<float>(bornX), static_cast<float>(bornY)));
+    auto flyingObject = dynamic_cast<FlyingObject *>(sceneObject);
+    if (flyingObject) {
+        flyingObject->setDestination(Vec2(static_cast<float>(destinationX), static_cast<float>(destinationY)));
     }
     
-    return mFriendPlane;
+    return sceneObject;
+}
+
+GameObject * ObjectManager::createPlayerPlane(const json &object)
+{
+    if (mPlayerPlane) {
+        // sorry only one friend plane is supported
+        return nullptr;
+    }
+    
+    auto sceneObject = createSceneObject(object);
+    mPlayerPlane = dynamic_cast<FriendPlane *>(sceneObject);
+    
+    // should return sceneObject, instead of mPlayerPlane
+    return sceneObject;
 }
 
 /*
@@ -479,14 +508,14 @@ void ObjectManager::ObjectEnterScene(GameObject *object)
         //log("add one object with id 0, there're %lu objects with id 0.", mObjectsWithId0.size());
     }
     
-    if (object == mFriendPlane && mScene) {
+    if (object == mPlayerPlane && mScene) {
         mScene->onFriendPlaneEnter();
     }
 }
 
 void ObjectManager::ObjectExitScene(GameObject *object)
 {
-    if (object == mFriendPlane && mScene) {
+    if (object == mPlayerPlane && mScene) {
         mScene->onFriendPlaneExit();
     }
     

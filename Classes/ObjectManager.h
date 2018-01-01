@@ -36,11 +36,12 @@ private:
     GameScene *mScene;
     std::vector<Bullet *> mBullets;
     std::vector<Weapon *> mWeapons;
+    //std::vector<FriendPlane *> mFriendPlanes;
     std::vector<EnemyObject *> mEnemies;
     std::vector<GameObject *> mRetainedObjects;
     std::list<GameObject *> mObjectsInScene;
     std::list<GameObject *> mObjectsWithId0;
-    FriendPlane *mFriendPlane;      // only on friend plane is supported
+    FriendPlane *mPlayerPlane;      // only one player plane is supported
     ScrollingBackground *mBackground;
     
     bool loadObjects(const json &objects);
@@ -53,6 +54,8 @@ private:
     EnemyPlane * createEnemyPlane(const json &object);
     EnemyGenerator * createEnemyGenerator(const json &object);
     ScrollingBackground * createScrollingBackground(const json &object);
+    GameObject * createSceneObject(const json &object);
+    GameObject * createPlayerPlane(const json &object);
     
 public:
     ObjectManager(GameScene *scene);
