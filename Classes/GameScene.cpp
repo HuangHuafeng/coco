@@ -67,7 +67,7 @@ void GameScene::ObjectEnterScene(GameObject *object)
 void GameScene::AddObjectToScene(GameObject *object, int localZOrder)
 {
     auto lzo = localZOrder;
-    if (lzo != 0 && mObjectManager) {
+    if (lzo == 0 && mObjectManager) {
         lzo = mObjectManager->getNumberOfSceneObjects() + 1;
     }
     addChild(object, lzo);

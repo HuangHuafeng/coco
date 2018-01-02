@@ -30,8 +30,8 @@ public:
     void setHealth(int health);
     int getHealth() const;
     
-    virtual void onEnter() override;
-    virtual void onExit() override;
+    //virtual void onEnter() override;
+    //virtual void onExit() override;
     //virtual void update (float delta) override;
 };
 

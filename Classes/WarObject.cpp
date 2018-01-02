@@ -59,17 +59,21 @@ void WarObject::ceaseFire()
     }
 }
 
+/*
 void WarObject::onEnter()
 {
     FlyingObject::onEnter();
-    openFire();
+    // should not open fire here, let subclass define the behaviour
+    //openFire();
 }
 
 void WarObject::onExit()
 {
     FlyingObject::onExit();
-    ceaseFire();
+ // should not cease fire here, let subclass define the behaviour
+    //ceaseFire();
 }
+*/
 
 void WarObject::collideWith(CollideObject *otherCollideObject)
 {

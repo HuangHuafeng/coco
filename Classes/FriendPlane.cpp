@@ -35,6 +35,8 @@ FriendPlane * FriendPlane::clone() const
     fp->initialize();
     fp->setForceType(mForceType);
     fp->modifyPosition(getPosition());
+    fp->setDamage(mDamage);
+    fp->setHealth(mHealth);
     fp->setSpeed(mSpeed);
     fp->setWeapon(mWeapon);
     fp->autorelease();
@@ -45,4 +47,16 @@ FriendPlane * FriendPlane::clone() const
 void FriendPlane::collideWith(CollideObject *otherCollideObject)
 {
     UserControlledFlyingObject::collideWith(otherCollideObject);
+}
+
+void FriendPlane::onEnter()
+{
+    UserControlledFlyingObject::onEnter();
+    openFire();
+}
+
+void FriendPlane::onExit()
+{
+    ceaseFire();
+    UserControlledFlyingObject::onExit();
 }

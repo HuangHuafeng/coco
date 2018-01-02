@@ -29,8 +29,8 @@ public:
     void start();
     void stop();
     
-    virtual void onEnter() override;
-    virtual void onExit() override;
+    //virtual void onEnter() override;
+    //virtual void onExit() override;
 };
 
 #endif /* ObjectGenerator_h */

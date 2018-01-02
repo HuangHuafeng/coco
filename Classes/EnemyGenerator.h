@@ -20,6 +20,10 @@ protected:
 public:
     static EnemyGenerator * create(float interval = 1.0f);
     virtual EnemyGenerator * clone() const override;
+    
+    
+    virtual void onEnter() override;
+    virtual void onExit() override;
 };
 
 #endif /* EnemyGenerator_h */

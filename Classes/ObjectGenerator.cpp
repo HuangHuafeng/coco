@@ -51,14 +51,18 @@ void ObjectGenerator::stop()
     stopAllActions();
 }
 
+/*
 void ObjectGenerator::onEnter()
 {
     GameObject::onEnter();
-    start();
+    // should not start, let subclass/parent define the behaviour
+    //start();
 }
 
 void ObjectGenerator::onExit()
 {
-    stop();
+    // should not stop here, let subclass/parent define the behaviour
+    //stop();
     GameObject::onExit();
 }
+*/

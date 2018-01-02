@@ -1,19 +1,18 @@
 {
   "objects": [
-    { "type": "Bullet", "id": 1, "name": "b1", "file": "bullet1.png", "speed": 500, "damage": 100 },
+    { "type": "Bullet", "id": 1, "name": "b1", "file": "bullet1.png", "speed": 200, "damage": 100 },
     { "type": "Weapon", "id": 2, "name": "w1", "bullet": 1, "triggerInterval": 800 },
     {
       "type": "EnemyPlane",
       "id": 3,
       "name": "e1",
       "file": "enemy2.png",
-      "health": 1000,
+      "health": 100,
       "speed": 50,
-      "damage": 1000,
+      "damage": 100,
       "weapon": 2
     },
     { "type": "EnemyGenerator", "id": 4, "name": "g1", "classId": 3, "triggerInterval": 1000 },
-    { "type": "EnemyGenerator", "id": 14, "name": "g1", "classId": 3, "triggerInterval": 100 },
     {
       "type": "SceneObject",
       "id": 5,
@@ -25,16 +24,40 @@
       "destinationX": 0,
       "destinationY": 0
     },
+    { "type": "Bullet", "id": 111, "name": "b1", "file": "bullet1.png", "speed": 400, "damage": 100 },
+    { "type": "Weapon", "id": 6, "name": "w2", "bullet": 111, "triggerInterval": 400 },
+    {
+      "type": "FriendPlane",
+      "id": 7,
+      "name": "f1",
+      "file": "myPlane.png",
+      "health": 2000,
+      "speed": 300,
+      "damage": 1000,
+      "weapon": 6
+    },
+    { "type": "EnemyGenerator", "id": 8, "name": "g2", "classId": 3, "triggerInterval": 250 },
     {
       "type": "SceneObject",
-      "id": 6,
+      "id": 9,
       "name": "NONAME",
-      "classId": 14,
-      "bornTime": 3000,
+      "classId": 8,
+      "bornTime": 10000,
       "bornX": 0,
       "bornY": 0,
       "destinationX": 0,
       "destinationY": 0
+    },
+    {
+      "type": "PlayerPlane",
+      "id": 10,
+      "name": "NONAME",
+      "classId": 7,
+      "bornTime": 0,
+      "bornX": 0,
+      "bornY": 0,
+      "destinationX": 160,
+      "destinationY": 50
     }
   ]
 }

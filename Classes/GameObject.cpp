@@ -39,12 +39,12 @@ void GameObject::setObjectId(int id)
 
 void GameObject::onExit()
 {
-    Sprite::onExit();
-    
     auto gameScene = dynamic_cast<GameScene *>(Director::getInstance()->getRunningScene());
     if (gameScene) {
         gameScene->ObjectExitScene(this);
     }
+    
+    Sprite::onExit();
 }
 
 void GameObject::onEnter()

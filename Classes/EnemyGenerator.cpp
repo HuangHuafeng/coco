@@ -57,3 +57,15 @@ EnemyGenerator * EnemyGenerator::clone() const
     
     return generator;
 }
+
+void EnemyGenerator::onEnter()
+{
+    ObjectGenerator::onEnter();
+    start();
+}
+
+void EnemyGenerator::onExit()
+{
+    stop();
+    ObjectGenerator::onExit();
+}
