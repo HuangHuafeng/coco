@@ -62,6 +62,7 @@ private:
     ScrollingBackground * createScrollingBackground(const json &object);
     GameObject * addSceneObject(const json &object);
     GameObject * addPlayerPlane(const json &object);
+    GameObject * addBackground(const json &object);
     
 public:
     ObjectManager(GameScene *scene);

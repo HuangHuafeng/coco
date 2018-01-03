@@ -46,9 +46,17 @@ ObjectManager::~ObjectManager()
 void ObjectManager::initTypeCreators()
 {
     mTypeCreators.clear();
-    mTypeCreators.insert(std::make_pair("Bullet", std::bind(&ObjectManager::addSceneObject, this, std::placeholders::_1)));
+    mTypeCreators.insert(std::make_pair("Bullet", std::bind(&ObjectManager::createBullet, this, std::placeholders::_1)));
+    mTypeCreators.insert(std::make_pair("Weapon", std::bind(&ObjectManager::createWeapon, this, std::placeholders::_1)));
+    mTypeCreators.insert(std::make_pair("WeaponTripleBullet", std::bind(&ObjectManager::createWeaponTripleBullet, this, std::placeholders::_1)));
+    mTypeCreators.insert(std::make_pair("FriendPlane", std::bind(&ObjectManager::createFriendPlane, this, std::placeholders::_1)));
+    mTypeCreators.insert(std::make_pair("EnemyPlane", std::bind(&ObjectManager::createEnemyPlane, this, std::placeholders::_1)));
+    mTypeCreators.insert(std::make_pair("EnemyGenerator", std::bind(&ObjectManager::createEnemyGenerator, this, std::placeholders::_1)));
+    mTypeCreators.insert(std::make_pair("ScrollingBackground", std::bind(&ObjectManager::createScrollingBackground, this, std::placeholders::_1)));
+    mTypeCreators.insert(std::make_pair("PlayerPlane", std::bind(&ObjectManager::addPlayerPlane, this, std::placeholders::_1)));
+    mTypeCreators.insert(std::make_pair("SceneObject", std::bind(&ObjectManager::addSceneObject, this, std::placeholders::_1)));
+    mTypeCreators.insert(std::make_pair("Background", std::bind(&ObjectManager::addBackground, this, std::placeholders::_1)));
 }
-
 
 /*
 ObjectManager * ObjectManager::getInstance()
@@ -149,32 +157,21 @@ bool ObjectManager::createObjectImmediately(const json &object)
     }
     
     GameObject * ret = nullptr;
-    if ("Bullet" == type) {
-        ret = createBullet(object);
-    } else if ("Weapon" == type) {
-        ret = createWeapon(object);
-    }  else if ("WeaponTripleBullet" == type) {
-        ret = createWeaponTripleBullet(object);
-    } else if ("FriendPlane" == type) {
-        ret = createFriendPlane(object);
-    } else if ("EnemyPlane" == type) {
-        ret = createEnemyPlane(object);
-    } else if ("EnemyGenerator" == type) {
-        ret = createEnemyGenerator(object);
-    } else if ("ScrollingBackground" == type) {
-        ret = createScrollingBackground(object);
-    } else if ("PlayerPlane" == type) {
-        ret = addPlayerPlane(object);
-    } else if ("SceneObject" == type) {
-        ret = addSceneObject(object);
-    } else {
-        log("Don't know how to create object from json: %s", object.dump(4).c_str());
+    auto it = mTypeCreators.cbegin();
+    auto end = mTypeCreators.cend();
+    while (it != end) {
+        if (it->first == type) {
+            ret = it->second(object);
+            break;
+        }
+        it++;
     }
 
     if (ret) {
+        auto bornTime = object.value("bornTime", j_null);
         // successfully created an object, check if it should be added to scene
-        if (type == "SceneObject" || type == "PlayerPlane" ) {
-            // SceneObject is added to the scene, PlayerPlane is a special SceneObject
+        if (bornTime.is_null() == false) {
+            // the object should be added to the scene, at this moment, "bornTime" milliseconds has just passed since the object manager is created
             if (mScene) {
                 mScene->addChild(ret);
             }
@@ -188,6 +185,8 @@ bool ObjectManager::createObjectImmediately(const json &object)
             ret->retain();
             mRetainedObjects.push_back(ret);
         }
+    } else {
+        log("failed to create object from json: %s", object.dump(4).c_str());
     }
     
     return ret;
@@ -421,12 +420,13 @@ GameObject * ObjectManager::addSceneObject(const json &object)
     auto id = object.value("id", j_null);
     auto name = object.value("name", j_null);
     auto classId = object.value("classId", j_null);
+    auto localZOrder = object.value("localZOrder", j_null);
     auto bornX = object.value("bornX", j_null);
     auto bornY = object.value("bornY", j_null);
     auto destinationX = object.value("destinationX", j_null);
     auto destinationY = object.value("destinationY", j_null);
     
-    if (id.is_number_unsigned() == false || name.is_string() == false || classId.is_number_unsigned() == false || bornX.is_number_integer() == false || bornY.is_number_integer() == false || destinationX.is_number_integer() == false || destinationY.is_number_integer() == false) {
+    if (id.is_number_unsigned() == false || name.is_string() == false || classId.is_number_unsigned() == false || localZOrder.is_number() == false || bornX.is_number_integer() == false || bornY.is_number_integer() == false || destinationX.is_number_integer() == false || destinationY.is_number_integer() == false) {
         return nullptr;
     }
     
@@ -445,6 +445,7 @@ GameObject * ObjectManager::addSceneObject(const json &object)
     auto sceneObject = classObject->clone();
     sceneObject->setObjectId(id);
     sceneObject->setObjectName(name);
+    sceneObject->setLocalZOrder(localZOrder);
     sceneObject->setPosition(Vec2(static_cast<float>(bornX), static_cast<float>(bornY)));
     auto flyingObject = dynamic_cast<FlyingObject *>(sceneObject);
     if (flyingObject) {
@@ -468,59 +469,14 @@ GameObject * ObjectManager::addPlayerPlane(const json &object)
     return sceneObject;
 }
 
-/*
-GameObject * ObjectManager::findObject(int id) const
+GameObject * ObjectManager::addBackground(const json &object)
 {
-    GameObject *ret = findBullet(id);
-    if (ret) {
-        return ret;
-    }
-    
-    ret = findWeapon(id);
-    if (ret) {
-        return ret;
-    }
-    
-    ret = findEnemy(id);
-    if (ret) {
-        return ret;
-    }
-    
-    if (mFriendPlane && mFriendPlane->getObjectId() == id) {
-        return mFriendPlane;
-    }
-    
-    return nullptr;
-}
+    auto background = addSceneObject(object);
+    // manually set the local z order
+    //background->setLocalZOrder(-100);
 
-Weapon * ObjectManager::findWeapon(int id) const
-{
-    std::vector<Weapon *>::const_iterator itWeapon = mWeapons.cbegin();
-    std::vector<Weapon *>::const_iterator endWeapon = mWeapons.cend();
-    while (itWeapon != endWeapon) {
-        if ((*itWeapon)->getObjectId() == id) {
-            return *itWeapon;
-        }
-        itWeapon++;
-    }
-    
-    return nullptr;
+    return background;
 }
-
-Bullet * ObjectManager::findBullet(int id) const
-{
-    std::vector<Bullet *>::const_iterator itBullet = mBullets.cbegin();
-    std::vector<Bullet *>::const_iterator endBullet = mBullets.cend();
-    while (itBullet != endBullet) {
-        if ((*itBullet)->getObjectId() == id) {
-            return *itBullet;
-        }
-        itBullet++;
-    }
-    
-    return nullptr;
-}
-*/
 
 void ObjectManager::ObjectEnterScene(GameObject *object)
 {
