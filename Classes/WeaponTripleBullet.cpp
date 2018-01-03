@@ -6,6 +6,7 @@
 //
 
 #include "WeaponTripleBullet.h"
+#include "GameScene.h"
 
 USING_NS_CC;
 
@@ -29,10 +30,15 @@ void WeaponTripleBullet::generateOnce()
         bullet2->modifyPosition(currentPosition);
         bullet2->setDestination(currentPosition + mBulletOffset);
         bullet3->modifyPosition(currentPosition);
-        bullet3->setDestination(currentPosition + interval + mBulletOffset);
-        Director::getInstance()->getRunningScene()->addChild(bullet1);
-        Director::getInstance()->getRunningScene()->addChild(bullet2);
-        Director::getInstance()->getRunningScene()->addChild(bullet3);
+        bullet3->setDestination(currentPosition + interval + mBulletOffset);        
+        auto gameScene = dynamic_cast<GameScene *>(Director::getInstance()->getRunningScene());
+        if (gameScene) {
+            auto localZorder = getParent()->getLocalZOrder();
+            localZorder--;  // the Bullet is under the WarObject
+            gameScene->AddObjectToScene(bullet1, localZorder);
+            gameScene->AddObjectToScene(bullet2, localZorder);
+            gameScene->AddObjectToScene(bullet3, localZorder);
+        }
     }
 }
 
@@ -45,3 +51,15 @@ WeaponTripleBullet * WeaponTripleBullet::create(float interval)
     return weapon;
 }
 
+
+WeaponTripleBullet * WeaponTripleBullet::clone() const
+{
+    auto weaponTripleBullet = new (std::nothrow) WeaponTripleBullet(mInterval);
+    Bullet * equippedBullet = dynamic_cast<Bullet *>(mObject);
+    if (equippedBullet) {
+        weaponTripleBullet->setBullet(equippedBullet);
+    }
+    weaponTripleBullet->autorelease();
+    
+    return weaponTripleBullet;
+}

@@ -19,12 +19,13 @@ ObjectManager::ObjectManager(GameScene *scene)
     mObjectsInScene = {};
     mObjectsWithId0 = {};
     mPlayerPlane = nullptr;
-    mBackground = nullptr;
     
     mScene = scene;
     if (mScene) {
         mScene->retain();
     }
+    
+    initTypeCreators();
 }
 
 ObjectManager::~ObjectManager()
@@ -40,11 +41,12 @@ ObjectManager::~ObjectManager()
         (*itObject)->autorelease();
         itObject++;
     }
-    
-    if (mBackground) {
-        mBackground->autorelease();
-        mBackground = nullptr;
-    }
+}
+
+void ObjectManager::initTypeCreators()
+{
+    mTypeCreators.clear();
+    mTypeCreators.insert(std::make_pair("Bullet", std::bind(&ObjectManager::addSceneObject, this, std::placeholders::_1)));
 }
 
 
@@ -151,6 +153,8 @@ bool ObjectManager::createObjectImmediately(const json &object)
         ret = createBullet(object);
     } else if ("Weapon" == type) {
         ret = createWeapon(object);
+    }  else if ("WeaponTripleBullet" == type) {
+        ret = createWeaponTripleBullet(object);
     } else if ("FriendPlane" == type) {
         ret = createFriendPlane(object);
     } else if ("EnemyPlane" == type) {
@@ -160,9 +164,9 @@ bool ObjectManager::createObjectImmediately(const json &object)
     } else if ("ScrollingBackground" == type) {
         ret = createScrollingBackground(object);
     } else if ("PlayerPlane" == type) {
-        ret = createPlayerPlane(object);
+        ret = addPlayerPlane(object);
     } else if ("SceneObject" == type) {
-        ret = createSceneObject(object);
+        ret = addSceneObject(object);
     } else {
         log("Don't know how to create object from json: %s", object.dump(4).c_str());
     }
@@ -207,14 +211,11 @@ ScrollingBackground * ObjectManager::createScrollingBackground(const json &objec
     }
     
     auto windowSize = Director::getInstance()->getWinSize();
-    auto bkg = ScrollingBackground::create(file1, file2, windowSize);
-    if (bkg) {
-        bkg->startScroll(speed);
-        mBackground = bkg;
-        mBackground->retain();
-    }
+    auto bkg = ScrollingBackground::create(file1, file2, windowSize, speed);
+    bkg->setObjectId(id);
+    bkg->setObjectName(name);
     
-    return mBackground;
+    return bkg;
 }
 
 EnemyGenerator * ObjectManager::createEnemyGenerator(const json &object)
@@ -255,10 +256,11 @@ EnemyPlane * ObjectManager::createEnemyPlane(const json &object)
     auto id = object.value("id", j_null);
     auto name = object.value("name", j_null);
     auto file = object.value("file", j_null);
+    auto calmPeriod = object.value("calmPeriod", j_null);
     auto speed = object.value("speed", j_null);
     auto health = object.value("health", j_null);
     auto damage = object.value("damage", j_null);
-    if (id.is_number_unsigned() == false || name.is_string() == false || file.is_string() == false || speed.is_number_unsigned() == false || health.is_number_unsigned() == false || damage.is_number_unsigned() == false) {
+    if (id.is_number_unsigned() == false || name.is_string() == false || file.is_string() == false || calmPeriod.is_number_unsigned() == false || speed.is_number_unsigned() == false || health.is_number_unsigned() == false || damage.is_number_unsigned() == false) {
         return nullptr;
     }
     
@@ -270,6 +272,7 @@ EnemyPlane * ObjectManager::createEnemyPlane(const json &object)
     auto enemyPlane = EnemyPlane::create(file);
     enemyPlane->setObjectId(id);
     enemyPlane->setObjectName(name);
+    enemyPlane->setCalmPeriod(static_cast<float>(calmPeriod) * 0.001f);
     enemyPlane->setSpeed(speed);
     enemyPlane->setHealth(health);
     enemyPlane->setDamage(damage);
@@ -291,10 +294,11 @@ FriendPlane * ObjectManager::createFriendPlane(const json &object)
     auto id = object.value("id", j_null);
     auto name = object.value("name", j_null);
     auto file = object.value("file", j_null);
+    auto calmPeriod = object.value("calmPeriod", j_null);
     auto speed = object.value("speed", j_null);
     auto health = object.value("health", j_null);
     auto damage = object.value("damage", j_null);
-    if (id.is_number_unsigned() == false || name.is_string() == false || file.is_string() == false || speed.is_number_unsigned() == false || health.is_number_unsigned() == false || damage.is_number_unsigned() == false) {
+    if (id.is_number_unsigned() == false || name.is_string() == false || file.is_string() == false || calmPeriod.is_number_unsigned() == false || speed.is_number_unsigned() == false || health.is_number_unsigned() == false || damage.is_number_unsigned() == false) {
         return nullptr;
     }
     
@@ -306,6 +310,7 @@ FriendPlane * ObjectManager::createFriendPlane(const json &object)
     auto friendPlane = FriendPlane::create(file);
     friendPlane->setObjectId(id);
     friendPlane->setObjectName(name);
+    friendPlane->setCalmPeriod(static_cast<float>(calmPeriod) * 0.001f);
     friendPlane->setSpeed(speed);
     friendPlane->setHealth(health);
     friendPlane->setDamage(damage);
@@ -334,7 +339,7 @@ Bullet * ObjectManager::createBullet(const json &object)
         return nullptr;
     }
     
-    if ( findRetainedObject(id) != nullptr) {
+    if (findRetainedObject(id) != nullptr) {
         // there's already an object with this id, don't create another one
         return nullptr;
     }
@@ -368,7 +373,7 @@ Weapon * ObjectManager::createWeapon(const json &object)
     mWeapons.push_back(weapon);
     
     auto bulletId = object.value("bullet", j_null);
-    if (bulletId.is_number_unsigned()) {
+    if (bulletId.is_number_unsigned() && bulletId != 0) {
         auto bullet = dynamic_cast<Bullet *>(findRetainedObject(bulletId));
         if (bullet) {
             weapon->setBullet(bullet);
@@ -378,7 +383,39 @@ Weapon * ObjectManager::createWeapon(const json &object)
     return weapon;
 }
 
-GameObject * ObjectManager::createSceneObject(const json &object)
+WeaponTripleBullet * ObjectManager::createWeaponTripleBullet(const json &object)
+{
+    const json j_null;
+    auto id = object.value("id", j_null);
+    auto name = object.value("name", j_null);
+    auto triggerInterval = object.value("triggerInterval", j_null);
+    if (id.is_number_unsigned() == false || name.is_string() == false || triggerInterval.is_number_unsigned() == false) {
+        return nullptr;
+    }
+    
+    if ( findRetainedObject(id) != nullptr) {
+        // there's already an object with this id, don't create another one
+        return nullptr;
+    }
+    
+    // triggerInterval is **milliseconds** in json file
+    auto weaponTripleBullet = WeaponTripleBullet::create(static_cast<float>(triggerInterval) * 0.001);
+    weaponTripleBullet->setObjectId(id);
+    weaponTripleBullet->setObjectName(name);
+    mWeapons.push_back(weaponTripleBullet);
+    
+    auto bulletId = object.value("bullet", j_null);
+    if (bulletId.is_number_unsigned() && bulletId != 0) {
+        auto bullet = dynamic_cast<Bullet *>(findRetainedObject(bulletId));
+        if (bullet) {
+            weaponTripleBullet->setBullet(bullet);
+        }
+    }
+    
+    return weaponTripleBullet;
+}
+
+GameObject * ObjectManager::addSceneObject(const json &object)
 {
     const json j_null;
     auto id = object.value("id", j_null);
@@ -417,14 +454,14 @@ GameObject * ObjectManager::createSceneObject(const json &object)
     return sceneObject;
 }
 
-GameObject * ObjectManager::createPlayerPlane(const json &object)
+GameObject * ObjectManager::addPlayerPlane(const json &object)
 {
     if (mPlayerPlane) {
         // sorry only one friend plane is supported
         return nullptr;
     }
     
-    auto sceneObject = createSceneObject(object);
+    auto sceneObject = addSceneObject(object);
     mPlayerPlane = dynamic_cast<FriendPlane *>(sceneObject);
     
     // should return sceneObject, instead of mPlayerPlane

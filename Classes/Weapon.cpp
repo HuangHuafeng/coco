@@ -7,7 +7,6 @@
 
 #include "Weapon.h"
 #include "WarObject.h"
-#include "ObjectManager.h"
 #include "GameScene.h"
 
 USING_NS_CC;

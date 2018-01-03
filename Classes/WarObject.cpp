@@ -7,8 +7,11 @@
 
 #include "WarObject.h"
 
+USING_NS_CC;
+
 WarObject::WarObject()
 {
+    mCalmPeriod = 1.0f; // default to 1 second
     mWeapon = nullptr;
     mHealth = 10;   // default to a small value, so it will be killed easily
 }
@@ -59,21 +62,28 @@ void WarObject::ceaseFire()
     }
 }
 
-/*
+void WarObject::setCalmPeriod(float calmPeriod)
+{
+    mCalmPeriod = calmPeriod > 0.0f ? calmPeriod : 0.0f;
+}
+
+
 void WarObject::onEnter()
 {
     FlyingObject::onEnter();
-    // should not open fire here, let subclass define the behaviour
-    //openFire();
+    
+     auto openFire = CallFunc::create(CC_CALLBACK_0(WarObject::openFire, this));
+     auto calm = DelayTime::create(mCalmPeriod);
+     auto seq = Sequence::create(calm, openFire, nullptr);
+     runAction(seq);
 }
 
 void WarObject::onExit()
 {
     FlyingObject::onExit();
- // should not cease fire here, let subclass define the behaviour
-    //ceaseFire();
+    ceaseFire();
 }
-*/
+
 
 void WarObject::collideWith(CollideObject *otherCollideObject)
 {

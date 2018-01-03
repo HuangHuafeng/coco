@@ -32,7 +32,7 @@ public:
     void setDestination(const cocos2d::Vec2 &destination);
     void modifyPosition(const cocos2d::Vec2& pos);
     void stop();
-    
+    void invalidRoute();
 };
 
 #endif /* FlyingObject_h */

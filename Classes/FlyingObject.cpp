@@ -19,13 +19,13 @@ FlyingObject::FlyingObject()
 void FlyingObject::setDestination(const cocos2d::Vec2 &destination)
 {
     mDestination = destination;
-    mRouteNeedUpdate = true;
+    invalidRoute();
 }
 
 void FlyingObject::setSpeed(float speed)
 {
     mSpeed = speed;
-    mRouteNeedUpdate = true;
+    invalidRoute();
 }
 
 void FlyingObject::updateRoute()
@@ -52,7 +52,7 @@ void FlyingObject::stop()
 void FlyingObject::modifyPosition(const Vec2& pos)
 {
     setPosition(pos);
-    mRouteNeedUpdate = true;
+    invalidRoute();
 }
 
 
@@ -64,4 +64,9 @@ void FlyingObject::update(float delta)
     }
     
     CollideObject::update(delta);
+}
+
+void FlyingObject::invalidRoute()
+{
+    mRouteNeedUpdate = true;
 }

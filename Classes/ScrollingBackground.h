@@ -12,13 +12,15 @@
 
 class ScrollingBackground : public GameObject {
 public:
-    ScrollingBackground(const cocos2d::Size bkgSize);
+    ScrollingBackground(const cocos2d::Size bkgSize, float speed = 0);
     //virtual ~Background();
     
     virtual ScrollingBackground * clone() const override;
+    virtual void onEnter() override;
+    virtual void onExit() override;
     
-    static ScrollingBackground* create(const std::string& bkgImg1, const std::string& bkgImg2, const cocos2d::Size bkgSize);
-    void startScroll(float timeForOneScroll);
+    static ScrollingBackground* create(const std::string& bkgImg1, const std::string& bkgImg2, const cocos2d::Size bkgSize, float speed = 0);
+    void startScroll();
     
 protected:
     enum {
@@ -28,6 +30,7 @@ protected:
     
 private:
     cocos2d::Size mBackgroundSize;
+    float mSpeed;
 };
 
 #endif /* ScrollingBackground_h */

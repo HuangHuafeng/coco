@@ -10,33 +10,46 @@
 
 USING_NS_CC;
 
-ScrollingBackground::ScrollingBackground(const Size bkgSize)
+ScrollingBackground::ScrollingBackground(const Size bkgSize, float speed)
 {
     mBackgroundSize = bkgSize;
+    mSpeed = speed;
 }
 
 ScrollingBackground * ScrollingBackground::clone() const
 {
-    // no clone yet
+    Sprite *childImage1 = dynamic_cast<Sprite *>(getChildByTag(IMAGE1));
+    Sprite *childImage2 = dynamic_cast<Sprite *>(getChildByTag(IMAGE2));
+    if (childImage1 && childImage2) {
+        auto image1 = Sprite::createWithTexture(childImage1->getTexture());
+        auto image2 = Sprite::createWithTexture(childImage2->getTexture());
+        auto scrollingBackground = new (std::nothrow) ScrollingBackground(mBackgroundSize, mSpeed);
+        scrollingBackground->addChild(image1, 0, IMAGE1);
+        scrollingBackground->addChild(image2, -1, IMAGE2);
+        scrollingBackground->autorelease();
+        return scrollingBackground;
+    }
+    
     return nullptr;
 }
 
-ScrollingBackground * ScrollingBackground::create(const std::string& bkgImg1, const std::string& bkgImg2, const cocos2d::Size bkgSize)
+ScrollingBackground * ScrollingBackground::create(const std::string& bkgImg1, const std::string& bkgImg2, const cocos2d::Size bkgSize, float speed)
 {
-    auto img1 = Sprite::create(bkgImg1);
-    auto img2 = Sprite::create(bkgImg2);
-    if (img1 && img2)
+    auto image1 = Sprite::create(bkgImg1);
+    auto image2 = Sprite::create(bkgImg2);
+    if (image1 && image2)
     {
-        ScrollingBackground* sbkg = new (std::nothrow) ScrollingBackground(bkgSize);
-        sbkg->addChild(img1, 0, IMAGE1);
-        sbkg->addChild(img2, -1, IMAGE2);
+        ScrollingBackground* sbkg = new (std::nothrow) ScrollingBackground(bkgSize, speed);
+        sbkg->addChild(image1, 0, IMAGE1);
+        sbkg->addChild(image2, -1, IMAGE2);
+        sbkg->autorelease();
         return sbkg;
     }
 
     return nullptr;
 }
 
-void ScrollingBackground::startScroll(float timeForOneScroll)
+void ScrollingBackground::startScroll()
 {
     auto img1 = this->getChildByTag(IMAGE1);
     auto img2 = this->getChildByTag(IMAGE2);
@@ -69,6 +82,8 @@ void ScrollingBackground::startScroll(float timeForOneScroll)
     // first set the position of the two images directly
     img1->setPosition(Vec2(0, 0));
     
+    const auto timeForOneScroll = mBackgroundSize.height / mSpeed;
+    
     // image1
     auto img1ScrollHeightPart1 = img1Size.height * img1ScaleY;
     auto img1ScrollTimePart1 = timeForOneScroll * (img1ScrollHeightPart1 / totalScrollHeight);
@@ -99,3 +114,14 @@ void ScrollingBackground::startScroll(float timeForOneScroll)
     img2->runAction(RepeatForever::create(img2Seq));
 }
 
+void ScrollingBackground::onExit()
+{
+    stopAllActions();
+    GameObject::onExit();
+}
+
+void ScrollingBackground::onEnter()
+{
+    GameObject::onEnter();
+    startScroll();
+}

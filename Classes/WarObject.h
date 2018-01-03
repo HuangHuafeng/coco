@@ -14,6 +14,7 @@
 class WarObject : public FlyingObject {
     
 protected:
+    float mCalmPeriod;    // after the carm period, the war object open fire
     Weapon *mWeapon;
     int mHealth;
     
@@ -26,12 +27,13 @@ public:
 
     void openFire();
     void ceaseFire();
+    void setCalmPeriod(float calmPeriod);
     void setWeapon(Weapon *weapon);
     void setHealth(int health);
     int getHealth() const;
     
-    //virtual void onEnter() override;
-    //virtual void onExit() override;
+    virtual void onEnter() override;
+    virtual void onExit() override;
     //virtual void update (float delta) override;
 };
 

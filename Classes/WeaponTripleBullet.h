@@ -19,6 +19,8 @@ protected:
     
 public:
     static WeaponTripleBullet * create(float interval = 1.0f);
+    
+    virtual WeaponTripleBullet * clone() const override;
 };
 
 #endif /* WeaponTripleBullet_h */

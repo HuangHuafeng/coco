@@ -31,6 +31,8 @@ typedef enum {
     ENEMYPLANE = 5,
 } ObjectType;
 
+typedef std::function<GameObject *(const json &)> creatorCallback;
+
 class ObjectManager {
 private:    
     GameScene *mScene;
@@ -42,7 +44,10 @@ private:
     std::list<GameObject *> mObjectsInScene;
     std::list<GameObject *> mObjectsWithId0;
     FriendPlane *mPlayerPlane;      // only one player plane is supported
-    ScrollingBackground *mBackground;
+    
+    std::map<std::string, creatorCallback> mTypeCreators;
+    
+    void initTypeCreators();
     
     bool loadObjects(const json &objects);
     bool createObject(const json &object);
@@ -50,12 +55,13 @@ private:
     
     Bullet * createBullet(const json &object);
     Weapon * createWeapon(const json &object);
+    WeaponTripleBullet * createWeaponTripleBullet(const json &object);
     FriendPlane * createFriendPlane(const json &object);
     EnemyPlane * createEnemyPlane(const json &object);
     EnemyGenerator * createEnemyGenerator(const json &object);
     ScrollingBackground * createScrollingBackground(const json &object);
-    GameObject * createSceneObject(const json &object);
-    GameObject * createPlayerPlane(const json &object);
+    GameObject * addSceneObject(const json &object);
+    GameObject * addPlayerPlane(const json &object);
     
 public:
     ObjectManager(GameScene *scene);
