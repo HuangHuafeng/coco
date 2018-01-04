@@ -43,6 +43,7 @@ void WarObject::setWeapon(Weapon *weapon)
 
     if (weapon) {
         mWeapon = weapon->clone();
+        //mWeapon->setObjectName(mName+"_generated object");
         mWeapon->attachToWarObject(this);
         addChild(mWeapon);
     }

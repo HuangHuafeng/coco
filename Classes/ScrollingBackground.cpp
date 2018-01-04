@@ -24,6 +24,8 @@ ScrollingBackground * ScrollingBackground::clone() const
         auto image1 = Sprite::createWithTexture(childImage1->getTexture());
         auto image2 = Sprite::createWithTexture(childImage2->getTexture());
         auto scrollingBackground = new (std::nothrow) ScrollingBackground(mBackgroundSize, mSpeed);
+        // cloned object has id 0 and name "", it should not be touched unless necessary
+        //scrollingBackground->setObjectName("clonedScrollingBackground");
         scrollingBackground->addChild(image1, 0, IMAGE1);
         scrollingBackground->addChild(image2, -1, IMAGE2);
         scrollingBackground->autorelease();

@@ -21,18 +21,32 @@ void WeaponTripleBullet::generateOnce()
     Bullet * equippedBullet = dynamic_cast<Bullet *>(mObject);
     if (equippedBullet) {
         auto currentPosition = getParent()->getPosition();
-        const auto interval = Vec2(80, 0);
+        auto bulletSize = equippedBullet->getContentSize();
+        const auto startInterval = Vec2(bulletSize.width / 2, 0);
+        const auto destinationInterval = Vec2(bulletSize.width * 3, 0);
         auto bullet1 = equippedBullet->clone();
         auto bullet2 = equippedBullet->clone();
         auto bullet3 = equippedBullet->clone();
-        bullet1->modifyPosition(currentPosition);
-        bullet1->setDestination(currentPosition - interval + mBulletOffset);
+        bullet1->modifyPosition(currentPosition - startInterval);
+        bullet1->setDestination(currentPosition - destinationInterval + mBulletOffset);
         bullet2->modifyPosition(currentPosition);
         bullet2->setDestination(currentPosition + mBulletOffset);
-        bullet3->modifyPosition(currentPosition);
-        bullet3->setDestination(currentPosition + interval + mBulletOffset);        
+        bullet3->modifyPosition(currentPosition + startInterval);
+        bullet3->setDestination(currentPosition + destinationInterval + mBulletOffset);
         auto gameScene = dynamic_cast<GameScene *>(Director::getInstance()->getRunningScene());
+        
         if (gameScene) {
+            // DEBUG
+            /*
+            bullet1->setObjectId(gameScene->giveMeId());
+            bullet1->setObjectName("bullet1");
+            bullet2->setObjectId(gameScene->giveMeId());
+            bullet2->setObjectName("bullet2");
+            bullet3->setObjectId(gameScene->giveMeId());
+            bullet3->setObjectName("bullet3");
+             */
+            // DEBUG END
+            
             auto localZorder = getParent()->getLocalZOrder();
             localZorder--;  // the Bullet is under the WarObject
             gameScene->AddObjectToScene(bullet1, localZorder);
@@ -55,6 +69,8 @@ WeaponTripleBullet * WeaponTripleBullet::create(float interval)
 WeaponTripleBullet * WeaponTripleBullet::clone() const
 {
     auto weaponTripleBullet = new (std::nothrow) WeaponTripleBullet(mInterval);
+    // cloned object has id 0 and name "", it should not be touched unless necessary
+    //weaponTripleBullet->setObjectName("clonedWeaponTripleBullet");
     Bullet * equippedBullet = dynamic_cast<Bullet *>(mObject);
     if (equippedBullet) {
         weaponTripleBullet->setBullet(equippedBullet);

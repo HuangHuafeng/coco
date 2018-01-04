@@ -28,6 +28,8 @@ EnemyPlane* EnemyPlane::create(const std::string &filename)
 EnemyPlane * EnemyPlane::clone() const
 {
     EnemyPlane* ep = new (std::nothrow) EnemyPlane();
+    // cloned object has id 0 and name "", it should not be touched unless necessary
+    //ep->setObjectName("clonedEnemyPlane");
     ep->initWithTexture(_texture);
     ep->initialize();
     ep->setForceType(mForceType);

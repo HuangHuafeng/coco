@@ -57,6 +57,9 @@ void Bullet::setForceType(ForceType type)
 Bullet* Bullet::clone() const
 {
     Bullet* b = new (std::nothrow) Bullet();
+    // cloned object has id 0 and name "", it should not be touched unless necessary
+    //b->setObjectId(mId);
+    //b->setObjectName(mName);
     b->initWithTexture(_texture);
     b->initialize();
     b->setDamage(mDamage);

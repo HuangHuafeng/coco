@@ -13,13 +13,16 @@
 class PlayScene : public GameScene {
     
 public:
+    PlayScene();
+    ~PlayScene();
+    
     static PlayScene * createScene(const std::string &sceneDataInJson);
     CREATE_FUNC(PlayScene);
 
     void menuStartGameCallback(Ref *sender);
     
     virtual bool init() override;
-    virtual void onFriendPlaneExit() override;
+    virtual void onPlayerPlaneExit() override;
 };
 
 #endif /* PlayScene_h */

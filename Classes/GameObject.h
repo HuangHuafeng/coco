@@ -18,9 +18,11 @@ protected:
     
 public:
     GameObject();
+    ~GameObject();
     
     const std::string & getName();
     void setObjectName(const std::string & name);
+    const std::string & getObjectName();
     int getObjectId() const;
     void setObjectId(int id);
     

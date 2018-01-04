@@ -103,6 +103,7 @@ void HelloWorld::menuStartGameCallback(Ref *sender)
         auto playScene = PlayScene::createScene(sbuf);
         if (playScene) {
             Director::getInstance()->pushScene(playScene);
+            //Director::getInstance()->replaceScene(playScene);
         }
     } else {
         log("failed to read file testgame.json, status: %d", status);

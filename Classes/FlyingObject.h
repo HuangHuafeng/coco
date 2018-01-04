@@ -27,6 +27,7 @@ public:
     FlyingObject();
 
     virtual void update (float delta) override;
+    virtual FlyingObject * clone() const override;
     
     void setSpeed(float speed);
     void setDestination(const cocos2d::Vec2 &destination);

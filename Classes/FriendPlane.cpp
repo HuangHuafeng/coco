@@ -31,6 +31,8 @@ FriendPlane* FriendPlane::create(const std::string &filename)
 FriendPlane * FriendPlane::clone() const
 {
     FriendPlane* fp = new (std::nothrow) FriendPlane();
+    // cloned object has id 0 and name "", it should not be touched unless necessary
+    //fp->setObjectName("clonedFriendPlane");
     fp->initWithTexture(_texture);
     fp->initialize();
     fp->setForceType(mForceType);

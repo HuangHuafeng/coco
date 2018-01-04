@@ -26,15 +26,16 @@ protected:
 public:
     ~GameScene();
     
-    void setData(const std::string &sceneDataInJson);
+    bool setData(const std::string &sceneDataInJson);
     const std::string & getData();
     void ObjectEnterScene(GameObject *object);
     void ObjectExitScene(GameObject *object);
     void AddObjectToScene(GameObject *object, int localZOrder = 0);
     int giveMeId();
+    void releaseObjectManager();
     
-    virtual void onFriendPlaneEnter();
-    virtual void onFriendPlaneExit();
+    virtual void onPlayerPlaneEnter();
+    virtual void onPlayerPlaneExit();
 };
 
 #endif /* GameScene_h */

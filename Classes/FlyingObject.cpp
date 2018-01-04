@@ -70,3 +70,8 @@ void FlyingObject::invalidRoute()
 {
     mRouteNeedUpdate = true;
 }
+
+FlyingObject * FlyingObject::clone() const
+{
+    return nullptr;
+}

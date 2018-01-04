@@ -22,7 +22,16 @@ EnemyGenerator::EnemyGenerator(float interval)
 
 void EnemyGenerator::generateOnce()
 {
-    EnemyObject * enemyObject = dynamic_cast<EnemyObject *>(mObject);
+    //EnemyObject * enemyObject = dynamic_cast<EnemyObject *>(mObject);
+    // DEBUG
+    FlyingObject * enemyObject = nullptr;
+    EnemyObject * tempObject = dynamic_cast<EnemyObject *>(mObject);
+    if (!tempObject) {
+        enemyObject = dynamic_cast<Bullet *>(mObject);
+    } else {
+        enemyObject = tempObject;
+    }
+    // DEBUG END
     if (enemyObject) {
         auto newEnemyObject = enemyObject->clone();
         if (newEnemyObject) {
@@ -53,6 +62,8 @@ EnemyGenerator * EnemyGenerator::clone() const
     if (mObject) {
         generator->setObject(mObject);
     }
+    // cloned object has id 0 and name "", it should not be touched unless necessary
+    //generator->setObjectName("clonedEnemyGenerator");
     generator->autorelease();
     
     return generator;

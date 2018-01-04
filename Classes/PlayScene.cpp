@@ -10,6 +10,17 @@
 
 USING_NS_CC;
 
+PlayScene::PlayScene()
+{
+    log("PlayScene::PlayScene()");
+    
+}
+
+PlayScene::~PlayScene()
+{
+    log("PlayScene::~PlayScene()");
+}
+
 PlayScene * PlayScene::createScene(const std::string &sceneDataInJson)
 {
     PlayScene *scene = PlayScene::create();
@@ -30,11 +41,11 @@ bool PlayScene::init()
     return true;
 }
 
-void PlayScene::onFriendPlaneExit()
+void PlayScene::onPlayerPlaneExit()
 {
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    auto localZOrder = 1000;
+    auto localZOrder = 100000;
     
     auto labelGameOver = Label::createWithTTF("Game Over!", "fonts/Marker Felt.ttf", 36);
     if (labelGameOver) {

@@ -33,16 +33,16 @@ typedef enum {
 
 typedef std::function<GameObject *(const json &)> creatorCallback;
 
-class ObjectManager {
-private:    
+class ObjectManager : public cocos2d::Ref {
+private:
+    ObjectManager();
+    
     GameScene *mScene;
     std::vector<Bullet *> mBullets;
     std::vector<Weapon *> mWeapons;
-    //std::vector<FriendPlane *> mFriendPlanes;
     std::vector<EnemyObject *> mEnemies;
     std::vector<GameObject *> mRetainedObjects;
-    std::list<GameObject *> mObjectsInScene;
-    std::list<GameObject *> mObjectsWithId0;
+    std::map<GameObject *, GameObject *> mObjectsInScene;
     FriendPlane *mPlayerPlane;      // only one player plane is supported
     
     std::map<std::string, creatorCallback> mTypeCreators;
@@ -65,15 +65,20 @@ private:
     GameObject * addBackground(const json &object);
     
 public:
-    ObjectManager(GameScene *scene);
     ~ObjectManager();
     
     // ObjectManager should not be a singleton object as every scene
     // has its own object manager. And object manager is created/destroyed by scene
     //static ObjectManager * getInstance();
     
+    static ObjectManager * createObjectManager(GameScene *scene);
+    CREATE_FUNC(ObjectManager);
+    
+    virtual bool init();
+    
     bool loadFromFile(const std::string &filename);
     bool loadFromJsonString(const std::string &jsonString);
+    void setScene(GameScene *scene);
 
     int giveMeId();
     int getNumberOfSceneObjects() const;

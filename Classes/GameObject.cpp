@@ -16,6 +16,13 @@ GameObject::GameObject()
     mName = "";
 }
 
+GameObject::~GameObject()
+{
+    log("GameObject::~GameObject(): id %d, name %s", mId, mName.c_str());
+    mId = 0;
+    mName = "";
+}
+
 
 const std::string & GameObject::getName()
 {
@@ -25,6 +32,11 @@ const std::string & GameObject::getName()
 void GameObject::setObjectName(const std::string & name)
 {
     mName = name;
+}
+
+const std::string & GameObject::getObjectName()
+{
+    return mName;
 }
 
 int GameObject::getObjectId() const

@@ -10,30 +10,28 @@
 
 USING_NS_CC;
 
-ObjectManager::ObjectManager(GameScene *scene)
+ObjectManager::ObjectManager()
 {
     mBullets = {};
     mWeapons = {};
-    //mFriendPlanes = {};
     mRetainedObjects = {};
     mObjectsInScene = {};
-    mObjectsWithId0 = {};
     mPlayerPlane = nullptr;
-    
-    mScene = scene;
-    if (mScene) {
-        mScene->retain();
-    }
-    
-    initTypeCreators();
+    mScene = nullptr;
 }
 
 ObjectManager::~ObjectManager()
 {
     if (mScene) {
-        mScene->autorelease();
+        // refer to comment in setScene()
+        //mScene->autorelease();
         mScene = nullptr;
     }
+    
+    log("ObjectGenerator::~ObjectGenerator()");
+    log("mRetainedObjects size: %lu", mRetainedObjects.size());
+    log("mObjectsInScene size: %lu", mObjectsInScene.size());
+    log("ObjectGenerator::~ObjectGenerator()");
     
     std::vector<GameObject *>::const_iterator itObject = mRetainedObjects.cbegin();
     std::vector<GameObject *>::const_iterator endObject = mRetainedObjects.cend();
@@ -41,6 +39,37 @@ ObjectManager::~ObjectManager()
         (*itObject)->autorelease();
         itObject++;
     }
+}
+
+ObjectManager * ObjectManager::createObjectManager(GameScene *scene)
+{
+    ObjectManager *om = ObjectManager::create();
+    om->setScene(scene);
+    
+    return om;
+}
+
+void ObjectManager::setScene(GameScene *scene)
+{
+    if (mScene) {
+        // refer to comment below
+        //mScene->autorelease();
+        mScene = nullptr;
+    }
+    mScene = scene;
+    if (mScene) {
+        // !!! should not retain the scene, as the destroy of the scene should be restricted by the objectManager
+        // when a scene is destroyed, the related objectManager is also released from that scene
+        // mScene->retain();
+    }
+}
+
+
+bool ObjectManager::init()
+{
+    initTypeCreators();
+    
+    return true;
 }
 
 void ObjectManager::initTypeCreators()
@@ -105,7 +134,6 @@ bool ObjectManager::loadObjects(const json &objects)
         log("\"objects\" has type %hhu, it's not an array!", objects.type());
         return false;
     }
-    
     json::const_iterator it = objects.cbegin();
     json::const_iterator end = objects.cend();
     while (it != end) {
@@ -472,80 +500,44 @@ GameObject * ObjectManager::addPlayerPlane(const json &object)
 GameObject * ObjectManager::addBackground(const json &object)
 {
     auto background = addSceneObject(object);
-    // manually set the local z order
-    //background->setLocalZOrder(-100);
 
     return background;
 }
 
 void ObjectManager::ObjectEnterScene(GameObject *object)
 {
-    auto id = object->getObjectId();
-    if (id != 0) {
-        // AS A RULE, object with id 0 is not important
-        // Besides, there will be many objects with id 0 (like bullets), we actually
-        // cannot trace them as the objects in mObjectsInScene have unique id
-        if (findSceneObject(id) == nullptr) {
-            // only add the object if there's no object with "id"
-            object->retain();
-            mObjectsInScene.push_back(object);
-            //log("object with id %d enters, %lu objects in scene", object->getObjectId(), mObjectsInScene.size());
-        } else {
-            log("try to add object with id %d, but there's already an object with id %d in list. We should NOT reach here!", id, id);
+    if (object) {
+        object->retain();
+        mObjectsInScene.insert(std::make_pair(object, object));
+        
+        if (object == mPlayerPlane && mScene) {
+            mScene->onPlayerPlaneEnter();
         }
     } else {
-        // we still should trace the objects with id 0
-        // of course, we cannot trace them by id, we trace them by the pointers
-        object->retain();
-        mObjectsWithId0.push_back(object);
-        //log("add one object with id 0, there're %lu objects with id 0.", mObjectsWithId0.size());
+        assert(false);
     }
-    
-    if (object == mPlayerPlane && mScene) {
-        mScene->onFriendPlaneEnter();
-    }
+    log("%lu objects in scene", mObjectsInScene.size());
 }
 
 void ObjectManager::ObjectExitScene(GameObject *object)
 {
-    if (object == mPlayerPlane && mScene) {
-        mScene->onFriendPlaneExit();
-    }
-    
-    auto id = object->getObjectId();
-    if (id != 0) {
-        std::list<GameObject *>::const_iterator itObject = mObjectsInScene.cbegin();
-        std::list<GameObject *>::const_iterator endObject = mObjectsInScene.cend();
-        
-        while (itObject != endObject) {
-            if ((*itObject)->getObjectId() == object->getObjectId()) {
-                mObjectsInScene.remove(*itObject);
-                (*itObject)->autorelease();
-                //log("object with id %d exits, %lu objects in scene", object->getObjectId(), mObjectsInScene.size());
-                break;
-            }
-            itObject++;
+    if (object) {
+        if (object == mPlayerPlane && mScene) {
+            mScene->onPlayerPlaneExit();
         }
-    } else {
-        std::list<GameObject *>::const_iterator itObject = mObjectsWithId0.cbegin();
-        std::list<GameObject *>::const_iterator endObject = mObjectsWithId0.cend();
         
-        while (itObject != endObject) {
-            if (*itObject == object) {
-                mObjectsWithId0.remove(*itObject);
-                (*itObject)->autorelease();
-                //log("remove one object with id 0, there're %lu objects with id 0 left.", mObjectsWithId0.size());
-                break;
-            }
-            itObject++;
+        auto itObject = mObjectsInScene.find(object);
+        if (itObject != mObjectsInScene.cend()) {
+            itObject->second->autorelease();
+            mObjectsInScene.erase(itObject);
         }
     }
 }
 
 GameObject * ObjectManager::findRetainedObject(int id) const
 {
-    std::vector<GameObject *>::const_iterator itObject = mRetainedObjects.cbegin();
-    std::vector<GameObject *>::const_iterator endObject = mRetainedObjects.cend();
+    auto itObject = mRetainedObjects.cbegin();
+    auto endObject = mRetainedObjects.cend();
     
     while (itObject != endObject) {
         if ((*itObject)->getObjectId() == id) {
@@ -560,12 +552,12 @@ GameObject * ObjectManager::findRetainedObject(int id) const
 
 GameObject * ObjectManager::findSceneObject(int id) const
 {
-    std::list<GameObject *>::const_iterator itObject = mObjectsInScene.cbegin();
-    std::list<GameObject *>::const_iterator endObject = mObjectsInScene.cend();
+    auto itObject = mObjectsInScene.cbegin();
+    auto endObject = mObjectsInScene.cend();
     
     while (itObject != endObject) {
-        if ((*itObject)->getObjectId() == id) {
-            return *itObject;
+        if (itObject->second->getObjectId() == id) {
+            return itObject->second;
         }
         itObject++;
     }

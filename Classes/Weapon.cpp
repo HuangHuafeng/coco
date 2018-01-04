@@ -21,7 +21,6 @@ Weapon::Weapon(float interval)
 Weapon::~Weapon()
 {
     if (mWarObject) {
-        mWarObject->autorelease();
         mWarObject = nullptr;
     }
 }
@@ -39,6 +38,11 @@ void Weapon::generateOnce()
         bullet->setDestination(destination);
         auto gameScene = dynamic_cast<GameScene *>(Director::getInstance()->getRunningScene());
         if (gameScene) {
+            // DEBUG
+            //bullet->setObjectId(gameScene->giveMeId());
+            //bullet->setObjectName("bullet1");
+            // DEBUG END
+            
             auto localZorder = getParent()->getLocalZOrder();
             localZorder--;  // the Bullet is under the WarObject
             gameScene->AddObjectToScene(bullet, localZorder);
@@ -52,10 +56,11 @@ void Weapon::attachToWarObject(WarObject *warObject)
         mWarObject->autorelease();
         mWarObject = nullptr;
     }
-    
-    if (warObject) {
-        mWarObject = warObject;
-        mWarObject->retain();
+    mWarObject = warObject;
+    if (mWarObject) {
+        // !!! a weapon should not retain the attached warObject, so the warObject can be destroyed, otherwise deadlock
+        // when a warObject is destroyed, the attached weapon will be removed from the warObject, this logic is OK.
+        //mWarObject->retain();
         updateBullet();
     }
 }
@@ -91,6 +96,8 @@ Weapon * Weapon::create(float interval)
 Weapon * Weapon::clone() const
 {
     auto weapon = new (std::nothrow) Weapon(mInterval);
+    // cloned object has id 0 and name "", it should not be touched unless necessary
+    //weapon->setObjectName("cloneWeapon");
     Bullet * equippedBullet = dynamic_cast<Bullet *>(mObject);
     if (equippedBullet) {
         weapon->setBullet(equippedBullet);
