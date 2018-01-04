@@ -18,7 +18,6 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
-    log("GameObject::~GameObject(): id %d, name %s", mId, mName.c_str());
     mId = 0;
     mName = "";
 }

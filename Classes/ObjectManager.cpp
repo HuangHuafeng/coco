@@ -28,10 +28,8 @@ ObjectManager::~ObjectManager()
         mScene = nullptr;
     }
     
-    log("ObjectGenerator::~ObjectGenerator()");
-    log("mRetainedObjects size: %lu", mRetainedObjects.size());
-    log("mObjectsInScene size: %lu", mObjectsInScene.size());
-    log("ObjectGenerator::~ObjectGenerator()");
+    //log("mRetainedObjects size: %lu", mRetainedObjects.size());
+    //log("mObjectsInScene size: %lu", mObjectsInScene.size());
     
     std::vector<GameObject *>::const_iterator itObject = mRetainedObjects.cbegin();
     std::vector<GameObject *>::const_iterator endObject = mRetainedObjects.cend();
@@ -516,7 +514,7 @@ void ObjectManager::ObjectEnterScene(GameObject *object)
     } else {
         assert(false);
     }
-    log("%lu objects in scene", mObjectsInScene.size());
+    //log("%lu objects in scene", mObjectsInScene.size());
 }
 
 void ObjectManager::ObjectExitScene(GameObject *object)
