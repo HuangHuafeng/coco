@@ -19,29 +19,42 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-    if (mObjectManager) {
-        delete mObjectManager;
-        mObjectManager = nullptr;
-    }
+    releaseObjectManager();
 }
 
-void GameScene::setData(const std::string &sceneDataInJson)
+bool GameScene::setData(const std::string &sceneDataInJson)
 {
     if (mObjectManager) {
-        delete mObjectManager;
+        mObjectManager->autorelease();
+        //delete mObjectManager;
         mObjectManager = nullptr;
     }
     
     mDataInJson = sceneDataInJson;
     if (mDataInJson != "") {
-        mObjectManager = new (std::nothrow) ObjectManager(this);
-        if (mObjectManager && mObjectManager->loadFromJsonString(mDataInJson)) {
+        mObjectManager = ObjectManager::createObjectManager(this);
+        if (mObjectManager) {
             // we are good
+            if (mObjectManager->loadFromJsonString(mDataInJson)) {
+                mObjectManager->retain();
+            } else {
+                // nothing to do, mObjectManager will be auto released as it is not retained here
+                return false;
+            }
         } else {
-            log("failed to create object manager for the scene");
-            delete mObjectManager;
-            mObjectManager = nullptr;
+            // nothing to do
+            return false;
         }
+    }
+    
+    return true;
+}
+
+void GameScene::releaseObjectManager()
+{
+    if (mObjectManager) {
+        mObjectManager->autorelease();
+        mObjectManager = nullptr;
     }
 }
 
@@ -82,11 +95,12 @@ int GameScene::giveMeId()
     }
 }
 
-void GameScene::onFriendPlaneEnter()
+void GameScene::onPlayerPlaneEnter()
 {
 }
 
-void GameScene::onFriendPlaneExit()
+void GameScene::onPlayerPlaneExit()
 {
     
 }
+
