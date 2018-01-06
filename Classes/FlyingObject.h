@@ -26,7 +26,7 @@ protected:
 public:
     FlyingObject();
 
-    virtual void update (float delta) override;
+    virtual void update(float delta) override;
     virtual FlyingObject * clone() const override;
     
     void setSpeed(float speed);

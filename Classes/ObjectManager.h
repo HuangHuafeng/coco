@@ -31,7 +31,7 @@ typedef enum {
     ENEMYPLANE = 5,
 } ObjectType;
 
-typedef std::function<GameObject *(const json &)> creatorCallback;
+typedef std::function<GameObject *(const json &)> CreatorCallback;
 
 class ObjectManager : public cocos2d::Ref {
 private:
@@ -45,7 +45,7 @@ private:
     std::map<GameObject *, GameObject *> mObjectsInScene;
     FriendPlane *mPlayerPlane;      // only one player plane is supported
     
-    std::map<std::string, creatorCallback> mTypeCreators;
+    std::map<std::string, CreatorCallback> mTypeCreators;
     
     void initTypeCreators();
     

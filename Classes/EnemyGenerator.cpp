@@ -41,7 +41,7 @@ void EnemyGenerator::generateOnce()
             newEnemyObject->setDestination(Vec2(windowSize.width * rand_0_1(), - height));
             auto gameScene = dynamic_cast<GameScene *>(Director::getInstance()->getRunningScene());
             if (gameScene) {
-                newEnemyObject->setObjectId(gameScene->giveMeId());
+                //newEnemyObject->setObjectId(gameScene->giveMeId());
                 gameScene->AddObjectToScene(newEnemyObject);
             }
         }
@@ -59,11 +59,9 @@ EnemyGenerator * EnemyGenerator::create(float interval)
 EnemyGenerator * EnemyGenerator::clone() const
 {
     auto generator = new (std::nothrow) EnemyGenerator(mInterval);
-    if (mObject) {
-        generator->setObject(mObject);
-    }
-    // cloned object has id 0 and name "", it should not be touched unless necessary
-    //generator->setObjectName("clonedEnemyGenerator");
+    generator->setObjectId(mId);
+    generator->setObjectName(mName);
+    generator->setObject(mObject);
     generator->autorelease();
     
     return generator;

@@ -22,7 +22,10 @@ public:
     void menuStartGameCallback(Ref *sender);
     
     virtual bool init() override;
-    virtual void onPlayerPlaneExit() override;
+    
+    virtual void ObjectEnterScene(GameObject *object) override;
+    //virtual void ObjectExitScene(GameObject *object);
+    virtual void onPlayerPlaneExit(FriendPlane * friendPlane) override;
 };
 
 #endif /* PlayScene_h */

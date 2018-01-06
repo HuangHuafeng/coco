@@ -28,15 +28,16 @@ EnemyPlane* EnemyPlane::create(const std::string &filename)
 EnemyPlane * EnemyPlane::clone() const
 {
     EnemyPlane* ep = new (std::nothrow) EnemyPlane();
-    // cloned object has id 0 and name "", it should not be touched unless necessary
-    //ep->setObjectName("clonedEnemyPlane");
+    ep->setObjectId(mId);
+    ep->setObjectName(mName);
     ep->initWithTexture(_texture);
     ep->initialize();
     ep->setForceType(mForceType);
     ep->modifyPosition(getPosition());
     ep->setCalmPeriod(mCalmPeriod);
     ep->setDamage(mDamage);
-    ep->setHealth(mHealth);
+    ep->setInitialHealth(mInitialHealth);
+    ep->setCurrentHealth(mCurrentHealth);
     ep->setSpeed(mSpeed);
     ep->setWeapon(mWeapon);
     ep->autorelease();

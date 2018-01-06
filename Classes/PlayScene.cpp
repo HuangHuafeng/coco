@@ -7,6 +7,8 @@
 
 #include "PlayScene.h"
 #include "ScrollingBackground.h"
+#include "HealthIndicator.h"
+#include "FriendPlane.h"
 
 USING_NS_CC;
 
@@ -41,7 +43,7 @@ bool PlayScene::init()
     return true;
 }
 
-void PlayScene::onPlayerPlaneExit()
+void PlayScene::onPlayerPlaneExit(FriendPlane * friendPlane)
 {
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -68,4 +70,15 @@ void PlayScene::onPlayerPlaneExit()
 void PlayScene::menuStartGameCallback(Ref *sender)
 {
     Director::getInstance()->popScene();
+}
+
+void PlayScene::ObjectEnterScene(GameObject *object)
+{
+    GameScene::ObjectEnterScene(object);
+    
+    auto warObject = dynamic_cast<WarObject *>(object);
+    if (warObject) {
+        HealthIndicator::createHealthIndicatorForObject(warObject);
+        //warObject->setRotation(360.0f * rand_0_1());
+    }
 }

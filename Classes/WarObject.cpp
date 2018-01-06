@@ -13,25 +13,41 @@ WarObject::WarObject()
 {
     mCalmPeriod = 1.0f; // default to 1 second
     mWeapon = nullptr;
-    mHealth = 10;   // default to a small value, so it will be killed easily
+    mInitialHealth = 10;   // default to a small value, so it will be killed easily
+    mCurrentHealth = mInitialHealth;
+    mChangeCallbacks={};
 }
 
 WarObject::~WarObject()
 {
     if (mWeapon) {
-        removeChild(mWeapon, true);
+        // no need to remove child as it is automatically done by cocos2d?
+        //removeChild(mWeapon, true);
         mWeapon = nullptr;
     }
+    
+    //assert(mChangeCallbacks.size() == 0);
 }
 
-void WarObject::setHealth(int health)
+void WarObject::setInitialHealth(int health)
 {
-    mHealth = health;
+    mInitialHealth = health;
+    mCurrentHealth = mInitialHealth;
 }
 
-int WarObject::getHealth() const
+int WarObject::getInitialHealth() const
 {
-    return mHealth;
+    return mInitialHealth;
+}
+
+void WarObject::setCurrentHealth(int health)
+{
+    mCurrentHealth = health;
+}
+
+int WarObject::getCurrentHealth() const
+{
+    return mCurrentHealth;
 }
 
 void WarObject::setWeapon(Weapon *weapon)
@@ -43,7 +59,6 @@ void WarObject::setWeapon(Weapon *weapon)
 
     if (weapon) {
         mWeapon = weapon->clone();
-        //mWeapon->setObjectName(mName+"_generated object");
         mWeapon->attachToWarObject(this);
         addChild(mWeapon);
     }
@@ -81,16 +96,17 @@ void WarObject::onEnter()
 
 void WarObject::onExit()
 {
-    FlyingObject::onExit();
+    callCallbacks(CT_Exit);
     ceaseFire();
+    FlyingObject::onExit();
 }
 
 
 void WarObject::collideWith(CollideObject *otherCollideObject)
 {
-    mHealth -= otherCollideObject->getDamage();
-
-    if (mHealth <= 0) {
+    mCurrentHealth -= otherCollideObject->getDamage();
+    callCallbacks(CT_Health);
+    if (mCurrentHealth <= 0) {
         OnKilled();
     }
 }
@@ -99,4 +115,46 @@ void WarObject::OnKilled()
 {
     stop();
     removeFromParent();
+}
+
+void WarObject::registerChangeCallback(GameObject * gameObject, ChangeCallback changeCallback)
+{
+    if (gameObject) {
+        gameObject->retain();
+        mChangeCallbacks.insert(std::make_pair(gameObject, changeCallback));
+    } else {
+        assert(false);
+    }
+}
+
+void WarObject::unregisterChangeCallback(GameObject * gameObject)
+{
+    if (gameObject) {
+        auto howmany = mChangeCallbacks.erase(gameObject);
+        while (howmany > 0) {
+            gameObject->autorelease();
+            howmany--;
+        }
+    }
+}
+
+void WarObject::callCallbacks(ChangeTypes changeType)
+{
+    auto itCallback = mChangeCallbacks.cbegin();
+    auto endCallback = mChangeCallbacks.cend();
+    std::vector<ChangeCallback> copiedCallbacks = {};
+    
+    // copy the functions because these functions may modify mChangeCallbacks via unregisterChangeCallback()
+    while (itCallback != endCallback) {
+        copiedCallbacks.push_back(itCallback->second);
+        itCallback++;
+    }
+    
+    // call the functions
+    auto itCopiedCallback = copiedCallbacks.cbegin();
+    auto endCopiedCallback = copiedCallbacks.cend();
+    while (itCopiedCallback != endCopiedCallback) {
+        (*itCopiedCallback)(this, changeType);
+        itCopiedCallback++;
+    }
 }

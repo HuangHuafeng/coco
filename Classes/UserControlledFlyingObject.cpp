@@ -89,7 +89,7 @@ void UserControlledFlyingObject::onExit()
     WarObject::onExit();
 }
 
-void UserControlledFlyingObject::update (float delta)
+void UserControlledFlyingObject::update(float delta)
 {
     mTimeLastFrame = utils::gettime();
     

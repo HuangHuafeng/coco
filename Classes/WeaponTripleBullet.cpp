@@ -69,8 +69,8 @@ WeaponTripleBullet * WeaponTripleBullet::create(float interval)
 WeaponTripleBullet * WeaponTripleBullet::clone() const
 {
     auto weaponTripleBullet = new (std::nothrow) WeaponTripleBullet(mInterval);
-    // cloned object has id 0 and name "", it should not be touched unless necessary
-    //weaponTripleBullet->setObjectName("clonedWeaponTripleBullet");
+    weaponTripleBullet->setObjectId(mId);
+    weaponTripleBullet->setObjectName(mName);
     Bullet * equippedBullet = dynamic_cast<Bullet *>(mObject);
     if (equippedBullet) {
         weaponTripleBullet->setBullet(equippedBullet);

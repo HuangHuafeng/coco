@@ -8,6 +8,7 @@
 #include "GameScene.h"
 #include "GameObject.h"
 #include "ObjectManager.h"
+#include "FriendPlane.h"
 
 USING_NS_CC;
 
@@ -79,6 +80,11 @@ void GameScene::ObjectEnterScene(GameObject *object)
 
 void GameScene::AddObjectToScene(GameObject *object, int localZOrder)
 {
+    // DEBUG
+    //if (mObjectManager->getNumberOfSceneObjects() > 2000) {
+    //    return;
+    //}
+    // DEBUG END
     auto lzo = localZOrder;
     if (lzo == 0 && mObjectManager) {
         lzo = mObjectManager->getNumberOfSceneObjects() + 1;
@@ -95,12 +101,13 @@ int GameScene::giveMeId()
     }
 }
 
-void GameScene::onPlayerPlaneEnter()
+void GameScene::onPlayerPlaneEnter(FriendPlane * friendPlane)
 {
 }
 
-void GameScene::onPlayerPlaneExit()
+void GameScene::onPlayerPlaneExit(FriendPlane * friendPlane)
 {
-    
+
 }
+
 

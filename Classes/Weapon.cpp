@@ -96,8 +96,8 @@ Weapon * Weapon::create(float interval)
 Weapon * Weapon::clone() const
 {
     auto weapon = new (std::nothrow) Weapon(mInterval);
-    // cloned object has id 0 and name "", it should not be touched unless necessary
-    //weapon->setObjectName("cloneWeapon");
+    weapon->setObjectId(mId);
+    weapon->setObjectName(mName);
     Bullet * equippedBullet = dynamic_cast<Bullet *>(mObject);
     if (equippedBullet) {
         weapon->setBullet(equippedBullet);

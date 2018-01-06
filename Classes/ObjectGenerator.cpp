@@ -32,7 +32,6 @@ void ObjectGenerator::setObject(GameObject *object)
     
     if (object) {
         mObject = object->clone();
-        //mObject->setObjectName(mName+"_generated object");
         mObject->retain();
     }
 }

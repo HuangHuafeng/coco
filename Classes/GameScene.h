@@ -14,6 +14,7 @@
 class ObjectManager;
 
 class GameObject;
+class FriendPlane;
 
 class GameScene : public cocos2d::Scene {
     
@@ -28,14 +29,14 @@ public:
     
     bool setData(const std::string &sceneDataInJson);
     const std::string & getData();
-    void ObjectEnterScene(GameObject *object);
-    void ObjectExitScene(GameObject *object);
     void AddObjectToScene(GameObject *object, int localZOrder = 0);
     int giveMeId();
     void releaseObjectManager();
     
-    virtual void onPlayerPlaneEnter();
-    virtual void onPlayerPlaneExit();
+    virtual void ObjectEnterScene(GameObject *object);
+    virtual void ObjectExitScene(GameObject *object);
+    virtual void onPlayerPlaneEnter(FriendPlane * friendPlane);
+    virtual void onPlayerPlaneExit(FriendPlane * friendPlane);
 };
 
 #endif /* GameScene_h */

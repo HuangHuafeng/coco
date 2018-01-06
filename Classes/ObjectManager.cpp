@@ -31,8 +31,8 @@ ObjectManager::~ObjectManager()
     //log("mRetainedObjects size: %lu", mRetainedObjects.size());
     //log("mObjectsInScene size: %lu", mObjectsInScene.size());
     
-    std::vector<GameObject *>::const_iterator itObject = mRetainedObjects.cbegin();
-    std::vector<GameObject *>::const_iterator endObject = mRetainedObjects.cend();
+    auto itObject = mRetainedObjects.cbegin();
+    auto endObject = mRetainedObjects.cend();
     while (itObject != endObject) {
         (*itObject)->autorelease();
         itObject++;
@@ -299,7 +299,7 @@ EnemyPlane * ObjectManager::createEnemyPlane(const json &object)
     enemyPlane->setObjectName(name);
     enemyPlane->setCalmPeriod(static_cast<float>(calmPeriod) * 0.001f);
     enemyPlane->setSpeed(speed);
-    enemyPlane->setHealth(health);
+    enemyPlane->setInitialHealth(health);
     enemyPlane->setDamage(damage);
     
     auto weaponId = object.value("weapon", j_null);
@@ -337,7 +337,7 @@ FriendPlane * ObjectManager::createFriendPlane(const json &object)
     friendPlane->setObjectName(name);
     friendPlane->setCalmPeriod(static_cast<float>(calmPeriod) * 0.001f);
     friendPlane->setSpeed(speed);
-    friendPlane->setHealth(health);
+    friendPlane->setInitialHealth(health);
     friendPlane->setDamage(damage);
     //mFriendPlanes.push_back(friendPlane);
     
@@ -481,6 +481,8 @@ GameObject * ObjectManager::addSceneObject(const json &object)
     return sceneObject;
 }
 
+// TODO: this need to be considerred in more details.
+// should object manager be involved in the life to the player plane? Probably NOT!
 GameObject * ObjectManager::addPlayerPlane(const json &object)
 {
     if (mPlayerPlane) {
@@ -507,10 +509,6 @@ void ObjectManager::ObjectEnterScene(GameObject *object)
     if (object) {
         object->retain();
         mObjectsInScene.insert(std::make_pair(object, object));
-        
-        if (object == mPlayerPlane && mScene) {
-            mScene->onPlayerPlaneEnter();
-        }
     } else {
         assert(false);
     }
@@ -520,15 +518,17 @@ void ObjectManager::ObjectEnterScene(GameObject *object)
 void ObjectManager::ObjectExitScene(GameObject *object)
 {
     if (object) {
-        if (object == mPlayerPlane && mScene) {
-            mScene->onPlayerPlaneExit();
+        auto howmany = mObjectsInScene.erase(object);
+        while (howmany > 0) {
+            object->autorelease();
+            howmany--;
         }
-        
+        /*
         auto itObject = mObjectsInScene.find(object);
         if (itObject != mObjectsInScene.cend()) {
             itObject->second->autorelease();
             mObjectsInScene.erase(itObject);
-        }
+        }*/
     }
 }
 
