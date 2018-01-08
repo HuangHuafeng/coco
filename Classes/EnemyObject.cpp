@@ -31,17 +31,24 @@ void EnemyObject::updateRoute()
             auto distance = currentPosition.getDistance(mDestination);
             auto moveTo = MoveTo::create(distance/mSpeed, mDestination);
             moveTo->setTag(ACTION_TAG);
-            
-            Sequence * seq = nullptr;
-            if (mSelfDestroy) {
-                auto removeSelf = RemoveSelf::create();
-                removeSelf->setTag(ACTION_TAG);
-                seq = Sequence::create(moveTo, removeSelf, nullptr);
-            } else {
-                seq = Sequence::create(moveTo, nullptr);
-            }
+            auto onArriveDestination = CallFunc::create(CC_CALLBACK_0(EnemyObject::onArriveDestination, this));
+            auto seq = Sequence::create(moveTo, onArriveDestination, nullptr);
             runAction(seq);
         }
+    }
+}
+
+// by default, enemy object destroys itself
+// 1. is at the destination
+// 2. is out of the screen
+// subclass should override onArriveDestination() to behave differently
+void EnemyObject::onArriveDestination()
+{
+    auto winSize = Director::getInstance()->getWinSize();
+    auto visibleRect = Rect(Vec2(0, 0), winSize);
+    auto objectRect = getBoundingBox();
+    if(visibleRect.intersectsRect(objectRect) == false) {
+        removeFromParent();
     }
 }
 

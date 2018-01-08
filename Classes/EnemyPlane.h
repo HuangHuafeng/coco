@@ -10,6 +10,10 @@
 
 #include "EnemyObject.h"
 
+/*
+ 最简单的飞机，从起点直线飞到目的地
+ */
+
 class EnemyPlane : public EnemyObject {
     
 public:

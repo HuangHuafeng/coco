@@ -1,14 +1,14 @@
 {
   "objects": [
     { "type": "Bullet", "id": 1, "name": "fb1", "file": "bullet3.png", "speed": 600, "damage": 60 },
-    { "type": "WeaponTripleBullet", "id": 2, "name": "fw1", "bullet": 1, "triggerInterval": 100 },
+    { "type": "WeaponTripleBullet", "id": 2, "name": "fw1", "bullet": 1, "triggerInterval": 200 },
     {
       "type": "FriendPlane",
       "id": 3,
       "name": "f1",
       "file": "myPlane.png",
       "calmPeriod": 1000,
-      "health": 10000,
+      "health": 1000,
       "speed": 250,
       "damage": 1000,
       "weapon": 2
@@ -17,8 +17,8 @@
       "type": "ScrollingBackground",
       "id": 4,
       "name": "b1",
-      "file1": "HelloWorld.png",
-      "file2": "HelloWorld.png",
+      "file1": "background.png",
+      "file2": "background.png",
       "speed": 20
     },
     {
@@ -27,7 +27,7 @@
       "name": "NONAME",
       "classId": 4,
       "localZOrder": -1000,
-      "bornTime": 5000,
+      "bornTime": 0,
       "bornX": 0,
       "bornY": 0,
       "destinationX": 0,
@@ -45,7 +45,7 @@
       "destinationX": 240,
       "destinationY": 240
     },
-    { "type": "Bullet", "id": 7, "name": "eb1", "file": "bullet1.png", "speed": 160, "damage": 150 },
+    { "type": "Bullet", "id": 7, "name": "eb1", "file": "bullet1.png", "speed": 160, "damage": 50 },
     { "type": "Weapon", "id": 8, "name": "ew1", "bullet": 7, "triggerInterval": 3000 },
     {
       "type": "EnemyPlane",

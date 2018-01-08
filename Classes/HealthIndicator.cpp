@@ -42,14 +42,13 @@ void HealthIndicator::linkToObject(WarObject *warObject)
         //mLinkedWarObject->retain();
         
         mHeight = mLinkedWarObject->getContentSize().width;
-        mWidth = mHeight * 0.05f;
+        mWidth = mHeight * 1.0f / HEIGHT_WIDTH_RATIO;
         mHealthBar->setPosition(Vec2(0, - mWidth));
 
         mLinkedWarObject->addChild(this);
         mLinkedWarObject->registerChangeCallback(this, CC_CALLBACK_2(HealthIndicator::onWarObjectChanged, this));
         
-        // call this now to get the latest data
-        onWarObjectChanged(mLinkedWarObject, WarObject::CT_Health);
+        updateHealthBarPicture();
     }
 }
 
@@ -84,6 +83,7 @@ void HealthIndicator::onWarObjectChanged(WarObject *warObject, WarObject::Change
     }
 }
 
+// the bar is default to horzontal
 void HealthIndicator::updateHealthBarPicture()
 {
     assert(mHealthBar != nullptr);
@@ -93,7 +93,7 @@ void HealthIndicator::updateHealthBarPicture()
     mHealthBar->drawSolidRect(Vec2(0, 0), Vec2(mHeight * ratio, mWidth), mCurrentHealthColor);
 }
 
-void HealthIndicator::createHealthIndicatorForObject(WarObject *warObject, Color4F initialHealthColor, Color4F currentHealthColor, PositionPolicy positionPolicy)
+HealthIndicator * HealthIndicator::createHealthIndicatorForObject(WarObject *warObject, Color4F initialHealthColor, Color4F currentHealthColor, PositionPolicy positionPolicy)
 {
     HealthIndicator* hi = new (std::nothrow) HealthIndicator(initialHealthColor, currentHealthColor, positionPolicy);
     if (hi) {
@@ -103,4 +103,18 @@ void HealthIndicator::createHealthIndicatorForObject(WarObject *warObject, Color
         delete hi;
         hi = nullptr;
     }
+    
+    return hi;
+}
+
+void HealthIndicator::dontMoveWithLinkedObject(cocos2d::Rect rectArea)
+{
+    assert(mLinkedWarObject != nullptr);
+    removeFromParent();
+    setPosition(rectArea.origin);
+    mHeight = rectArea.size.width;  // the bar is default to horzontal
+    //mWidth = mHeight * 1.0f / HEIGHT_WIDTH_RATIO;
+    mWidth = rectArea.size.height;
+    mHealthBar->setPosition(Vec2(0, 0));
+    updateHealthBarPicture();
 }

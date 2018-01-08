@@ -16,6 +16,7 @@ protected:
     bool mSelfDestroy;
     
     virtual void updateRoute() override;
+    virtual void onArriveDestination();
     
     void setSelfDestroy(bool selfDestroy);
     

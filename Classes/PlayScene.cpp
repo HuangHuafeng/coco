@@ -9,6 +9,7 @@
 #include "ScrollingBackground.h"
 #include "HealthIndicator.h"
 #include "FriendPlane.h"
+#include "EnemyPlane.h"
 
 USING_NS_CC;
 
@@ -76,9 +77,26 @@ void PlayScene::ObjectEnterScene(GameObject *object)
 {
     GameScene::ObjectEnterScene(object);
     
-    auto warObject = dynamic_cast<WarObject *>(object);
-    if (warObject) {
-        HealthIndicator::createHealthIndicatorForObject(warObject);
-        //warObject->setRotation(360.0f * rand_0_1());
+    if (dynamic_cast<WarObject *>(object)) {
+        auto enemyObject = dynamic_cast<EnemyObject *>(object);
+        if (enemyObject) {
+            HealthIndicator::createHealthIndicatorForObject(enemyObject);
+            //enemyObject->setRotation(360.0f * rand_0_1());
+        } else {
+            auto friendPlane = dynamic_cast<FriendPlane *>(object);
+            if (friendPlane) {
+                auto hi = HealthIndicator::createHealthIndicatorForObject(friendPlane);
+                if (hi) {
+                    auto windowSize = Director::getInstance()->getWinSize();
+                    const auto barHeight = windowSize.height / HealthIndicator::HEIGHT_WIDTH_RATIO;
+                    hi->dontMoveWithLinkedObject(Rect(0, windowSize.height - barHeight, windowSize.width, barHeight));
+                    addChild(hi, 10000);
+                }
+            } else {
+                assert(false);
+            }
+        }
+        
     }
+    
 }
