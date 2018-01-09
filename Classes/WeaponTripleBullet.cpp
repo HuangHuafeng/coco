@@ -27,14 +27,11 @@ void WeaponTripleBullet::generateOnce()
         auto bullet1 = equippedBullet->clone();
         auto bullet2 = equippedBullet->clone();
         auto bullet3 = equippedBullet->clone();
-        bullet1->modifyPosition(currentPosition - startInterval);
-        //bullet1->setPosition(currentPosition - startInterval);
+        bullet1->setPosition(currentPosition - startInterval);
         bullet1->setDestination(currentPosition - destinationInterval + mBulletOffset);
-        bullet2->modifyPosition(currentPosition);
-        //bullet2->setPosition(currentPosition);
+        bullet2->setPosition(currentPosition);
         bullet2->setDestination(currentPosition + mBulletOffset);
-        bullet3->modifyPosition(currentPosition + startInterval);
-        //bullet3->setPosition(currentPosition + startInterval);
+        bullet3->setPosition(currentPosition + startInterval);
         bullet3->setDestination(currentPosition + destinationInterval + mBulletOffset);
         auto gameScene = dynamic_cast<GameScene *>(Director::getInstance()->getRunningScene());
         

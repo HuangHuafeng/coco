@@ -63,8 +63,7 @@ Bullet* Bullet::clone() const
     b->initialize();
     b->setDamage(mDamage);
     b->setForceType(mForceType);
-    b->modifyPosition(getPosition());
-    //b->setPosition(getPosition());
+    b->setPosition(getPosition());
     b->setSpeed(mSpeed);
     b->autorelease();
     

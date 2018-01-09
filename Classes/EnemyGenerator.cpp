@@ -37,8 +37,7 @@ void EnemyGenerator::generateOnce()
         if (newEnemyObject) {
             auto height = enemyObject->getContentSize().height;
             auto windowSize = Director::getInstance()->getWinSize();
-            newEnemyObject->modifyPosition(Vec2(windowSize.width * rand_0_1(), windowSize.height + height));
-            //newEnemyObject->setPosition(Vec2(windowSize.width * rand_0_1(), windowSize.height + height));
+            newEnemyObject->setPosition(Vec2(windowSize.width * rand_0_1(), windowSize.height + height));
             newEnemyObject->setDestination(Vec2(windowSize.width * rand_0_1(), - height));
             auto gameScene = dynamic_cast<GameScene *>(Director::getInstance()->getRunningScene());
             if (gameScene) {

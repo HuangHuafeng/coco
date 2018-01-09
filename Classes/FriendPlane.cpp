@@ -37,8 +37,7 @@ FriendPlane * FriendPlane::clone() const
     fp->initWithTexture(_texture);
     fp->initialize();
     fp->setForceType(mForceType);
-    fp->modifyPosition(getPosition());
-    //fp->setPosition(getPosition());
+    fp->setPosition(getPosition());
     fp->setCalmPeriod(mCalmPeriod);
     fp->setDamage(mDamage);
     fp->setInitialHealth(mInitialHealth);

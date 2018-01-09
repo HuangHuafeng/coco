@@ -49,14 +49,6 @@ void FlyingObject::stop()
     stopAllActionsByTag(ACTION_TAG);
 }
 
-void FlyingObject::modifyPosition(const Vec2& pos)
-//void FlyingObject::setPosition(const Vec2& pos)
-{
-    CollideObject::setPosition(pos);
-    invalidRoute();
-}
-
-
 void FlyingObject::update(float delta)
 {
     if (mRouteNeedUpdate) {

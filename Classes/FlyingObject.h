@@ -28,11 +28,11 @@ public:
 
     virtual void update(float delta) override;
     virtual FlyingObject * clone() const override;
-    //virtual void setPosition(const cocos2d::Vec2& pos) override;
-    void modifyPosition(const cocos2d::Vec2& pos);
     
+    // setSpeed() and setDestination() calls invalidRoute(), so the route is recalculated on the next frame automatically, setPosition() won't invalidate the route (so we don't need to override it). Thus invalidRoute() must be called after setPosition() if needed.
     void setSpeed(float speed);
     void setDestination(const cocos2d::Vec2 &destination);
+    
     void stop();
     void invalidRoute();
 };
