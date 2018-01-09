@@ -34,6 +34,7 @@ EnemyPlane * EnemyPlane::clone() const
     ep->initialize();
     ep->setForceType(mForceType);
     ep->modifyPosition(getPosition());
+    //ep->setPosition(getPosition());
     ep->setCalmPeriod(mCalmPeriod);
     ep->setDamage(mDamage);
     ep->setInitialHealth(mInitialHealth);

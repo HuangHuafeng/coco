@@ -35,6 +35,7 @@ void Weapon::generateOnce()
         auto bullet = equippedBullet->clone();
         auto destination = currentPosition + mBulletOffset;
         bullet->modifyPosition(currentPosition);
+        //bullet->setPosition(currentPosition);
         bullet->setDestination(destination);
         auto gameScene = dynamic_cast<GameScene *>(Director::getInstance()->getRunningScene());
         if (gameScene) {

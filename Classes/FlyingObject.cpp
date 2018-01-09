@@ -50,8 +50,9 @@ void FlyingObject::stop()
 }
 
 void FlyingObject::modifyPosition(const Vec2& pos)
+//void FlyingObject::setPosition(const Vec2& pos)
 {
-    setPosition(pos);
+    CollideObject::setPosition(pos);
     invalidRoute();
 }
 

@@ -59,7 +59,7 @@
       "weapon": 8
     },
     { "type": "EnemyGenerator", "id": 10, "name": "g1", "classId": 7, "triggerInterval": 20 },
-    { "type": "EnemyGenerator", "id": 11, "name": "g2", "classId": 9, "triggerInterval": 250 },
+    { "type": "EnemyGenerator", "id": 11, "name": "g2", "classId": 9, "triggerInterval": 2500 },
     {
       "type": "SceneObject",
       "id": 12,

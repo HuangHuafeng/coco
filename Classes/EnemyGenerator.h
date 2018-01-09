@@ -11,8 +11,17 @@
 #include "ObjectGenerator.h"
 
 class EnemyGenerator : public ObjectGenerator {
+public:
+    typedef enum {
+        DP_RandomTo = 1,
+        DP_VerticalTo,
+        DP_HorizontalTo,
+    } DestinationPolicy;
 
 protected:
+    float mStart;
+    cocos2d::Rect mDestinationRect;
+
     EnemyGenerator(float interval = 1.0f);
     
     virtual void generateOnce() override;

@@ -28,10 +28,11 @@ public:
 
     virtual void update(float delta) override;
     virtual FlyingObject * clone() const override;
+    //virtual void setPosition(const cocos2d::Vec2& pos) override;
+    void modifyPosition(const cocos2d::Vec2& pos);
     
     void setSpeed(float speed);
     void setDestination(const cocos2d::Vec2 &destination);
-    void modifyPosition(const cocos2d::Vec2& pos);
     void stop();
     void invalidRoute();
 };
