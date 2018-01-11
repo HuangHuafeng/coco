@@ -16,8 +16,8 @@ HealthIndicator::HealthIndicator(Color4F initialHealthColor, Color4F currentHeal
     mCurrentHealthColor = currentHealthColor;
     mLinkedWarObject = nullptr;
     mHealthBar = nullptr;
-    mHeight = 100.0;
-    mWidth = mHeight * 0.001f;
+    mWidth = 100.0;
+    mHeight = mWidth / WIDTH_HEIGHT_RATIO;
     
     mHealthBar = DrawNode::create();
     addChild(mHealthBar);
@@ -41,9 +41,9 @@ void HealthIndicator::linkToObject(WarObject *warObject)
         // should NOT retain mLinkedWarObject!!!
         //mLinkedWarObject->retain();
         
-        mHeight = mLinkedWarObject->getContentSize().width;
-        mWidth = mHeight * 1.0f / HEIGHT_WIDTH_RATIO;
-        mHealthBar->setPosition(Vec2(0, - mWidth));
+        mWidth = mLinkedWarObject->getContentSize().width;
+        mHeight = mWidth / WIDTH_HEIGHT_RATIO;
+        mHealthBar->setPosition(Vec2(0, - mHeight));
 
         mLinkedWarObject->addChild(this);
         mLinkedWarObject->registerChangeCallback(this, CC_CALLBACK_2(HealthIndicator::onWarObjectChanged, this));
@@ -89,8 +89,9 @@ void HealthIndicator::updateHealthBarPicture()
     assert(mHealthBar != nullptr);
     assert(mLinkedWarObject != nullptr);
     auto ratio = (1.0f * mLinkedWarObject->getCurrentHealth()) / mLinkedWarObject->getInitialHealth();
-    mHealthBar->drawSolidRect(Vec2(0, 0), Vec2(mHeight, mWidth), mInitialHealthColor);
-    mHealthBar->drawSolidRect(Vec2(0, 0), Vec2(mHeight * ratio, mWidth), mCurrentHealthColor);
+    mHealthBar->clear();
+    mHealthBar->drawSolidRect(Vec2(0, 0), Vec2(mWidth, mHeight), mInitialHealthColor);
+    mHealthBar->drawSolidRect(Vec2(0, 0), Vec2(mWidth * ratio, mHeight), mCurrentHealthColor);
 }
 
 HealthIndicator * HealthIndicator::createHealthIndicatorForObject(WarObject *warObject, Color4F initialHealthColor, Color4F currentHealthColor, PositionPolicy positionPolicy)
@@ -112,9 +113,8 @@ void HealthIndicator::dontMoveWithLinkedObject(cocos2d::Rect rectArea)
     assert(mLinkedWarObject != nullptr);
     removeFromParent();
     setPosition(rectArea.origin);
-    mHeight = rectArea.size.width;  // the bar is default to horzontal
-    //mWidth = mHeight * 1.0f / HEIGHT_WIDTH_RATIO;
-    mWidth = rectArea.size.height;
+    mWidth = rectArea.size.width;  // the bar is default to horzontal
+    mHeight = rectArea.size.height;
     mHealthBar->setPosition(Vec2(0, 0));
     updateHealthBarPicture();
 }

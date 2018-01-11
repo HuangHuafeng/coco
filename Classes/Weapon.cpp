@@ -36,6 +36,7 @@ void Weapon::generateOnce()
         auto destination = currentPosition + mBulletOffset;
         bullet->setPosition(currentPosition);
         bullet->setDestination(destination);
+        log("destination: %f, %f", destination.x, destination.y);
         auto gameScene = dynamic_cast<GameScene *>(Director::getInstance()->getRunningScene());
         if (gameScene) {
             // DEBUG

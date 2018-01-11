@@ -28,7 +28,7 @@ public:
     } PositionPolicy;
     
     typedef enum {
-        HEIGHT_WIDTH_RATIO = 20,
+        WIDTH_HEIGHT_RATIO = 20,
     } HeightWidthRatio;
 
 protected:
@@ -48,7 +48,7 @@ protected:
 public:
     ~HealthIndicator();
     
-    static HealthIndicator * createHealthIndicatorForObject(WarObject *warObject, cocos2d::Color4F initialHealthColor = cocos2d::Color4F(1.0, 0.0, 0.0, 1.0), cocos2d::Color4F currentHealthColor = cocos2d::Color4F(0.0, 1.0, 0.0, 1.0), PositionPolicy positionPolicy = STICK_BOTTOM);
+    static HealthIndicator * createHealthIndicatorForObject(WarObject *warObject, cocos2d::Color4F initialHealthColor = cocos2d::Color4F(1.0, 0.0, 0.0, 0.5), cocos2d::Color4F currentHealthColor = cocos2d::Color4F(0.0, 1.0, 0.0, 0.75), PositionPolicy positionPolicy = STICK_BOTTOM);
     
     void dontMoveWithLinkedObject(cocos2d::Rect rectArea);
 };

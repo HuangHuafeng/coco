@@ -88,8 +88,10 @@ void PlayScene::ObjectEnterScene(GameObject *object)
                 auto hi = HealthIndicator::createHealthIndicatorForObject(friendPlane);
                 if (hi) {
                     auto windowSize = Director::getInstance()->getWinSize();
-                    const auto barHeight = windowSize.height / HealthIndicator::HEIGHT_WIDTH_RATIO;
-                    hi->dontMoveWithLinkedObject(Rect(0, windowSize.height - barHeight, windowSize.width, barHeight));
+                    //const auto barHeight = windowSize.height / HealthIndicator::WIDTH_HEIGHT_RATIO;
+                    const auto barWidth = windowSize.height / 5.0;
+                    const auto barHeight = barWidth / HealthIndicator::WIDTH_HEIGHT_RATIO;
+                    hi->dontMoveWithLinkedObject(Rect(0, windowSize.height - barHeight, barWidth, barHeight));
                     addChild(hi, 10000);
                 }
             } else {

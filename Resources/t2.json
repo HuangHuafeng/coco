@@ -52,14 +52,14 @@
       "id": 9,
       "name": "e1",
       "file": "enemy2.png",
-      "calmPeriod": 2000,
+      "calmPeriod": 0,
       "health": 300,
       "speed": 80,
       "damage": 300,
       "weapon": 8
     },
     { "type": "EnemyGenerator", "id": 10, "name": "g1", "classId": 7, "triggerInterval": 20 },
-    { "type": "EnemyGenerator", "id": 11, "name": "g2", "classId": 9, "triggerInterval": 2500 },
+    { "type": "EnemyGenerator", "id": 11, "name": "g2", "classId": 9, "triggerInterval": 800 },
     {
       "type": "SceneObject",
       "id": 12,

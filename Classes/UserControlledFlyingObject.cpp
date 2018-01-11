@@ -38,6 +38,7 @@ void UserControlledFlyingObject::onTouchMoved(cocos2d::Touch *touch, cocos2d::Ev
     auto timeDelta = currentTime - mPreviousTime;
     auto newPosition = keepInsideScreen(currentPosition + mSpeed * delta * timeDelta);
     setPosition(newPosition);
+    setDestination(newPosition);
     
     mPreviousTime = currentTime;
 }
@@ -64,8 +65,8 @@ const cocos2d::Vec2 UserControlledFlyingObject::keepInsideScreen(const cocos2d::
 
 void UserControlledFlyingObject::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *unused_event)
 {
-    auto currentPosition = getPosition();
-    setDestination(currentPosition);
+    //auto currentPosition = getPosition();
+    //setDestination(currentPosition);
 }
 
 void UserControlledFlyingObject::onEnter()
