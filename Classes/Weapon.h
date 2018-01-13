@@ -18,12 +18,10 @@ class Weapon : public ObjectGenerator {
 protected:
     Weapon(float interval = 1.0f);
     
+    int mNumberOfBullet;
     WarObject *mWarObject;
-    cocos2d::Vec2 mBulletOffset;
     
     void updateBullet();
-    
-    virtual void generateOnce() override;
     
 public:
     ~Weapon();
@@ -32,7 +30,9 @@ public:
     virtual void attachToWarObject(WarObject *warObject);
     void setBullet(Bullet *bullet);
     
-    static Weapon * create(float interval = 1.0f);
+    virtual void upgrade();
+    virtual void downgrade();
+    void setNumberOfBullet(int numberOfBullet);
 };
 
 #endif /* Weapon_h */

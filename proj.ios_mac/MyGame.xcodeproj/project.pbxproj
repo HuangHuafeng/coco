@@ -88,6 +88,8 @@
 		DC6738811FF724950013C7F0 /* ObjectGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC67387E1FF724950013C7F0 /* ObjectGenerator.cpp */; };
 		DC6738841FF735A70013C7F0 /* EnemyGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC6738821FF735A70013C7F0 /* EnemyGenerator.cpp */; };
 		DC6738851FF735A70013C7F0 /* EnemyGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC6738821FF735A70013C7F0 /* EnemyGenerator.cpp */; };
+		DC6B1D21200A020A00455F30 /* MultipleBulletDiffuse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC6B1D1E200A020900455F30 /* MultipleBulletDiffuse.cpp */; };
+		DC6B1D22200A04C900455F30 /* MultipleBulletDiffuse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC6B1D1E200A020900455F30 /* MultipleBulletDiffuse.cpp */; };
 		DC7BE68B1FEA03EE00C7E219 /* GameObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7BE68A1FEA03EE00C7E219 /* GameObject.cpp */; };
 		DC7BE68C1FEA03EE00C7E219 /* GameObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7BE68A1FEA03EE00C7E219 /* GameObject.cpp */; };
 		DC7BE6911FEA088400C7E219 /* CollideObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7BE6901FEA088400C7E219 /* CollideObject.cpp */; };
@@ -100,8 +102,8 @@
 		DC7BE69C1FEA921F00C7E219 /* Weapon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7BE6991FEA921F00C7E219 /* Weapon.cpp */; };
 		DC7BE69E1FEA9BB300C7E219 /* bullet1.png in Resources */ = {isa = PBXBuildFile; fileRef = DC7BE69D1FEA9BB300C7E219 /* bullet1.png */; };
 		DC7BE69F1FEA9BB300C7E219 /* bullet1.png in Resources */ = {isa = PBXBuildFile; fileRef = DC7BE69D1FEA9BB300C7E219 /* bullet1.png */; };
-		DC7BE6A21FEB4D0F00C7E219 /* WeaponTripleBullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7BE6A01FEB4D0F00C7E219 /* WeaponTripleBullet.cpp */; };
-		DC7BE6A31FEB4D0F00C7E219 /* WeaponTripleBullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7BE6A01FEB4D0F00C7E219 /* WeaponTripleBullet.cpp */; };
+		DC7BE6A21FEB4D0F00C7E219 /* MultipleBulletStraight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7BE6A01FEB4D0F00C7E219 /* MultipleBulletStraight.cpp */; };
+		DC7BE6A31FEB4D0F00C7E219 /* MultipleBulletStraight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7BE6A01FEB4D0F00C7E219 /* MultipleBulletStraight.cpp */; };
 		DC7BE6A61FEB75BD00C7E219 /* WarObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7BE6A41FEB75BD00C7E219 /* WarObject.cpp */; };
 		DC7BE6A71FEB75BD00C7E219 /* WarObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7BE6A41FEB75BD00C7E219 /* WarObject.cpp */; };
 		DC7BE6AA1FEB846700C7E219 /* FriendPlane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7BE6A81FEB846700C7E219 /* FriendPlane.cpp */; };
@@ -238,6 +240,8 @@
 		DC67387F1FF724950013C7F0 /* ObjectGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjectGenerator.h; sourceTree = "<group>"; };
 		DC6738821FF735A70013C7F0 /* EnemyGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EnemyGenerator.cpp; sourceTree = "<group>"; };
 		DC6738831FF735A70013C7F0 /* EnemyGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EnemyGenerator.h; sourceTree = "<group>"; };
+		DC6B1D1E200A020900455F30 /* MultipleBulletDiffuse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultipleBulletDiffuse.cpp; sourceTree = "<group>"; };
+		DC6B1D20200A020A00455F30 /* MultipleBulletDiffuse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultipleBulletDiffuse.h; sourceTree = "<group>"; };
 		DC7BE68A1FEA03EE00C7E219 /* GameObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameObject.cpp; sourceTree = "<group>"; };
 		DC7BE68E1FEA040200C7E219 /* GameObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameObject.h; sourceTree = "<group>"; };
 		DC7BE68F1FEA087600C7E219 /* CollideObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollideObject.h; sourceTree = "<group>"; };
@@ -247,8 +251,8 @@
 		DC7BE6991FEA921F00C7E219 /* Weapon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Weapon.cpp; sourceTree = "<group>"; };
 		DC7BE69A1FEA921F00C7E219 /* Weapon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Weapon.h; sourceTree = "<group>"; };
 		DC7BE69D1FEA9BB300C7E219 /* bullet1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bullet1.png; sourceTree = "<group>"; };
-		DC7BE6A01FEB4D0F00C7E219 /* WeaponTripleBullet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WeaponTripleBullet.cpp; sourceTree = "<group>"; };
-		DC7BE6A11FEB4D0F00C7E219 /* WeaponTripleBullet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeaponTripleBullet.h; sourceTree = "<group>"; };
+		DC7BE6A01FEB4D0F00C7E219 /* MultipleBulletStraight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MultipleBulletStraight.cpp; sourceTree = "<group>"; };
+		DC7BE6A11FEB4D0F00C7E219 /* MultipleBulletStraight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MultipleBulletStraight.h; sourceTree = "<group>"; };
 		DC7BE6A41FEB75BD00C7E219 /* WarObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WarObject.cpp; sourceTree = "<group>"; };
 		DC7BE6A51FEB75BD00C7E219 /* WarObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WarObject.h; sourceTree = "<group>"; };
 		DC7BE6A81FEB846700C7E219 /* FriendPlane.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FriendPlane.cpp; sourceTree = "<group>"; };
@@ -441,6 +445,10 @@
 				DC1B8D441FFF051A00FD5067 /* HealthIndicator.h */,
 				46880B8619C43A87006E1F66 /* HelloWorldScene.cpp */,
 				46880B8719C43A87006E1F66 /* HelloWorldScene.h */,
+				DC6B1D1E200A020900455F30 /* MultipleBulletDiffuse.cpp */,
+				DC6B1D20200A020A00455F30 /* MultipleBulletDiffuse.h */,
+				DC7BE6A01FEB4D0F00C7E219 /* MultipleBulletStraight.cpp */,
+				DC7BE6A11FEB4D0F00C7E219 /* MultipleBulletStraight.h */,
 				DC67387E1FF724950013C7F0 /* ObjectGenerator.cpp */,
 				DC67387F1FF724950013C7F0 /* ObjectGenerator.h */,
 				DCEB25FA1FF4D6EB00EF09CC /* ObjectManager.cpp */,
@@ -455,8 +463,6 @@
 				DC7BE6A51FEB75BD00C7E219 /* WarObject.h */,
 				DC7BE6991FEA921F00C7E219 /* Weapon.cpp */,
 				DC7BE69A1FEA921F00C7E219 /* Weapon.h */,
-				DC7BE6A01FEB4D0F00C7E219 /* WeaponTripleBullet.cpp */,
-				DC7BE6A11FEB4D0F00C7E219 /* WeaponTripleBullet.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -679,6 +685,7 @@
 				DC6738841FF735A70013C7F0 /* EnemyGenerator.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				DC7BE69B1FEA921F00C7E219 /* Weapon.cpp in Sources */,
+				DC6B1D21200A020A00455F30 /* MultipleBulletDiffuse.cpp in Sources */,
 				DC7D65961FF8D47E00AFE949 /* PlayScene.cpp in Sources */,
 				DC6738801FF724950013C7F0 /* ObjectGenerator.cpp in Sources */,
 				DC7BE6911FEA088400C7E219 /* CollideObject.cpp in Sources */,
@@ -695,7 +702,7 @@
 				DC7BE6971FEA8A2F00C7E219 /* Bullet.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				DC7BE6AA1FEB846700C7E219 /* FriendPlane.cpp in Sources */,
-				DC7BE6A21FEB4D0F00C7E219 /* WeaponTripleBullet.cpp in Sources */,
+				DC7BE6A21FEB4D0F00C7E219 /* MultipleBulletStraight.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				DC7BE68B1FEA03EE00C7E219 /* GameObject.cpp in Sources */,
 			);
@@ -717,10 +724,11 @@
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
 				DC7BE6941FEA3F5B00C7E219 /* UserControlledFlyingObject.cpp in Sources */,
 				DC7D659C1FF8DADC00AFE949 /* GameScene.cpp in Sources */,
+				DC6B1D22200A04C900455F30 /* MultipleBulletDiffuse.cpp in Sources */,
 				DC7BE6921FEA088400C7E219 /* CollideObject.cpp in Sources */,
 				DC7BE6A71FEB75BD00C7E219 /* WarObject.cpp in Sources */,
 				DC7BE69C1FEA921F00C7E219 /* Weapon.cpp in Sources */,
-				DC7BE6A31FEB4D0F00C7E219 /* WeaponTripleBullet.cpp in Sources */,
+				DC7BE6A31FEB4D0F00C7E219 /* MultipleBulletStraight.cpp in Sources */,
 				DCEB25FD1FF4D6EB00EF09CC /* ObjectManager.cpp in Sources */,
 				DC7D65971FF8D47E00AFE949 /* PlayScene.cpp in Sources */,
 				DC7BE6AF1FEB8BA300C7E219 /* EnemyObject.cpp in Sources */,

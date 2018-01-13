@@ -14,8 +14,8 @@ USING_NS_CC;
 Weapon::Weapon(float interval)
 : ObjectGenerator(interval)
 {
-    mBulletOffset = Vec2(0, 0);
     mWarObject = nullptr;
+    mNumberOfBullet = 1;
 }
 
 Weapon::~Weapon()
@@ -25,8 +25,24 @@ Weapon::~Weapon()
     }
 }
 
+void Weapon::upgrade()
+{
+    mNumberOfBullet++;
+}
+
+void Weapon::downgrade()
+{
+    mNumberOfBullet--;
+}
+
+void Weapon::setNumberOfBullet(int numberOfBullet)
+{
+    mNumberOfBullet = numberOfBullet;
+}
+
 // subclass can override this function to get different effect
 // for example, fire 4 bullets a time
+/*
 void Weapon::generateOnce()
 {
     Bullet * equippedBullet = dynamic_cast<Bullet *>(mObject);
@@ -36,7 +52,6 @@ void Weapon::generateOnce()
         auto destination = currentPosition + mBulletOffset;
         bullet->setPosition(currentPosition);
         bullet->setDestination(destination);
-        log("destination: %f, %f", destination.x, destination.y);
         auto gameScene = dynamic_cast<GameScene *>(Director::getInstance()->getRunningScene());
         if (gameScene) {
             // DEBUG
@@ -50,11 +65,12 @@ void Weapon::generateOnce()
         }
     }
 }
+*/
 
 void Weapon::attachToWarObject(WarObject *warObject)
 {
     if (mWarObject) {
-        mWarObject->autorelease();
+        //mWarObject->autorelease();
         mWarObject = nullptr;
     }
     mWarObject = warObject;
@@ -72,9 +88,6 @@ void Weapon::updateBullet()
     if (equippedBullet && mWarObject) {
         auto forceType = mWarObject->getForceType();
         equippedBullet->setForceType(forceType);
-        
-        auto firRange = equippedBullet->getFireRange();
-        mBulletOffset = forceType == FRIEND ? Vec2(0, firRange) : Vec2(0, - firRange);
     }
 }
 
@@ -86,24 +99,7 @@ void Weapon::setBullet(Bullet *bullet)
     }
 }
 
-Weapon * Weapon::create(float interval)
-{
-    auto weapon = new (std::nothrow) Weapon(interval);
-    weapon->autorelease();
-
-    return weapon;
-}
-
 Weapon * Weapon::clone() const
 {
-    auto weapon = new (std::nothrow) Weapon(mInterval);
-    weapon->setObjectId(mId);
-    weapon->setObjectName(mName);
-    Bullet * equippedBullet = dynamic_cast<Bullet *>(mObject);
-    if (equippedBullet) {
-        weapon->setBullet(equippedBullet);
-    }
-    weapon->autorelease();
-    
-    return weapon;
+    return nullptr;
 }

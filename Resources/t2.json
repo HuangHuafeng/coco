@@ -1,7 +1,7 @@
 {
   "objects": [
     { "type": "Bullet", "id": 1, "name": "fb1", "file": "bullet3.png", "speed": 600, "damage": 60 },
-    { "type": "WeaponTripleBullet", "id": 2, "name": "fw1", "bullet": 1, "triggerInterval": 200 },
+    { "type": "MultipleBulletDiffuse", "id": 2, "name": "fw1", "bullet": 1, "triggerInterval": 200 },
     {
       "type": "FriendPlane",
       "id": 3,
@@ -46,7 +46,7 @@
       "destinationY": 240
     },
     { "type": "Bullet", "id": 7, "name": "eb1", "file": "bullet1.png", "speed": 160, "damage": 50 },
-    { "type": "Weapon", "id": 8, "name": "ew1", "bullet": 7, "triggerInterval": 3000 },
+    { "type": "MultipleBulletStraight", "id": 8, "name": "ew1", "bullet": 7, "triggerInterval": 3000 },
     {
       "type": "EnemyPlane",
       "id": 9,
@@ -59,7 +59,7 @@
       "weapon": 8
     },
     { "type": "EnemyGenerator", "id": 10, "name": "g1", "classId": 7, "triggerInterval": 20 },
-    { "type": "EnemyGenerator", "id": 11, "name": "g2", "classId": 9, "triggerInterval": 800 },
+    { "type": "EnemyGenerator", "id": 11, "name": "g2", "classId": 9, "triggerInterval": 1000 },
     {
       "type": "SceneObject",
       "id": 12,

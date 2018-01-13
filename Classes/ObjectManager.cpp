@@ -74,8 +74,8 @@ void ObjectManager::initTypeCreators()
 {
     mTypeCreators.clear();
     mTypeCreators.insert(std::make_pair("Bullet", std::bind(&ObjectManager::createBullet, this, std::placeholders::_1)));
-    mTypeCreators.insert(std::make_pair("Weapon", std::bind(&ObjectManager::createWeapon, this, std::placeholders::_1)));
-    mTypeCreators.insert(std::make_pair("WeaponTripleBullet", std::bind(&ObjectManager::createWeaponTripleBullet, this, std::placeholders::_1)));
+    mTypeCreators.insert(std::make_pair("MultipleBulletDiffuse", std::bind(&ObjectManager::createMultipleBulletDiffuse, this, std::placeholders::_1)));
+    mTypeCreators.insert(std::make_pair("MultipleBulletStraight", std::bind(&ObjectManager::createMultipleBulletStraight, this, std::placeholders::_1)));
     mTypeCreators.insert(std::make_pair("FriendPlane", std::bind(&ObjectManager::createFriendPlane, this, std::placeholders::_1)));
     mTypeCreators.insert(std::make_pair("EnemyPlane", std::bind(&ObjectManager::createEnemyPlane, this, std::placeholders::_1)));
     mTypeCreators.insert(std::make_pair("EnemyGenerator", std::bind(&ObjectManager::createEnemyGenerator, this, std::placeholders::_1)));
@@ -378,6 +378,8 @@ Bullet * ObjectManager::createBullet(const json &object)
 
 Weapon * ObjectManager::createWeapon(const json &object)
 {
+    return createMultipleBulletStraight(object);
+    /*
     const json j_null;
     auto id = object.value("id", j_null);
     auto name = object.value("name", j_null);
@@ -406,9 +408,10 @@ Weapon * ObjectManager::createWeapon(const json &object)
     }
     
     return weapon;
+    */
 }
 
-WeaponTripleBullet * ObjectManager::createWeaponTripleBullet(const json &object)
+MultipleBulletStraight * ObjectManager::createMultipleBulletStraight(const json &object)
 {
     const json j_null;
     auto id = object.value("id", j_null);
@@ -424,20 +427,52 @@ WeaponTripleBullet * ObjectManager::createWeaponTripleBullet(const json &object)
     }
     
     // triggerInterval is **milliseconds** in json file
-    auto weaponTripleBullet = WeaponTripleBullet::create(static_cast<float>(triggerInterval) * 0.001);
-    weaponTripleBullet->setObjectId(id);
-    weaponTripleBullet->setObjectName(name);
-    mWeapons.push_back(weaponTripleBullet);
+    auto mbs = MultipleBulletStraight::create(static_cast<float>(triggerInterval) * 0.001);
+    mbs->setObjectId(id);
+    mbs->setObjectName(name);
+    mWeapons.push_back(mbs);
     
     auto bulletId = object.value("bullet", j_null);
     if (bulletId.is_number_unsigned() && bulletId != 0) {
         auto bullet = dynamic_cast<Bullet *>(findRetainedObject(bulletId));
         if (bullet) {
-            weaponTripleBullet->setBullet(bullet);
+            mbs->setBullet(bullet);
         }
     }
     
-    return weaponTripleBullet;
+    return mbs;
+}
+
+MultipleBulletDiffuse * ObjectManager::createMultipleBulletDiffuse(const json &object)
+{
+    const json j_null;
+    auto id = object.value("id", j_null);
+    auto name = object.value("name", j_null);
+    auto triggerInterval = object.value("triggerInterval", j_null);
+    if (id.is_number_unsigned() == false || name.is_string() == false || triggerInterval.is_number_unsigned() == false) {
+        return nullptr;
+    }
+    
+    if ( findRetainedObject(id) != nullptr) {
+        // there's already an object with this id, don't create another one
+        return nullptr;
+    }
+    
+    // triggerInterval is **milliseconds** in json file
+    auto mbd = MultipleBulletDiffuse::create(static_cast<float>(triggerInterval) * 0.001);
+    mbd->setObjectId(id);
+    mbd->setObjectName(name);
+    mWeapons.push_back(mbd);
+    
+    auto bulletId = object.value("bullet", j_null);
+    if (bulletId.is_number_unsigned() && bulletId != 0) {
+        auto bullet = dynamic_cast<Bullet *>(findRetainedObject(bulletId));
+        if (bullet) {
+            mbd->setBullet(bullet);
+        }
+    }
+    
+    return mbd;
 }
 
 GameObject * ObjectManager::addSceneObject(const json &object)

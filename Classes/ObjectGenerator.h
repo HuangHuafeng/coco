@@ -26,8 +26,8 @@ public:
     
     void setObject(GameObject *object);
     void setInterval(float interval);
-    void start();
-    void stop();
+    virtual void start();
+    virtual void stop();
     
     //virtual void onEnter() override;
     //virtual void onExit() override;

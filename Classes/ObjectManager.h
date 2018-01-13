@@ -15,7 +15,8 @@
 #include "EnemyGenerator.h"
 #include "FriendPlane.h"
 #include "EnemyPlane.h"
-#include "WeaponTripleBullet.h"
+#include "MultipleBulletStraight.h"
+#include "MultipleBulletDiffuse.h"
 #include "ScrollingBackground.h"
 
 #include "json.hpp" // installed by homebrew in /usr/local/Cellar/nlohmann_json/3.0.0/include/
@@ -55,7 +56,8 @@ private:
     
     Bullet * createBullet(const json &object);
     Weapon * createWeapon(const json &object);
-    WeaponTripleBullet * createWeaponTripleBullet(const json &object);
+    MultipleBulletStraight * createMultipleBulletStraight(const json &object);
+    MultipleBulletDiffuse * createMultipleBulletDiffuse(const json &object);
     FriendPlane * createFriendPlane(const json &object);
     EnemyPlane * createEnemyPlane(const json &object);
     EnemyGenerator * createEnemyGenerator(const json &object);
