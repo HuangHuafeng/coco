@@ -7,7 +7,6 @@
 
 #include "FriendPlane.h"
 #include "Weapon.h"
-#include "MultipleBulletStraight.h"
 #include "GameScene.h"
 
 USING_NS_CC;

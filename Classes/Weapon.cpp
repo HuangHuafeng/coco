@@ -103,3 +103,16 @@ Weapon * Weapon::clone() const
 {
     return nullptr;
 }
+
+void Weapon::fireABullet(const Vec2 &start, const Vec2 &destination)
+{
+    Bullet * equippedBullet = dynamic_cast<Bullet *>(mObject);
+    auto gameScene = dynamic_cast<GameScene *>(Director::getInstance()->getRunningScene());
+    if (equippedBullet && gameScene) {
+        const auto localZorder = getParent()->getLocalZOrder() - 1;   // the Bullet is under the WarObject
+        auto bullet = equippedBullet->clone();
+        bullet->setPosition(start);
+        bullet->setDestination(destination);
+        gameScene->AddObjectToScene(bullet, localZorder);
+    }
+}

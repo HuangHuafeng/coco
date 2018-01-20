@@ -1,7 +1,7 @@
 {
   "objects": [
-    { "type": "Bullet", "id": 1, "name": "fb1", "file": "bullet3.png", "speed": 600, "damage": 60 },
-    { "type": "MultipleBulletDiffuse", "id": 2, "name": "fw1", "bullet": 1, "triggerInterval": 200 },
+    { "type": "Bullet", "id": 1, "name": "fb1", "file": "bullet2.png", "speed": 1200, "damage": 60 },
+    { "type": "MultipleBulletDiffuse", "id": 2, "name": "fw1", "bullet": 1, "triggerInterval": 100 },
     {
       "type": "FriendPlane",
       "id": 3,

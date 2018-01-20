@@ -15,7 +15,6 @@
 #include "EnemyGenerator.h"
 #include "FriendPlane.h"
 #include "EnemyPlane.h"
-#include "MultipleBulletStraight.h"
 #include "MultipleBulletDiffuse.h"
 #include "ScrollingBackground.h"
 
@@ -56,7 +55,6 @@ private:
     
     Bullet * createBullet(const json &object);
     Weapon * createWeapon(const json &object);
-    MultipleBulletStraight * createMultipleBulletStraight(const json &object);
     MultipleBulletDiffuse * createMultipleBulletDiffuse(const json &object);
     FriendPlane * createFriendPlane(const json &object);
     EnemyPlane * createEnemyPlane(const json &object);

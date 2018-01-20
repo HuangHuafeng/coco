@@ -22,6 +22,7 @@ protected:
     WarObject *mWarObject;
     
     void updateBullet();
+    void fireABullet(const cocos2d::Vec2 &start, const cocos2d::Vec2 &destination);
     
 public:
     ~Weapon();

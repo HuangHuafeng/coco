@@ -27,7 +27,8 @@ protected:
     std::map<GameObject *, ChangeCallback> mChangeCallbacks;
     
     virtual void collideWith(CollideObject* otherCollideObject) override;
-    virtual void OnKilled();
+    virtual void onKilled();
+    virtual void onCalmPeriodPast();
     
     void callCallbacks(ChangeTypes changeType);
     

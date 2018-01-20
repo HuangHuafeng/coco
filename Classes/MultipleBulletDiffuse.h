@@ -13,6 +13,10 @@
 class MultipleBulletDiffuse : public Weapon {
     
 protected:
+    float mBulletStartInterval;
+    float mBulletDestinationInterval;
+    int mMaxNumberOfBullet;
+    
     MultipleBulletDiffuse(float interval = 1.0f);
 
     virtual void generateOnce() override;

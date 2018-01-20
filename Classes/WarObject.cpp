@@ -83,14 +83,13 @@ void WarObject::setCalmPeriod(float calmPeriod)
     mCalmPeriod = calmPeriod > 0.0f ? calmPeriod : 0.0f;
 }
 
-
 void WarObject::onEnter()
 {
     FlyingObject::onEnter();
     
-     auto openFire = CallFunc::create(CC_CALLBACK_0(WarObject::openFire, this));
+     auto calmPeriodPast = CallFunc::create(CC_CALLBACK_0(WarObject::onCalmPeriodPast, this));
      auto calm = DelayTime::create(mCalmPeriod);
-     auto seq = Sequence::create(calm, openFire, nullptr);
+     auto seq = Sequence::create(calm, calmPeriodPast, nullptr);
      runAction(seq);
 }
 
@@ -107,14 +106,19 @@ void WarObject::collideWith(CollideObject *otherCollideObject)
     mCurrentHealth -= otherCollideObject->getDamage();
     callCallbacks(CT_Health);
     if (mCurrentHealth <= 0) {
-        OnKilled();
+        onKilled();
     }
 }
 
-void WarObject::OnKilled()
+void WarObject::onKilled()
 {
     stop();
     removeFromParent();
+}
+
+void WarObject::onCalmPeriodPast()
+{
+    openFire();
 }
 
 void WarObject::registerChangeCallback(GameObject * gameObject, ChangeCallback changeCallback)
