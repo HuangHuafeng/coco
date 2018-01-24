@@ -512,13 +512,15 @@ GameObject * ObjectManager::addBackground(const json &object)
 
 void ObjectManager::ObjectEnterScene(GameObject *object)
 {
-    if (object) {
+    if (object && mObjectsInScene.count(object) == 0) {
         object->retain();
         mObjectsInScene.insert(std::make_pair(object, object));
     } else {
         assert(false);
     }
-    //log("%lu objects in scene", mObjectsInScene.size());
+    static int counter = 0;
+    counter++;
+    log("%lu objects in scene, counter: %d", mObjectsInScene.size(), counter);
 }
 
 void ObjectManager::ObjectExitScene(GameObject *object)

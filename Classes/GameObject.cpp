@@ -63,7 +63,8 @@ void GameObject::onEnter()
     Sprite::onEnter();
     
     auto gameScene = dynamic_cast<GameScene *>(Director::getInstance()->getRunningScene());
-    if (gameScene) {
+    if (gameScene && getParent() == gameScene) {
+        // when this game object is NOT a child (for example, a weapon attached to a war object)
         gameScene->ObjectEnterScene(this);
     }
 }
